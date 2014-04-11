@@ -24,4 +24,7 @@ gem 'spring',    group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+#
+#gem 'sass-rails'
+#gem 'uglifier'
 

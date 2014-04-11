@@ -1,0 +1,2 @@
+module DomainmetadataHelper
+end

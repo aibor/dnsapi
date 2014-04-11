@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Domain:</strong>
+  <%= @domainmetadatum.domain %>
+</p>
+
+<p>
+  <strong>Kind:</strong>
+  <%= @domainmetadatum.kind %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @domainmetadatum.content %>
+</p>
+
+<%= link_to 'Edit', edit_domainmetadatum_path(@domainmetadatum) %> |
+<%= link_to 'Back', domainmetadata_path %>

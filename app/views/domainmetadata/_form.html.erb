@@ -1,0 +1,33 @@
+<%= form_for(@domainmetadatum) do |f| %>
+  <% if @domainmetadatum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@domainmetadatum.errors.count, "error") %> prohibited this domainmetadatum from being saved:</h2>
+
+      <ul>
+      <% @domainmetadatum.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :domain_id %><br>
+    <%= f.text_field :domain_id %>
+  </div>
+  <div class="field">
+    <%= f.label :kind %><br>
+    <%= f.select :kind, Domainmetadatum::Kinds %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <% if @domainmetadatum.kind == 'SOA-EDIT' -%>
+      <%= f.select :content, Domainmetadatum::SOAEdits %>
+    <% else -%>
+      <%= f.text_area :content %>
+    <% end -%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

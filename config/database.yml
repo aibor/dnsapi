@@ -82,6 +82,7 @@ test:
 #
 production:
   <<: *default
-  database: dnsapi_production
-  username: dnsapi
+  #database: dnsapi_production
+  database: testdb
+  #username: dnsapi
   password: <%= ENV['DNSAPI_DATABASE_PASSWORD'] %>

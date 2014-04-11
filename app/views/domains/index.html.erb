@@ -1,0 +1,35 @@
+<h1>Listing domains</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Master</th>
+      <th>Last check</th>
+      <th>Type</th>
+      <th>Notified serial</th>
+      <th>Account</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @domains.each do |domain| %>
+      <tr>
+        <td><%= domain.name %></td>
+        <td><%= domain.master %></td>
+        <td><%= domain.last_check %></td>
+        <td><%= domain.type %></td>
+        <td><%= domain.notified_serial %></td>
+        <td><%= domain.account %></td>
+        <td><%= link_to 'Show', domain %></td>
+        <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
+        <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Domain', new_domain_path %>
