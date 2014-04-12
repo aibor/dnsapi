@@ -1,2 +1,21 @@
 //= require bootstrap
 //= require bootstrap-theme
+
+@media (min-width: 768px) {
+  .dl-prop dt {
+    float: left;
+    width: 100px;
+    clear: left;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dl-prop dd {
+    margin-left: 120px;
+  }
+}
+
+.button_to {
+  display: inline-block;
+}

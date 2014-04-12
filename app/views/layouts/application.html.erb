@@ -1,29 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
 <head>
-  <title>Dnsapi</title>
-  <%#= stylesheet_link_tag    'application', media: 'all' %>
+  <title>DNS API</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= stylesheet_link_tag    'bs', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div class="container">
-    <div class="header">
+    <header class="header">
       <ul class="nav nav-pills pull-right">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+      <% %w( domains tsigkeys ).each do |controller| -%>
+        <li<%= raw ' class="active"' if
+          current_page?(controller: controller) -%>>
+          <%= link_to controller.capitalize,
+            url_for( controller: controller ) %>
+        </li>
+      <% end -%>
       </ul>
-      <h3 class="text-muted">Project name</h3>
-    </div>
+      <div class="banner">
+        <h2 class="text-muted">
+          <%= link_to 'DNS API', "/#{I18n.locale}" %>
+        </h2>
+        <ul class="nav nav-lang">
+          <% I18n.available_locales.each do |loc| %>
+          <li>
+          <%= link_to loc, url_for( locale: loc ),
+            class: loc == I18n.locale ? 'text-muted' : '' %>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </header>
+    <hr>
   </div> <!-- /container -->
+
 
   <div class="container">
     <%= yield %>
   </div> <!-- /container -->
 
-  <div class="footer">
-    <p>&copy; Company 2014</p>
-  </div>
+  <div class="container">
+    <hr>
+    <footer class="footer">
+      <p class="text-center text-muted">&copy; aibo 2014</p>
+    </footer>
+  </div> <!-- /container -->
 </body>
 </html>

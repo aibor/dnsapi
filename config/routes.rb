@@ -1,9 +1,27 @@
 Rails.application.routes.draw do
-  resources :domains
+  root 'domains#index'
 
-  resources :domainmetadata
+  scope "(:locale)", locale: /en|de/ do
 
-  resources :records
+    resources :domains do
+      resources :records
+      resources :domainmetadata
+      resources :cryptokeys
+      resources :comments
+    end
+
+    resources :domainmetadata
+
+    resources :records
+
+    resources :comments
+
+    resources :tsigkeys
+
+    resources :cryptokeys
+  end
+
+  get '/:locale' => 'domains#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

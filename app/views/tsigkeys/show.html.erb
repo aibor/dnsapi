@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<h1>
+  <%= @tsigkey.name %>
+  <%= button_to 'Edit', edit_tsigkey_path(@tsigkey), class: "btn btn-primary", method: :get %>
+</h1>
+
+<dl class="dl-prop">
+  <dt>Algorithm</dt>
+  <dd><%= @tsigkey.algorithm %></dd>
+
+  <dt>Secret</dt>
+  <dd><%= @tsigkey.secret %></dd>
+</dl>
+
+<%= button_to 'Back', tsigkeys_path %>

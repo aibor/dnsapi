@@ -1,6 +1,9 @@
-<h1>Listing domains</h1>
+<h1>
+  Domains
+  <%= button_to t(:new), new_domain_path, class: "btn btn-primary", method: :get %>
+</h1>
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -16,20 +19,22 @@
   <tbody>
     <% @domains.each do |domain| %>
       <tr>
-        <td><%= domain.name %></td>
+        <td><%= link_to domain.name, domain, title: t('.show', domain: domain.name) %></td>
         <td><%= domain.master %></td>
         <td><%= domain.last_check %></td>
         <td><%= domain.type %></td>
         <td><%= domain.notified_serial %></td>
         <td><%= domain.account %></td>
-        <td><%= link_to 'Show', domain %></td>
-        <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
-        <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to edit_domain_path(domain),
+          title: t('.edit', domain: domain.name) do %>
+          <span class="glyphicon glyphicon-edit"></span>
+        <% end %></td>
+        <td><%= link_to domain, method: :delete,
+          data: { confirm: 'Are you sure?' },
+          title: t('.delete', domain: domain.name) do %>
+          <span class="glyphicon glyphicon-remove"></span>
+        <% end%></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Domain', new_domain_path %>

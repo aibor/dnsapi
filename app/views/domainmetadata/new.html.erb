@@ -1,5 +1,10 @@
-<h1>New domainmetadatum</h1>
+<h1>
+  New domainmetadatum
+  <%= " for #{@domain.name}" if @domain %>
+  <%= button_to 'Back', @domain ? @domain : domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', domainmetadata_path %>
+<div class="container">
+  <%= render 'form' %>
+</div>

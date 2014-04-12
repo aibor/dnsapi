@@ -11,10 +11,12 @@
     </div>
   <% end %>
 
+  <% unless @domain -%>
   <div class="field">
     <%= f.label :domain_id %><br>
     <%= f.text_field :domain_id %>
   </div>
+  <% end -%>
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>

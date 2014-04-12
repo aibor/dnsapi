@@ -14,7 +14,8 @@ class RecordsController < ApplicationController
 
   # GET /records/new
   def new
-    @record = Record.new
+    @domain = Domain.find(params[:domain_id]) rescue nil
+    @record = Record.new(domain: @domain)
   end
 
   # GET /records/1/edit

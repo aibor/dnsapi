@@ -1,6 +1,10 @@
-<h1>Editing domain</h1>
-
+<h1>
+  Editing domain
+  <%= " #{@domain.name}" if @domain %>
+  <%= button_to 'Back', @domain ? @domain : domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
+<div class="container">
 <%= render 'form' %>
+</div>
 
-<%= link_to 'Show', @domain %> |
-<%= link_to 'Back', domains_path %>

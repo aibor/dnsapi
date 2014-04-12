@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Domain:</strong>
+  <%= @cryptokey.domain %>
+</p>
+
+<p>
+  <strong>Flags:</strong>
+  <%= @cryptokey.flags %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @cryptokey.active %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @cryptokey.content %>
+</p>
+
+<%= link_to 'Edit', edit_cryptokey_path(@cryptokey) %> |
+<%= link_to 'Back', cryptokeys_path %>

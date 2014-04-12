@@ -13,3 +13,30 @@
  *= require_tree .
  *= require_self
  */
+.banner {
+  display: block;
+  margin-top: 20px;
+  margin-bottom:10px;
+}
+
+.banner h2 {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.banner .nav-lang {
+  display: inline-block;
+  margin-left: 20px;
+  list-style: none;
+}
+
+.banner .nav-lang li {
+  float:left;
+  margin:0px;
+}
+
+.banner .nav-lang li a {
+  margin:0px;
+  padding: 1px 10px;
+}

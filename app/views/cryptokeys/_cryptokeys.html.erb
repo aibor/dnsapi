@@ -1,0 +1,31 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th><%= t('cryptokeys.flags') %></th>
+      <th><%= t('cryptokeys.active') %></th>
+      <th><%= t('cryptokeys.content') %></th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% cryptokeys.each do |cryptokey| %>
+      <tr>
+        <td><%= cryptokey.flags %></td>
+        <td>
+          <span class="glyphicon glyphicon-<%= cryptokey.active ? 'ok' : 'remove' %>">
+        </td>
+        <td><%= cryptokey.content %></td>
+        <td><%= link_to edit_cryptokey_path(cryptokey),
+          title: t('cryptokeys.edit') do %>
+          <span class="glyphicon glyphicon-edit"></span>
+        <% end %></td>
+        <td><%= link_to cryptokey, method: :delete,
+          data: { confirm: 'Are you sure?' },
+          title: t('cryptokeys.delete') do %>
+          <span class="glyphicon glyphicon-remove"></span>
+        <% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

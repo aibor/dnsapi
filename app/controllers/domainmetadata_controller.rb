@@ -14,7 +14,8 @@ class DomainmetadataController < ApplicationController
 
   # GET /domainmetadata/new
   def new
-    @domainmetadatum = Domainmetadatum.new
+    @domain = Domain.find(params[:domain_id]) rescue nil
+    @domainmetadatum = Domainmetadatum.new(domain: @domain)
   end
 
   # GET /domainmetadata/1/edit

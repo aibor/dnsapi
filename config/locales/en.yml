@@ -20,4 +20,36 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  new:  New
+  edit: Edit
+  domains:
+    index:
+      show:   "Show %{domain}"
+      edit:   "Edit %{domain}"
+      delete: "Delete %{domain}"
+    show:
+      edit:   'Edit properties'
+  records:
+    show:     'Show details for this record'
+    edit:     'Edit record'
+    delete:   'Delete record'
+    change:   Modified
+    auth:     auth?
+  domainmetadata:
+    show:     'Show details for domainmetadatum'
+    edit:     'Edit domainmetadatum'
+    delete:   'Delete Domainmetadatum'
+  comments:
+    show:     'Show details for this comment'
+    edit:     'Edit comment'
+    delete:   'Delete comment'
+  cryptokeys:
+    show:     'Show details for this cryptokey'
+    edit:     'Edit cryptokey'
+    delete:   'Delete cryptokey'
+    active:   acitve?
+
+
+
+
+
