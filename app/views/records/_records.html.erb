@@ -19,9 +19,11 @@
         <td><%= link_to (record.name or ''), record,
           title: t('records.show') %></td>
         <td><%= record.type %></td>
-        <td><%= record.content %></td>
-        <td><%= record.ttl %></td>
-        <td><%= record.prio %></td>
+        <td>
+          <%= record.type == 'SOA' ? soa_times(record.content) : record.content %>
+        </td>
+        <td><%= sane_ttl record.ttl %></td>
+        <td><%= record.prio if record.prio > 0 %></td>
         <td><%= record.ordername %></td>
         <td>
           <span class="glyphicon glyphicon-<%= record.auth ? 'ok' : 'remove' %>">

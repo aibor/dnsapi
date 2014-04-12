@@ -10,9 +10,30 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap
+ *= require bootstrap-theme
  *= require_tree .
  *= require_self
  */
+
+@media (min-width: 768px) {
+  .dl-prop dt {
+    float: left;
+    width: 100px;
+    clear: left;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dl-prop dd {
+    margin-left: 120px;
+  }
+}
+
+.button_to {
+  display: inline-block;
+}
 .banner {
   display: block;
   margin-top: 20px;
