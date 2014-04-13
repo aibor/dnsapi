@@ -31,3 +31,6 @@ gem 'spring',    group: :development
 
 # Add mulitilingual support
 gem 'rails-i18n'
+
+# use sane console
+gem 'pry'

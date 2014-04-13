@@ -1,14 +1,18 @@
 <table class="table table-striped table-condensed">
   <thead>
     <tr>
-      <th><%= t('records.name') %></th>
-      <th><%= t('records.type') %></th>
-      <th><%= t('records.content') %></th>
+      <th><%= t('records.columns.name') %></th>
       <th>TTL</th>
-      <th><%= t('records.prio') %></th>
-      <th><%= t('records.ordername') %></th>
-      <th><%= t('records.auth') %></th>
-      <th><%= t('records.modified') %></th>
+      <th><%= t('records.columns.type') %></th>
+      <th><%= t('records.columns.prio') %></th>
+      <th><%= t('records.columns.content') %></th>
+      <% unless records.map {|r| r.domain.cryptokeys}.flatten.empty? -%>
+      <th><%= t('records.columns.ordername') %></th>
+      <% end -%>
+      <th><%= t('records.columns.auth') %></th>
+      <% if false %> 
+        <th><%= t('records.columns.modified') %></th>
+      <% end %>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -17,25 +21,29 @@
     <% Record.type_sort(records).each do |record| %>
       <tr>
         <td><%= link_to (record.name or ''), record,
-          title: t('records.show') %></td>
+          title: t('.show') %></td>
+        <td><%= sane_ttl record.ttl %></td>
         <td><%= record.type %></td>
+        <td><%= record.prio if record.prio.to_i > 0 %></td>
         <td>
           <%= record.type == 'SOA' ? soa_times(record.content) : record.content %>
         </td>
-        <td><%= sane_ttl record.ttl %></td>
-        <td><%= record.prio if record.prio > 0 %></td>
+        <% unless record.domain.cryptokeys.empty? -%>
         <td><%= record.ordername %></td>
+        <% end -%>
         <td>
           <span class="glyphicon glyphicon-<%= record.auth ? 'ok' : 'remove' %>">
         </td>
+        <% if false %> 
         <td><%= l record.change_date, format: :short if record.change_date %></td>
+      <% end %> 
         <td><%= link_to edit_record_path(record),
-          title: t('records.edit') do %>
+          title: t('.edit') do %>
           <span class="glyphicon glyphicon-edit"></span>
         <% end %></td>
         <td><%= link_to record, method: :delete,
           data: { confirm: 'Are you sure?' },
-          title: t('records.delete') do %>
+          title: t('.delete') do %>
           <span class="glyphicon glyphicon-remove"></span>
         <% end %></td>
       </tr>

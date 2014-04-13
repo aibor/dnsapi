@@ -8,23 +8,23 @@
   <div class="col-md-4">
     <h3>
       <%= t '.properties' %>
-      <%= button_to t(:edit), edit_domain_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= button_to t('c.edit'), edit_domain_path(@domain), class: "btn btn-primary", method: :get %>
     </h3>
     <div class="well">
       <dl class="dl-prop">
-        <dt><%= t('.master') %></dt>
+        <dt><%= t('domains.columns.master') %></dt>
         <dd><%= @domain.master or "-" %></dd>
 
-        <dt><%= t('.last_check') %></dt>
+        <dt><%= t('domains.columns.last_check') %></dt>
         <dd><%= @domain.last_check or "-" %></dd>
 
-        <dt><%= t '.type' %></dt>
+        <dt><%= t 'domains.columns.type' %></dt>
         <dd><%= @domain.type or "-" %></dd>
 
-        <dt><%= t('.notified_serial') %></dt>
+        <dt><%= t('domains.columns.notified_serial') %></dt>
         <dd><%= @domain.notified_serial or "-" %></dd>
 
-        <dt><%= t '.account' %></dt>
+        <dt><%= t 'domains.columns.account' %></dt>
         <dd><%= @domain.account or "-" %></dd>
       </dl>
     </div>
@@ -33,7 +33,7 @@
   <div class="col-md-8">
     <h3>
       <%= t '.metadata' %>
-      <%= button_to t(:new), new_domain_domainmetadatum_path(@domain),
+      <%= button_to t('c.new'), new_domain_domainmetadatum_path(@domain),
         class: "btn btn-primary", method: :get %>
     </h3>
     <%= render partial: "domainmetadata/domainmetadata",
@@ -44,7 +44,7 @@
   <div class="col-md-6">
     <h3>
       <%= t '.cryptokeys' %>
-      <%= button_to t(:new), new_domain_cryptokey_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= button_to t('c.new'), new_domain_cryptokey_path(@domain), class: "btn btn-primary", method: :get %>
     </h3>
     <%= render partial: "cryptokeys/cryptokeys",
       locals: {cryptokeys: @domain.cryptokeys} %>
@@ -52,7 +52,7 @@
   <div class="col-md-6">
     <h3>
       <%= t '.comments' %>
-      <%= button_to t(:new), new_domain_comment_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= button_to t('c.new'), new_domain_comment_path(@domain), class: "btn btn-primary", method: :get %>
     </h3>
     <%= render partial: "comments/comments",
       locals: {comments: @domain.comments} %>
@@ -63,7 +63,7 @@
 
 <h3>
   <%= t('.records') %>
-  <%= button_to t(:new), new_domain_record_path(@domain),
+  <%= button_to t('c.new'), new_domain_record_path(@domain),
     class: "btn btn-primary", method: :get %>
 </h3>
 <%= render partial: "records/records", locals: {records: @domain.records} %>

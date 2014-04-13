@@ -1,8 +1,8 @@
 <table class="table table-condensed">
   <thead>
     <tr>
-      <th><%= t '.kind' %></th>
-      <th><%= t '.content' %></th>
+      <th><%= t 'domainmetadata.columns.kind' %></th>
+      <th><%= t 'domainmetadata.columns.content' %></th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -13,12 +13,12 @@
         <td><%= domainmetadatum.kind %></td>
         <td><%= domainmetadatum.content %></td>
         <td><%= link_to edit_domainmetadatum_path(domainmetadatum),
-          title: t('domainmetadata.edit') do %>
+          title: t('.edit') do %>
           <span class="glyphicon glyphicon-edit"></span>
         <% end %></td>
         <td><%= link_to domainmetadatum, method: :delete,
           data: { confirm: 'Are you sure?' },
-          title: t('domainmetadata.delete') do %>
+          title: t('.delete') do %>
           <span class="glyphicon glyphicon-remove"></span>
         <% end%></td>
       </tr>

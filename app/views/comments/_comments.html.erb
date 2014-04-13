@@ -1,11 +1,11 @@
 <table class="table table-condensed">
   <thead>
     <tr>
-      <th><%= t('comments.name') %></th>
-      <th><%= t('comments.type') %></th>
-      <th><%= t('comments.modified') %></th>
-      <th><%= t('comments.account') %></th>
-      <th><%= t('comments.comment') %></th>
+      <th><%= t('comments.columns.name') %></th>
+      <th><%= t('comments.columns.type') %></th>
+      <th><%= t('comments.columns.modified') %></th>
+      <th><%= t('comments.columns.account') %></th>
+      <th><%= t('comments.columns.comment') %></th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -19,12 +19,12 @@
         <td><%= comment.account %></td>
         <td><%= comment.comment %></td>
         <td><%= link_to edit_comment_path(comment),
-          title: t('comments.edit') do %>
+          title: t('.edit') do %>
           <span class="glyphicon glyphicon-edit"></span>
         <% end %></td>
         <td><%= link_to comment, method: :delete,
           data: { confirm: 'Are you sure?' },
-          title: t('comments.delete') do %>
+          title: t('.delete') do %>
           <span class="glyphicon glyphicon-remove"></span>
         <% end %></td>
       </tr>

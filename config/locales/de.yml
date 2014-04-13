@@ -20,12 +20,20 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
-  new:      Neu
-  edit:     Ändern
-  type:     Typ
+  c:
+    back: Zurück
+    new:  Neu
+    edit: Ändern
+    type: Typ
+    for: für
+    account:  Konto
   domainmetadata:  Domainmetadaten
-  account:  Konto
   domains:
+    columns:
+      account:  Konto
+      last_check: Letzer Check
+      type:     Typ
+      notified_serial:  Seriennummer
     index:
       show:   'Details für "%{domain}" anzeigen'
       edit:   'Domain "%{domain}" bearbeiten'
@@ -35,35 +43,43 @@ de:
       edit:     'Eigenschaften bearbeiten'
       metadata: Metadaten
       comments: Kommentare
-      account:  Konto
-      last_check: Letzer Check
-      type:     Typ
-      notified_serial:  Seriennummer
   records:
-    show:     'Details zu Eintrag anzeigen'
-    edit:     'Eintrag bearbeiten'
-    delete:   'Eintrag löschen'
-    content:  Daten
-    auth:     auth?
-    modified: Geändert
+    columns:
+      content:  Daten
+      auth:     auth?
+      modified: Geändert
+      type:     Typ
+    records:
+      show:     'Details zu Eintrag anzeigen'
+      edit:     'Eintrag bearbeiten'
+      delete:   'Eintrag löschen'
+    edit:
+      title:  Eintrag bearbeiten
   domainmetadata:
-    show:     'Details zu Domainmetadatensatz anzeigen'
-    edit:     'Domainmetadatensatz bearbeiten'
-    delete:   'Domainmetadatensatz löschen'
-    kind:     Art
-    content:  Daten
+    columns:
+      kind:     Art
+      content:  Daten
+    domainmetadata:
+      show:     'Details zu Domainmetadatensatz anzeigen'
+      edit:     'Domainmetadatensatz bearbeiten'
+      delete:   'Domainmetadatensatz löschen'
   comments:
-    show:     'Details zu Kommentar anzeigen'
-    edit:     'Kommentar bearbeiten'
-    delete:   'Kommentar löschen'
-    comment:  Kommentar
-    modified: Geändert
+    columns:
+      comment:  Kommentar
+      modified: Geändert
+      type:     Typ
+    comments:
+      show:     'Details zu Kommentar anzeigen'
+      edit:     'Kommentar bearbeiten'
+      delete:   'Kommentar löschen'
   cryptokeys:
-    show:     'Details zu Schlüssel anzeigen'
-    edit:     'Schlüssel bearbeiten'
-    delete:   'Schlüssel löschen'
-    active:   aktiv?
-    content:  Schlüssel
+    columns:
+      active:   aktiv?
+      content:  Schlüssel
+    cryptokeys:
+      show:     'Details zu Schlüssel anzeigen'
+      edit:     'Schlüssel bearbeiten'
+      delete:   'Schlüssel löschen'
 
 
 

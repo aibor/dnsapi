@@ -25,4 +25,14 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Load pry instead or irb
+  # http://www.dotnetguy.co.uk/post/2011/08/23/replace-the-rails-console-with-pry/
+  silence_warnings do
+    begin
+      require 'pry'
+      IRB = Pry
+    rescue LoadError
+    end
+  end
 end
