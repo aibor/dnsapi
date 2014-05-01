@@ -1,6 +1,8 @@
-<h1>Editing comment</h1>
+<h1>
+  <%= t('.title') %>
+  <%= " #{t('c.for')} #{@comment.domain.name}" if @comment.domain %>
+  <%= button_to 'Back', @comment.domain ? @comment.domain : domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @comment %> |
-<%= link_to 'Back', comments_path %>

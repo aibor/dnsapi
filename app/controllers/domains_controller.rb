@@ -1,5 +1,5 @@
 class DomainsController < ApplicationController
-  before_action :set_domain, only: [:show, :edit, :update, :destroy]
+  before_action :set_domain, only: [:show, :edit, :update, :delete, :destroy]
 
   # GET /domains
   # GET /domains.json
@@ -10,6 +10,7 @@ class DomainsController < ApplicationController
   # GET /domains/1
   # GET /domains/1.json
   def show
+    @records_page = params[:records_page].to_i
   end
 
   # GET /domains/new
@@ -49,6 +50,9 @@ class DomainsController < ApplicationController
         format.json { render json: @domain.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete
   end
 
   # DELETE /domains/1

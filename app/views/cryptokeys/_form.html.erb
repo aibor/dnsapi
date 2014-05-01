@@ -11,25 +11,28 @@
     </div>
   <% end %>
 
-  <% unless @domain -%>
-  <div class="field">
-    <%= f.label :domain_id %><br>
-    <%= f.text_field :domain_id %>
+  <% unless @cryptokey.domain -%>
+  <div class="form-group">
+    <%= f.label :domain_id, t('cryptokey.columns.domain') %><br>
+    <%= f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'} %>
   </div>
   <% end -%>
-  <div class="field">
-    <%= f.label :flags %><br>
-    <%= f.number_field :flags %>
+  <div class="form-group">
+    <%= f.label :flags, t('cryptokey.columns.flags')  %><br>
+    <%= f.number_field :flags, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :active %><br>
-    <%= f.check_box :active %>
+  <div class="form-group">
+    <%= f.label :active, t('cryptokey.columns.active') %><br>
+    <%= f.check_box :active, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :content %><br>
-    <%= f.text_area :content %>
+  <div class="form-group">
+    <%= f.label :content, t('cryptokey.columns.content') %><br>
+    <%= f.text_area :content, class: 'form-control' %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="actions pull-right">
+    <%= button_tag type: 'reset', class: 'btn btn-default' do %>
+      Reset
+    <% end %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

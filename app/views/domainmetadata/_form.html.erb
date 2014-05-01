@@ -11,25 +11,28 @@
     </div>
   <% end %>
 
-  <% unless @domain -%>
-  <div class="field">
-    <%= f.label :domain_id %><br>
-    <%= f.text_field :domain_id %>
+  <% unless @domainmetadatum.domain -%>
+  <div class="form-group">
+    <%= f.label :domain_id, t('domainmetadata.columns.domain') %><br>
+    <%= f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'} %>
   </div>
   <% end -%>
-  <div class="field">
-    <%= f.label :kind %><br>
-    <%= f.select :kind, Domainmetadatum::Kinds %>
+  <div class="form-group">
+    <%= f.label :kind, t('domainmetadata.columns.kind') %><br>
+    <%= f.select :kind, Domainmetadatum::Kinds, {}, {class: 'form-control'} %>
   </div>
-  <div class="field">
-    <%= f.label :content %><br>
+  <div class="form-group">
+    <%= f.label :content, t('domainmetadata.columns.content') %><br>
     <% if @domainmetadatum.kind == 'SOA-EDIT' -%>
-      <%= f.select :content, Domainmetadatum::SOAEdits %>
+      <%= f.select :content, Domainmetadatum::SOAEdits, {}, {class: 'form-control'} %>
     <% else -%>
-      <%= f.text_area :content %>
+      <%= f.text_area :content, maxlength: 65535, class: 'form-control' %>
     <% end -%>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="actions pull-right">
+    <%= button_tag type: 'reset', class: 'btn btn-default' do %>
+      Reset
+    <% end %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

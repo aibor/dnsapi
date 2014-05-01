@@ -31,6 +31,13 @@ en:
       delete: "Delete %{domain}"
     show:
       edit:   'Edit properties'
+    edit:
+      title:  Edit Domain
+    new:
+      title:  New Domain
+    delete:
+      title:    Delete Domain
+      warning:  This will also delete the following resources
   records:
     columns:
       change:   Modified
@@ -39,25 +46,36 @@ en:
       show:     'Show details for this record'
       edit:     'Edit record'
       delete:   'Delete record'
+    edit:
+      title:    Edit Record
+    new:
+      title:  New Record
   domainmetadata:
     domainmetadata:
       show:     'Show details for domainmetadatum'
       edit:     'Edit domainmetadatum'
       delete:   'Delete Domainmetadatum'
+    edit:
+      title:    Edit Domainmetadatum
+    new:
+      title:  New Domainmetadatum
   comments:
     comments:
       show:     'Show details for this comment'
       edit:     'Edit comment'
       delete:   'Delete comment'
+    edit:
+      title:    Edit Comment
+    new:
+      title:  New Comment
   cryptokeys:
     columns:
-      active:   acitve?
+      active:   active?
     cryptokeys:
       show:     'Show details for this cryptokey'
       edit:     'Edit cryptokey'
       delete:   'Delete cryptokey'
-
-
-
-
-
+    edit:
+      title:    Edit Cryptokey
+    new:
+      title:  New Cryptokey

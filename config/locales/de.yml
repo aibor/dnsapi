@@ -24,6 +24,7 @@ de:
     back: Zurück
     new:  Neu
     edit: Ändern
+    refresh: Aktualisieren
     type: Typ
     for: für
     account:  Konto
@@ -43,6 +44,13 @@ de:
       edit:     'Eigenschaften bearbeiten'
       metadata: Metadaten
       comments: Kommentare
+    edit:
+      title: Bearbeite Domain
+    new:
+      title: Neue Domain
+    delete:
+      title:    Lösche Domain
+      warning:  Dies wird ebenso folgende Resourcen löschen
   records:
     columns:
       content:  Daten
@@ -55,6 +63,8 @@ de:
       delete:   'Eintrag löschen'
     edit:
       title:  Eintrag bearbeiten
+    new:
+      title: Neuer Eintrag
   domainmetadata:
     columns:
       kind:     Art
@@ -63,6 +73,10 @@ de:
       show:     'Details zu Domainmetadatensatz anzeigen'
       edit:     'Domainmetadatensatz bearbeiten'
       delete:   'Domainmetadatensatz löschen'
+    edit:
+      title: Bearbeite Metadatensatz
+    new:
+      title: Neuer Domainmetadatensatz
   comments:
     columns:
       comment:  Kommentar
@@ -72,6 +86,10 @@ de:
       show:     'Details zu Kommentar anzeigen'
       edit:     'Kommentar bearbeiten'
       delete:   'Kommentar löschen'
+    edit:
+      title: Bearbeite Kommentar
+    new:
+      title: Neuer Kommentar
   cryptokeys:
     columns:
       active:   aktiv?
@@ -80,8 +98,11 @@ de:
       show:     'Details zu Schlüssel anzeigen'
       edit:     'Schlüssel bearbeiten'
       delete:   'Schlüssel löschen'
-
-
-
-
+    edit:
+      title: Bearbeite Cryptokey
+    new:
+      title: Neuer Cryptokey
+  dashboard:
+    index:
+      recently_changed_records: Zuletzt geänderte Records
 

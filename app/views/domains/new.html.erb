@@ -1,5 +1,7 @@
-<h1>New domain</h1>
+<h1>
+  <%= t('.title') %>
+  <%= button_to 'Back', domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
 
 <%= render 'form' %>
-
-<%= link_to 'Back', domains_path %>

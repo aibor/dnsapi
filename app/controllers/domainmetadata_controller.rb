@@ -1,5 +1,5 @@
 class DomainmetadataController < ApplicationController
-  before_action :set_domainmetadatum, only: [:show, :edit, :update, :destroy]
+  before_action :set_domainmetadatum, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /domainmetadata
   # GET /domainmetadata.json
@@ -50,6 +50,9 @@ class DomainmetadataController < ApplicationController
         format.json { render json: @domainmetadatum.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete
   end
 
   # DELETE /domainmetadata/1

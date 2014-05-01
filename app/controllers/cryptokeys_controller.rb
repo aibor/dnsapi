@@ -1,5 +1,5 @@
 class CryptokeysController < ApplicationController
-  before_action :set_cryptokey, only: [:show, :edit, :update, :destroy]
+  before_action :set_cryptokey, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /cryptokeys
   # GET /cryptokeys.json
@@ -50,6 +50,9 @@ class CryptokeysController < ApplicationController
         format.json { render json: @cryptokey.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete
   end
 
   # DELETE /cryptokeys/1

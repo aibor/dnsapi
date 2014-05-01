@@ -1,7 +1,7 @@
 <h1>
-  New cryptokey
-  <%= " for #{@domain.name}" if @domain %>
-  <%= button_to 'Back', @domain ? @domain : domains_path,
+  <%= t('.title') %>
+  <%= " #{t('c.for')} #{@cryptokey.domain.name}" if @cryptokey.domain %>
+  <%= button_to 'Back', @cryptokey.domain ? @cryptokey.domain : domains_path,
     class: "btn btn-default", method: :get %>
 </h1>
 

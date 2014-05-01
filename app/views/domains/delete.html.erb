@@ -1,0 +1,29 @@
+
+<p id="notice"><%= notice %></p>
+
+<h1>
+  <%= t('.title') %> <%= @domain.name %>
+</h1>
+
+<div class="alert alert-warning"><%= t('.warning') %></div>
+
+<h3>
+  <%= t('.records') %>
+</h3>
+<%= render partial: "records/records",
+  locals: { records: @domain.records, no_links: true }
+%>
+
+<h3>
+  <%= t '.cryptokeys' %>
+</h3>
+<%= render partial: "cryptokeys/cryptokeys",
+  locals: {cryptokeys: @domain.cryptokeys}
+%>
+
+<hr>
+
+
+<%= button_to t('c.delete_domain'), (@domain),
+  class: "btn btn-primary", method: :delete
+%>

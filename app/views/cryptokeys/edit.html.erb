@@ -1,6 +1,8 @@
-<h1>Editing cryptokey</h1>
+<h1>
+  <%= t('.title') %>
+  <%= " #{t('c.for')} #{@cryptokey.domain.name}" if @cryptokey.domain %>
+  <%= button_to 'Back', @domainmetadatum.domain ? @domainmetadatum.domain : domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @cryptokey %> |
-<%= link_to 'Back', cryptokeys_path %>

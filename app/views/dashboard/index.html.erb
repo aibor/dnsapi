@@ -1,0 +1,12 @@
+<h1>
+  DNS API
+  <%= button_to t('c.refresh'), root_url, class: "btn btn-primary", method: :get %>
+</h1>
+<h3>
+  <%= t('.recently_changed_records') %>
+</h3>
+<%= render partial: "records/records",
+  locals: {
+    records: Record.order(:change_date).reverse_order.limit(10),
+    count: 10
+  } %>

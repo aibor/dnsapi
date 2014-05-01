@@ -1,7 +1,7 @@
 <h1>
-  New comment
-  <%= " for #{@domain.name}" if @domain %>
-  <%= button_to 'Back', @domain ? @domain : domains_path,
+  <%= t('.title') %>
+  <%= " #{t('c.for')} #{@comment.domain.name}" if @comment.domain %>
+  <%= button_to 'Back', @comment.domain ? @comment.domain : domains_path,
     class: "btn btn-default", method: :get %>
 </h1>
 

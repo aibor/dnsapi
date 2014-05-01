@@ -1,49 +1,36 @@
+<h1>
+  <%= " " + @record.name %>
+  <%= button_to 'Edit', edit_record_path(@record), class: 'btn btn-primary',
+    method: :get %>
+  <%= button_to (t('c.back')), @record.domain ? @record.domain : domains_path,
+    class: "btn btn-default", method: :get %>
+</h1>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Domain:</strong>
-  <%= @record.domain %>
-</p>
+<dl class="dl-horizontal">
+  <dt><%= t('records.columns.domain') %></dt>
+  <dd><%= link_to @record.domain.name, @record.domain %></dd>
 
-<p>
-  <strong>Name:</strong>
-  <%= @record.name %>
-</p>
+  <dt><%= t('records.columns.type') %></dt>
+  <dd><%= @record.type %></dd>
 
-<p>
-  <strong>Type:</strong>
-  <%= @record.type %>
-</p>
+  <dt><%= t('records.columns.content') %></dt>
+  <dd><%= @record.content %></dd>
 
-<p>
-  <strong>Content:</strong>
-  <%= @record.content %>
-</p>
+  <dt>TTL:</dt>
+  <dd><%= @record.ttl %></dd>
 
-<p>
-  <strong>Ttl:</strong>
-  <%= @record.ttl %>
-</p>
+  <dt><%= t('records.columns.prio') %></dt>
+  <dd><%= @record.prio %></dd>
 
-<p>
-  <strong>Prio:</strong>
-  <%= @record.prio %>
-</p>
+  <dt><%= t('records.columns.ordername') %></dt>
+  <dd><%= @record.ordername %></dd>
 
-<p>
-  <strong>Ordername:</strong>
-  <%= @record.ordername %>
-</p>
+  <dt><%= t('records.columns.auth') %></dt>
+  <dd><%= @record.auth %></dd>
 
-<p>
-  <strong>Auth:</strong>
-  <%= @record.auth %>
-</p>
+  <dt><%= t('records.columns.modified') %></dt>
+  <dd><%= @record.change_date %></dd>
+</dl>
 
-<p>
-  <strong>Change date:</strong>
-  <%= @record.change_date %>
-</p>
-
-<%= link_to 'Edit', edit_record_path(@record) %> |
-<%= link_to 'Back', records_path %>

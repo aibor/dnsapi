@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <%# Domain can only be choosed if none is defined yet %>
+  <%# Domain can only be choosen if none is defined yet %>
   <% unless @record.domain -%>
   <div class="form-group">
     <%= f.label :domain_id, t('records.columns.domain') %><br>

@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_comment, only: [:show, :edit, :update, :destroy]
+  before_action :set_comment, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /comments
   # GET /comments.json
@@ -50,6 +50,9 @@ class CommentsController < ApplicationController
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete
   end
 
   # DELETE /comments/1
