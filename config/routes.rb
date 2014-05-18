@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       resources :records
       resources :domainmetadata
       resources :cryptokeys
-      resources :comments
+    #  resources :comments
       member do
         get 'delete'
         put 'secure'
@@ -28,23 +28,23 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :comments do
-      member do
-        get 'delete'
-      end
-    end
-
-    resources :tsigkeys do
-      member do
-        get 'delete'
-      end
-    end
-
     resources :cryptokeys do
       member do
         get 'delete'
       end
     end
+
+#    resources :comments do
+#      member do
+#        get 'delete'
+#      end
+#    end
+#
+#    resources :tsigkeys do
+#      member do
+#        get 'delete'
+#      end
+#    end
   end
 
   get '/:locale' => 'dashboard#index'

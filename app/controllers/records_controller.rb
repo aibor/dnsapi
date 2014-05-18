@@ -4,7 +4,12 @@ class RecordsController < ApplicationController
   # GET /records
   # GET /records.json
   def index
-    @records = Record.all
+    @records = if params[:domain_id]
+                 domain = Domain.find(params[:domain_id]) rescue nil
+                 domain.records if domain
+               else
+                 Record.all
+               end
   end
 
   # GET /records/1

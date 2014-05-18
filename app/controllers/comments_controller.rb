@@ -4,7 +4,12 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.all
+    @comments = if params[:domain_id]
+                  domain = Domain.find(params[:domain_id]) rescue nil
+                  domain.comments if domain
+                else
+                  Comment.all
+                end
   end
 
   # GET /comments/1

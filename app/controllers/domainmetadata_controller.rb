@@ -4,7 +4,12 @@ class DomainmetadataController < ApplicationController
   # GET /domainmetadata
   # GET /domainmetadata.json
   def index
-    @domainmetadata = Domainmetadatum.all
+    @domainmetadata = if params[:domain_id]
+                        domain = Domain.find(params[:domain_id]) rescue nil
+                        domain.domainmetadata if domain
+                      else
+                        Domainmetadatum.all
+                      end
   end
 
   # GET /domainmetadata/1

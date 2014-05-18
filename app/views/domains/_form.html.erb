@@ -1,34 +1,49 @@
 <div class="row">
   <div class="col-md-6">
     <%= form_for @domain, html: {role: :form} do |f| %>
-      <% if @domain.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@domain.errors.count, "error") %> prohibited this domain from being saved:</h2>
 
-          <ul>
-            <% @domain.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <div class="form-group">
-        <%= f.label :name, t('domains.columns.name') %><br>
+      <div class="form-group <%= 'has-error' unless @domain.errors[:name].blank? %>">
+        <%= f.label :name, t('domains.columns.name'), class: 'control-label' %>
+        <% unless @domain.errors[:name].blank? %>
+          <span class="label label-danger">
+            <%= @domain.errors[:name].first %>
+          </span>
+        <% end %>
         <%= f.text_field :name, maxlength: 255, class: 'form-control' %>
       </div>
-      <div class="form-group">
-        <%= f.label :master, t('domains.columns.master') %><br>
+
+      <div class="form-group <%= 'has-error' unless @domain.errors[:master].blank? %>">
+        <%= f.label :master, t('domains.columns.master'), class: 'control-label' %>
+        <% unless @domain.errors[:master].blank? %>
+          <span class="label label-danger">
+            <%= @domain.errors[:master].first %>
+          </span>
+        <% end %>
         <%= f.text_field :master, maxlength: 255, class: 'form-control' %>
       </div>
-      <div class="form-group">
-        <%= f.label :type, t('domains.columns.type') %><br>
+
+      <div class="form-group <%= 'has-error' unless @domain.errors[:type].blank? %>">
+        <%= f.label :type, t('domains.columns.type'), class: 'control-label' %>
+        <% unless @domain.errors[:type].blank? %>
+          <span class="label label-danger">
+            <%= @domain.errors[:type].first %>
+          </span>
+        <% end %>
         <%= f.select :type, %w( MASTER NATIVE SLAVE ), {}, {class: 'form-control'} %>
       </div>
-      <div class="form-group">
-        <%= f.label :account, t('domains.columns.account') %><br>
+
+      <% if false %>
+      <div class="form-group <%= 'has-error' unless @domain.errors[:account].blank? %>">
+        <%= f.label :account, t('domains.columns.account'), class: 'control-label' %>
+        <% unless @domain.errors[:account].blank? %>
+          <span class="label label-danger">
+            <%= @domain.errors[:account].first %>
+          </span>
+        <% end %>
         <%= f.text_field :account, maxlength: 255, class: 'form-control' %>
       </div>
+      <% end %>
+
       <div class="actions pull-right">
         <%= button_tag type: 'reset', class: 'btn btn-default' do %>
           Reset

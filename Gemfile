@@ -34,3 +34,6 @@ gem 'rails-i18n'
 
 # use sane console
 gem 'pry'
+
+# for testing json
+gem 'rest-client'

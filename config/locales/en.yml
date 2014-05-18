@@ -31,6 +31,8 @@ en:
           attributes:
             content:
               invalid_ip_address: is not a valid IP address
+              invalid_ipv4_address: is not a valid IPv4 address
+              invalid_ipv6_address: is not a valid IPv6 address
               invalid_domain_name: 'is not a valid domain name: %{domain}'
               invalid_TTL: 'is not a valid TTL: %{ttl}'
               too_long: is too long

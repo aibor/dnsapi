@@ -1,25 +1,48 @@
 class Domain < ActiveRecord::Base
   self.inheritance_column = :itype
 
-  has_many :records
-  has_many :domainmetadata
-  has_many :comments
-  has_many :cryptokeys
+  has_many :records, inverse_of: :domain
+  has_many :domainmetadata, inverse_of: :domain
+  has_many :comments, inverse_of: :domain
+  has_many :cryptokeys, inverse_of: :domain
+
+  before_validation do
+    self.name = self.name.sub(/\.\z/,'') if self.name
+    self.type = 'MASTER' if self.type.blank?
+  end
+
+  validates :name, presence: true
+  validates :type, presence: true
+  validates_inclusion_of :type, in: %w(NATIVE MASTER SLAVE)
+  validate do |record|
+    DNSValidator::Domain.new(record).validate
+  end
 
   def soa
     self.records.where(type: 'SOA').first
   end
 
   def secure_zone
-    pdnssec 'secure-zone', self.name
-    pdnssec 'set-nsec3', self.name
-    pdnssec 'rectify-zone', self.name
+    if self.cryptokeys.empty?
+      pdnssec 'secure-zone', self.name
+      pdnssec 'set-nsec3', self.name
+      rectify_zone if self.soa
+    else
+      self.errors[:base] << "Zone already secured"
+      false
+    end
   end
 
   private
 
+  def rectify_zone
+    pdnssec 'rectify-zone', self.name
+  end
+
   def pdnssec(cmd, args = nil)
-    raise "pdnssec error" unless system("pdnssec #{cmd} #{args}")
+    unless system("pdnssec #{cmd} #{args}")
+      self.errors[:base] << "pdnssec error while executing: #{cmd} #{args}"
+    end
   end
 
 end

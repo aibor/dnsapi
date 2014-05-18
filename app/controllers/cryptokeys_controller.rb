@@ -4,7 +4,12 @@ class CryptokeysController < ApplicationController
   # GET /cryptokeys
   # GET /cryptokeys.json
   def index
-    @cryptokeys = Cryptokey.all
+    @cryptokeys = if params[:domain_id]
+                    domain = Domain.find(params[:domain_id]) rescue nil
+                    domain.cryptokeys if domain
+                  else
+                    Cryptokey.all
+                  end
   end
 
   # GET /cryptokeys/1

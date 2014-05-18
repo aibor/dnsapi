@@ -35,6 +35,8 @@ de:
           attributes:
             content:
               invalid_ip_address: ist keine gültige IP-Adresse
+              invalid_ipv4_address: ist keine gültige IPv4-Adresse
+              invalid_ipv6_address: ist keine gültige IPv6-Adresse
               invalid_domain_name: 'ist kein gültiger Domainname: %{domain}'
               invalid_TTL: 'ist keine gültige TTL: %{ttl}'
               too_long: ist zu lang

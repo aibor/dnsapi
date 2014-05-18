@@ -7,14 +7,16 @@ class Domainmetadatum < ActiveRecord::Base
   SOAEdits = %w( INCREMENT-WEEKS INCEPTION-EPOCH INCEPTION-INCREMENT INCEPTION
                  INCEPTION-WEEK EPOCH ).freeze
 
-  belongs_to :domain
+  belongs_to :domain, inverse_of: :domainmetadata
 
+  validates :domain_id, presence: true
+  validates :domain, associated: true
+  validates :kind, presence: true
   validates :kind, inclusion: { in: Kinds,
     message: "%{value} is not a valid kind" }
   validates :content, inclusion: { in: SOAEdits,
     message: "%{value} is not a valid SOA-EDIT mode" },
-    allow_nil: true,
-    if: :is_soa_edit?
+    allow_nil: true, if: :is_soa_edit?
       
   def is_soa_edit?
     self.kind == "SOA-EDIT"
