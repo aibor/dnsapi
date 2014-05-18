@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
+
 <head>
   <title>DNS API</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
+
 <body>
   <div class="container">
     <header class="header">
       <ul class="nav nav-pills pull-right">
-      <% %w( domains tsigkeys ).each do |controller| -%>
+      <% %w( domains ).each do |controller| -%>
         <li<%= raw ' class="active"' if
           current_page?(controller: controller) -%>>
           <%= link_to controller.capitalize,
@@ -17,10 +19,12 @@
         </li>
       <% end -%>
       </ul>
+
       <div class="banner">
         <h2 class="text-muted">
           <%= link_to 'DNS API', "/#{I18n.locale}" %>
         </h2>
+
         <ul class="nav nav-lang">
           <% I18n.available_locales.each do |loc| %>
           <li>
@@ -29,11 +33,11 @@
           </li>
           <% end %>
         </ul>
+
       </div>
     </header>
     <hr>
   </div> <!-- /container -->
-
 
   <div class="container">
     <%= yield %>
@@ -45,5 +49,6 @@
       <p class="text-center text-muted">&copy; aibo 2014</p>
     </footer>
   </div> <!-- /container -->
+
 </body>
 </html>

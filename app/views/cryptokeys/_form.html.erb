@@ -1,34 +1,56 @@
 <%= form_for(@cryptokey) do |f| %>
-  <% if @cryptokey.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@cryptokey.errors.count, "error") %> prohibited this cryptokey from being saved:</h2>
-
-      <ul>
-      <% @cryptokey.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <% unless @cryptokey.domain -%>
   <div class="form-group">
-    <%= f.label :domain_id, t('cryptokey.columns.domain') %><br>
+    <%= f.label :domain_id, t('cryptokey.columns.domain'), class: 'control-label' %><br>
     <%= f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'} %>
   </div>
+  <% else %>
+    <%= f.hidden_field :domain_id %>
   <% end -%>
-  <div class="form-group">
-    <%= f.label :flags, t('cryptokey.columns.flags')  %><br>
-    <%= f.number_field :flags, class: 'form-control' %>
+
+  <div class="row">
+
+    <div class="col-md-2">
+      <div class="form-group <%= 'has-error' unless @cryptokey.errors[:flags].blank? %>">
+        <%= f.label :flags, t('cryptokey.columns.flags'), class: 'control-label'  %><br>
+
+        <% unless @cryptokey.errors[:flags].blank? %>
+          <span class="label label-danger">
+            <%= @cryptokey.errors[:flags].first %>
+          </span>
+        <% end %>
+
+        <%= f.select :flags, Cryptokey.flags.keys, {}, {class: 'form-control'} %>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group <%= 'has-error' unless @cryptokey.errors[:active].blank? %>">
+        <%= f.label ' ' %>
+
+        <div class="checkbox">
+          <%= f.label :active, class: 'control-label' do %>
+            <%= f.check_box :active %><%= t('cryptokeys.columns.active') %> 
+          <% end %>
+        </div>
+
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <%= f.label :active, t('cryptokey.columns.active') %><br>
-    <%= f.check_box :active, class: 'form-control' %>
+
+  <div class="form-group <%= 'has-error' unless @cryptokey.errors[:content].blank? %>">
+    <%= f.label :content, t('cryptokey.columns.content'), class: 'control-label' %><br>
+
+    <% unless @cryptokey.errors[:content].blank? %>
+      <span class="label label-danger">
+        <%= @cryptokey.errors[:content].first %>
+      </span>
+    <% end %>
+
+    <%= f.text_area :content, class: 'form-control', maxlength: 65535, rows: 20 %>
   </div>
-  <div class="form-group">
-    <%= f.label :content, t('cryptokey.columns.content') %><br>
-    <%= f.text_area :content, class: 'form-control' %>
-  </div>
+
   <div class="actions pull-right">
     <%= button_tag type: 'reset', class: 'btn btn-default' do %>
       Reset

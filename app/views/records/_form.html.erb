@@ -1,72 +1,108 @@
 <%= form_for @record, html: {role: :form} do |f| %>
-  <% if @record.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@record.errors.count, "error") %> prohibited this record from being saved:</h2>
-
-      <ul>
-      <% @record.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <%# Domain can only be choosen if none is defined yet %>
   <% unless @record.domain -%>
   <div class="form-group">
-    <%= f.label :domain_id, t('records.columns.domain') %><br>
+    <%= f.label :domain_id, t('records.columns.domain'), class: 'control-label' %>
     <%= f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'} %>
   </div>
   <% else %>
-  <%= f.hidden_field :domain_id %>
+    <%= f.hidden_field :domain_id %>
   <% end -%>
 
-  <div class="form-group">
-    <%= f.label :name, t('records.columns.name') %><br>
+  <div class="form-group <%= 'has-error' unless @record.errors[:name].blank? %>">
+    <%= f.label :name, t('records.columns.name'), class: 'control-label' %>
+    <% unless @record.errors[:name].blank? %>
+      <span class="label label-danger">
+        <%= @record.errors[:name].first %>
+      </span>
+    <% end %>
     <%= f.text_field :name, maxlength: 255, class: 'form-control' %>
   </div>
+
   <%# Ordername is only relevant with crypto and NSEC3 modes other then 'Narrow' 
       see: http://downloads.powerdns.com/documentation/html/dnssec-modes.html %>
   <% unless @record.domain.cryptokeys.empty? -%>
-  <div class="form-group">
-    <%= f.label :ordername, t('records.columns.ordername') %><br>
-    <%= f.text_field :ordername, maxlength: 255, class: 'form-control' %>
-  </div>
-  <% end -%>
   <div class="row">
-    <div class="col-md-2">
+
+    <div class="col-md-11">
       <div class="form-group">
-        <%= f.label :type, t('records.columns.type') %><br>
-        <%= f.select :type, Record::Types, {}, {class: 'form-control'} %>
+        <%= f.label :ordername, t('records.columns.ordername'), class: 'control-label' %>
+        <%= f.text_field :ordername, maxlength: 255, class: 'form-control' %>
       </div>
     </div>
-    <div class="col-md-2">
-      <div class="form-group">
-        <%= f.label :ttl, 'TTL' %><br>
-        <%= f.number_field :ttl, class: 'form-control' %>
-      </div>
-    </div>
+
     <div class="col-md-1">
-      <div class="form-group">
-        <%= f.label :prio, t('records.columns.prio') %><br>
-        <%= f.number_field :prio, class: 'form-control' %>
-      </div>
-    </div>
-    <div class="col-md-5">
       <div class="form-group">
         <%= f.label ' ' %>
         <div class="checkbox">
-          <%= f.label :auth do %>
-            <%= f.check_box :auth %><%= t('records.colums.auth') %> 
+          <%= f.label :auth, class: 'control-label' do %>
+            <%= f.check_box :auth %><%= t('records.columns.auth') %> 
           <% end %>
         </div>
       </div>
     </div>
+
   </div>
-  <div class="form-group">
-    <%= f.label :content, t('records.content') %><br>
+
+  <% end -%>
+
+  <div class="row">
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <%= f.label :type, t('records.columns.type'), class: 'control-label' %>
+        <%= f.select :type, Record::Types, {}, {class: 'form-control'} %>
+      </div>
+    </div>
+    
+    <div class="col-md-2">
+      <div class="form-group <%= 'has-error' unless @record.errors[:ttl].blank? %>">
+        <%= f.label :ttl, 'TTL', class: 'control-label' %><br>
+        <% unless @record.errors[:ttl].blank? %>
+          <span class="label label-danger">
+            <%= @record.errors[:ttl].first %>
+          </span>
+        <% end %>
+        <%= f.number_field :ttl, class: 'form-control', min: 0, max: 2**31 - 1 %>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group <%= 'has-error' unless @record.errors[:prio].blank? %>">
+        <%= f.label :prio, t('records.columns.prio'), class: 'control-label' %>
+        <% unless @record.errors[:prio].blank? %>
+          <span class="label label-danger">
+            <%= @record.errors[:prio].first %>
+          </span>
+        <% end %>
+        <%= f.number_field :prio, class: 'form-control', min: 0, max: 2**16 - 1, maxlength: 5, size: 5 %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.label ' ' %>
+        <div class="checkbox">
+          <%= f.label :disabled, class: 'control-label' do %>
+            <%= f.check_box :disabled %><%= t('records.columns.disabled') %> 
+          <% end %>
+          <p class="help-block"><%= t('.help.disabled') %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group <%= 'has-error' unless @record.errors[:content].blank? %>">
+    <%= f.label :content, t('records.content'), class: 'control-label' %>
+    <% unless @record.errors[:content].blank? %>
+      <span class="label label-danger">
+        <%= @record.errors[:content].first %>
+      </span>
+    <% end %>
     <%= f.text_area :content, maxlength: 65535, class: 'form-control' %>
   </div>
+
   <div class="actions pull-right">
     <%= button_tag type: 'reset', class: 'btn btn-default' do %>
       Reset

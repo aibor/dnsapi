@@ -1,5 +1,6 @@
 class DomainsController < ApplicationController
-  before_action :set_domain, only: [:show, :edit, :update, :delete, :destroy]
+  before_action :set_domain, only: [:show, :edit, :update, :delete,
+    :destroy, :secure]
 
   # GET /domains
   # GET /domains.json
@@ -18,6 +19,19 @@ class DomainsController < ApplicationController
     @domain = Domain.new
   end
 
+  def secure
+    
+    respond_to do |format|
+      if @domain.secure_zone
+        format.html { redirect_to :back, notice: t('.success') }
+        format.json { render :show, status: :created, location: @domain }
+      else
+        format.html { redirect_to :back }
+        format.json { render json: @domain.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # GET /domains/1/edit
   def edit
   end
@@ -29,7 +43,7 @@ class DomainsController < ApplicationController
 
     respond_to do |format|
       if @domain.save
-        format.html { redirect_to @domain, notice: 'Domain was successfully created.' }
+        format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :created, location: @domain }
       else
         format.html { render :new }
@@ -43,7 +57,7 @@ class DomainsController < ApplicationController
   def update
     respond_to do |format|
       if @domain.update(domain_params)
-        format.html { redirect_to @domain, notice: 'Domain was successfully updated.' }
+        format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :ok, location: @domain }
       else
         format.html { render :edit }

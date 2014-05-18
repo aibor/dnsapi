@@ -7,6 +7,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Records</th>
       <th>Master</th>
       <th>Last check</th>
       <th>Type</th>
@@ -20,6 +21,7 @@
     <% @domains.each do |domain| %>
       <tr>
         <td><%= link_to domain.name, domain, title: t('.show', domain: domain.name) %></td>
+        <td class="text-center"><%= domain.records.count %></td>
         <td><%= domain.master %></td>
         <td><%= domain.last_check %></td>
         <td><%= domain.type %></td>

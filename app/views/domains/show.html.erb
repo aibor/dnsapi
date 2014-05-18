@@ -1,15 +1,31 @@
-<p id="notice"><%= notice %></p>
-
 <h1>
   <%= @domain.name %>
+  <% if @domain.soa and @domain.soa.disabled -%>
+    <span class="label label-danger" title="<%= t('.enable_hint') %>">
+      <%= t('.zone_disabled') %>
+    </span>
+  <% end -%>
 </h1>
+
+<% if notice %>
+  <div class="alert alert-success">
+    <%= notice %>
+  </div>
+<% elsif @domain.errors.any? %>
+  <div class="alert alert-danger">
+    <%= @domain.errors.messages %>
+  </div>
+<% end -%>
 
 <div class="row">
   <div class="col-md-4">
+
     <h3>
       <%= t '.properties' %>
-      <%= button_to t('c.edit'), edit_domain_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= button_to t('c.edit'), edit_domain_path(@domain),
+        class: "btn btn-primary", method: :get %>
     </h3>
+
     <div class="well">
       <dl class="dl-prop">
         <dt><%= t('domains.columns.master') %></dt>
@@ -29,7 +45,22 @@
       </dl>
     </div>
 
+    <h3>
+      <%= t '.cryptokeys' %>
+      <%#= "(#{@domain.cryptokeys.count})" unless @domain.cryptokeys.empty? -%>
+      <%#= button_to t('c.new'), new_domain_cryptokey_path(@domain),
+        class: "btn btn-primary", method: :get %>
+    </h3>
+
+    <% if @domain.cryptokeys.empty? -%>
+      <%= button_to t('.secure_zone'), secure_domain_path(@domain),
+        class: "btn btn-primary", method: :put %>
+    <% else -%>
+      <%= render partial: "cryptokeys/cryptokeys",
+        locals: {cryptokeys: @domain.cryptokeys} %>
+    <% end -%>
   </div>
+
   <div class="col-md-8">
     <h3>
       <%= t '.metadata' %>
@@ -39,33 +70,49 @@
     <%= render partial: "domainmetadata/domainmetadata",
       locals: {domainmetadata: @domain.domainmetadata} %>
   </div>
+
 </div>
+
+<% if false %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-4">
+
     <h3>
       <%= t '.cryptokeys' %>
-      <%= button_to t('c.new'), new_domain_cryptokey_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= "(#{@domain.cryptokeys.count})" unless @domain.cryptokeys.empty? -%>
+      <%= button_to t('c.new'), new_domain_cryptokey_path(@domain),
+        class: "btn btn-primary", method: :get %>
     </h3>
+
     <%= render partial: "cryptokeys/cryptokeys",
       locals: {cryptokeys: @domain.cryptokeys} %>
+
   </div>
-  <div class="col-md-6">
+  <div class="col-md-8">
+
     <h3>
       <%= t '.comments' %>
-      <%= button_to t('c.new'), new_domain_comment_path(@domain), class: "btn btn-primary", method: :get %>
+      <%= "(#{@domain.comments.count})" unless @domain.comments.empty? -%>
+      <%= button_to t('c.new'), new_domain_comment_path(@domain),
+        class: "btn btn-primary", method: :get %>
     </h3>
+
     <%= render partial: "comments/comments",
       locals: {comments: @domain.comments} %>
+
   </div>
 </div>
+<% end %>
 
 <hr>
 
 <h3>
   <%= t('.records') %>
+  <%= "(#{@domain.records.count})" unless @domain.records.empty? -%>
   <%= button_to t('c.new'), new_domain_record_path(@domain),
     class: "btn btn-primary", method: :get %>
 </h3>
+
 <%= render partial: "records/records",
   locals: {
   records: Record.type_sort(@domain.records),

@@ -1,24 +1,45 @@
+<h1>
+  <%= "#{@cryptokey.flags} #{t('c.for')} #{@cryptokey.domain.name}" %>
+</h1>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Domain:</strong>
-  <%= @cryptokey.domain %>
-</p>
+<dl class="dl-horizontal">
+  <dt>
+  <%= t('cryptokeys.columns.domain') %>
+  </dt>
+  <dd>
+  <%= link_to @cryptokey.domain.name, @cryptokey.domain or '-' %>
+  </dd>
 
-<p>
-  <strong>Flags:</strong>
+  <dt>
+  <%= t('cryptokeys.columns.flags') %>
+  </dt>
+  <dd>
   <%= @cryptokey.flags %>
-</p>
+  </dd>
 
-<p>
-  <strong>Active:</strong>
+  <dt>
+  <%= t('cryptokeys.columns.active') %>
+  </dt>
+  <dd>
   <%= @cryptokey.active %>
-</p>
+  </dd>
 
-<p>
-  <strong>Content:</strong>
-  <%= @cryptokey.content %>
-</p>
+  <dt>
+  <%= t('cryptokeys.columns.content') %>
+  </dt>
+  <dd>
+  <%= simple_format @cryptokey.content, wrapper_tag: 'div',
+    class: 'well',
+      style: 'word-wrap: break-word;'
+  %>
+  </dd>
+</dl>
 
-<%= link_to 'Edit', edit_cryptokey_path(@cryptokey) %> |
-<%= link_to 'Back', cryptokeys_path %>
+<%= button_to t('c.edit'), edit_cryptokey_path(@cryptokey), class: 'btn btn-primary',
+  method: :get
+%>
+<%= button_to t('c.back'), @cryptokey.domain ? @cryptokey.domain : domains_path,
+  class: "btn btn-default", method: :get
+%>

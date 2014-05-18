@@ -1,36 +1,87 @@
 <h1>
   <%= " " + @record.name %>
-  <%= button_to 'Edit', edit_record_path(@record), class: 'btn btn-primary',
-    method: :get %>
-  <%= button_to (t('c.back')), @record.domain ? @record.domain : domains_path,
-    class: "btn btn-default", method: :get %>
 </h1>
 
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <div class="alert alert-success">
+    <%= notice %>
+  </div>
+<% elsif @record.errors.any? %>
+  <div class="alert alert-danger">
+    <%= @record.errors.messages %>
+  </div>
+<% end %>
 
 <dl class="dl-horizontal">
-  <dt><%= t('records.columns.domain') %></dt>
-  <dd><%= link_to @record.domain.name, @record.domain %></dd>
+  <dt>
+  <%= t('records.columns.domain') %>
+  </dt>
+  <dd>
+  <%= link_to @record.domain.name, @record.domain or '-' %>
+  </dd>
 
-  <dt><%= t('records.columns.type') %></dt>
-  <dd><%= @record.type %></dd>
+  <dt>
+  <%= t('records.columns.type') %>
+  </dt>
+  <dd>
+  <%= @record.type or '-' %>
+  </dd>
 
-  <dt><%= t('records.columns.content') %></dt>
-  <dd><%= @record.content %></dd>
+  <dt>
+  <%= t('records.columns.content') %>
+  </dt>
+  <dd title="<%= @record.type == 'SOA' ? soa_times(@record.content) : @record.content %>">
+  <%= @record.content or '-' %>
+  </dd>
 
-  <dt>TTL:</dt>
-  <dd><%= @record.ttl %></dd>
+  <dt>
+  <%= t('records.columns.ttl') %>
+  </dt>
+  <dd title="<%=sane_ttl @record.ttl %>">
+  <%= @record.ttl or '-' %>
+  </dd>
 
-  <dt><%= t('records.columns.prio') %></dt>
-  <dd><%= @record.prio %></dd>
+  <dt>
+  <%= t('records.columns.prio') %>
+  </dt>
+  <dd>
+  <%= @record.prio or '-' %>
+  </dd>
 
-  <dt><%= t('records.columns.ordername') %></dt>
-  <dd><%= @record.ordername %></dd>
+  <dt>
+  <%= t('records.columns.ordername') %>
+  </dt>
+  <dd>
+  <%= @record.ordername.blank? ? '-' : @record.ordername %>
+  </dd>
 
-  <dt><%= t('records.columns.auth') %></dt>
-  <dd><%= @record.auth %></dd>
+  <dt>
+  <%= t('records.columns.auth') %>
+  </dt>
+  <dd>
+    <span class="glyphicon glyphicon-<%= @record.auth ? 'ok' : 'remove' %>">
+    </span>
+  </dd>
 
-  <dt><%= t('records.columns.modified') %></dt>
-  <dd><%= @record.change_date %></dd>
+  <dt>
+  <%= t('records.columns.disabled') %>
+  </dt>
+  <dd>
+    <span class="glyphicon glyphicon-<%= @record.disabled ? 'ok' : 'remove' %>">
+    </span>
+  </dd>
+
+  <dt>
+  <%= t('records.columns.modified') %>
+  </dt>
+  <dd>
+  <%= l @record.change_date.localtime or '-' %>
+  </dd>
 </dl>
 
+<%= button_to (t('c.back')), @record.domain ? @record.domain : domains_path,
+  class: "btn btn-default", method: :get
+%>
+<%= button_to 'Edit', edit_record_path(@record), class: 'btn btn-primary',
+  method: :get
+%>

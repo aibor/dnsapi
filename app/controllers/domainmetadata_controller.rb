@@ -58,9 +58,10 @@ class DomainmetadataController < ApplicationController
   # DELETE /domainmetadata/1
   # DELETE /domainmetadata/1.json
   def destroy
+    domain = @domainmetadatum.domain
     @domainmetadatum.destroy
     respond_to do |format|
-      format.html { redirect_to domainmetadata_url }
+      format.html { redirect_to domain }
       format.json { head :no_content }
     end
   end

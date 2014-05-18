@@ -58,9 +58,10 @@ class CryptokeysController < ApplicationController
   # DELETE /cryptokeys/1
   # DELETE /cryptokeys/1.json
   def destroy
+    domain = @cryptokey.domain
     @cryptokey.destroy
     respond_to do |format|
-      format.html { redirect_to cryptokeys_url }
+      format.html { redirect_to domain }
       format.json { head :no_content }
     end
   end

@@ -24,13 +24,44 @@ en:
     back: Back
     new:  New
     edit: Edit
+  activerecord:
+    errors:
+      models:
+        record:
+          attributes:
+            content:
+              invalid_ip_address: is not a valid IP address
+              invalid_domain_name: 'is not a valid domain name: %{domain}'
+              invalid_TTL: 'is not a valid TTL: %{ttl}'
+              too_long: is too long
+              wrong_number_of_fields: has invalid number of fields
+              not_a_number: 'is not a number: %{string}'
+              TTL_may_not_be_zero: TTL may not be zero
+              odd_number_of_double_quotes: has odd number of double quotes
+              invalid_algorithm_number: is not a valid algorithm
+              invalid_fingerprint_type: is not a valid fingerprint type
+              invalid_fingerprint_length: 'fingerprint has invalid length:
+                %{is_length} instead of %{must_length}'
+              invalid_fingerprint: invalid fingerprint
+            name:
+              invalid_host_name: 'is not a valid host name'
+            ttl:
+              invalid_ttl: too high
+            prio:
+              invalid_prio: too high
   domains:
     index:
       show:   "Show %{domain}"
       edit:   "Edit %{domain}"
       delete: "Delete %{domain}"
+    create:
+      success: Domain was successfully created.
+    update:
+      success: Domain was successfully updated.
     show:
       edit:   'Edit properties'
+      zone_disabled: Zone disabled
+      enable_hint: Enable SOA record to enable the zone
     edit:
       title:  Edit Domain
     new:
@@ -40,16 +71,25 @@ en:
       warning:  This will also delete the following resources
   records:
     columns:
+      ttl:      TTL
       change:   Modified
       auth:     auth?
+      disabled: disabled?
     records:
       show:     'Show details for this record'
       edit:     'Edit record'
       delete:   'Delete record'
     edit:
       title:    Edit Record
+    form:
+      help:
+        disabled: Disabling a SOA record disables the whole zone.
     new:
       title:  New Record
+    create:
+      success: Record was successfully created.
+    update:
+      success: Record was successfully updated.
   domainmetadata:
     domainmetadata:
       show:     'Show details for domainmetadatum'
@@ -79,3 +119,6 @@ en:
       title:    Edit Cryptokey
     new:
       title:  New Cryptokey
+  dashboard:
+    pdns_running: PDNS is running
+    pdns_not_running: PDNS is not running

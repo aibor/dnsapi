@@ -1,12 +1,31 @@
+<div class="jumbotron">
 <h1>
-  DNS API
-  <%= button_to t('c.refresh'), root_url, class: "btn btn-primary", method: :get %>
+  DNS API Dashboard
 </h1>
+  <%= button_to t('c.refresh'), "/#{I18n.locale}", class: "btn btn-primary", method: :get %>
+</div>
+
+<div class="container">
+<h3>
+  PowerDNS Status
+  <% if @pdns_pid.blank? -%>
+    <span class="label label-danger"><%= t('.pdns_not_running') %></span>
+  <% else -%>
+    <span class="label label-success"><%= t('.pdns_running') %></span>
+  <% end -%>
+
+</h3>
+</div>
+
+
+<div class="container">
 <h3>
   <%= t('.recently_changed_records') %>
 </h3>
+
 <%= render partial: "records/records",
   locals: {
-    records: Record.order(:change_date).reverse_order.limit(10),
-    count: 10
-  } %>
+    records: records = @records
+  }
+%>
+</div>

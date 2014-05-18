@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :comments
       member do
         get 'delete'
+        put 'secure'
       end
     end
 

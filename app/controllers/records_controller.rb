@@ -1,5 +1,5 @@
 class RecordsController < ApplicationController
-  before_action :set_record, only: [:show, :edit, :update, :destroy]
+  before_action :set_record, only: [:show, :edit, :update, :delete, :destroy]
 
   # GET /records
   # GET /records.json
@@ -29,7 +29,7 @@ class RecordsController < ApplicationController
 
     respond_to do |format|
       if @record.save
-        format.html { redirect_to @record, notice: 'Record was successfully created.' }
+        format.html { redirect_to @record, notice: t('.success') }
         format.json { render :show, status: :created, location: @record }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class RecordsController < ApplicationController
   def update
     respond_to do |format|
       if @record.update(record_params)
-        format.html { redirect_to @record, notice: 'Record was successfully updated.' }
+        format.html { redirect_to @record, notice: t('.success') }
         format.json { render :show, status: :ok, location: @record }
       else
         format.html { render :edit }
@@ -52,12 +52,17 @@ class RecordsController < ApplicationController
     end
   end
 
+  def delete
+
+  end
+
   # DELETE /records/1
   # DELETE /records/1.json
   def destroy
+    domain = @record.domain
     @record.destroy
     respond_to do |format|
-      format.html { redirect_to records_url }
+      format.html { redirect_to domain }
       format.json { head :no_content }
     end
   end
@@ -70,6 +75,6 @@ class RecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def record_params
-      params.require(:record).permit(:domain_id, :name, :type, :content, :ttl, :prio, :ordername, :auth, :change_date)
+      params.require(:record).permit(:domain_id, :name, :type, :content, :ttl, :prio, :ordername, :auth, :change_date, :disabled)
     end
 end

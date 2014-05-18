@@ -28,6 +28,31 @@ de:
     type: Typ
     for: für
     account:  Konto
+  activerecord:
+    errors:
+      models:
+        record:
+          attributes:
+            content:
+              invalid_ip_address: ist keine gültige IP-Adresse
+              invalid_domain_name: 'ist kein gültiger Domainname: %{domain}'
+              invalid_TTL: 'ist keine gültige TTL: %{ttl}'
+              too_long: ist zu lang
+              wrong_number_of_fields: hat ungültige Anzahl von Feldern
+              not_a_number: 'ist keine Zahl: %{string}'
+              TTL_may_not_be_zero: 'TTL darf nicht 0 sein: %{ttl}'
+              odd_number_of_double_quotes: hat ungerade Abzahl von Anführungszeichen
+              invalid_algorithm_number: ist kein gültiger Algorithmus
+              invalid_fingerprint_type: ist kein gültiger Fingerprint-Typ
+              invalid_fingerprint_length: 'Fingerprint hat falsche Länge:
+                %{is_length} statt %{must_length}'
+              invalid_fingerprint: ungültiger Fingerprint
+            name:
+              invalid_host_name: 'ist kein gültiger Hostname'
+            ttl:
+              invalid_TTL: 'zu hoch'
+            prio:
+              invalid_prio: 'zu hoch'
   domainmetadata:  Domainmetadaten
   domains:
     columns:
@@ -39,11 +64,17 @@ de:
       show:   'Details für "%{domain}" anzeigen'
       edit:   'Domain "%{domain}" bearbeiten'
       delete: 'Domain "%{domain}" löschen'
+    create:
+      success: Domain wurde erfolgreich angelegt.
+    update:
+      success: Domain wurde erfolgreich geändert.
     show:
       properties: Eigenschaften
       edit:     'Eigenschaften bearbeiten'
       metadata: Metadaten
       comments: Kommentare
+      zone_disabled: Zone deaktiviert
+      enable_hint: Zum Aktivieren der Zone SOA-Record aktivieren
     edit:
       title: Bearbeite Domain
     new:
@@ -54,7 +85,9 @@ de:
   records:
     columns:
       content:  Daten
+      ttl:      TTL
       auth:     auth?
+      disabled: deaktiviert?
       modified: Geändert
       type:     Typ
     records:
@@ -63,8 +96,15 @@ de:
       delete:   'Eintrag löschen'
     edit:
       title:  Eintrag bearbeiten
+    form:
+      help:
+        disabled: Deaktivieren eines SOA-Records deaktiviert die komplette Zone.
     new:
       title: Neuer Eintrag
+    create:
+      success: Record wurde erfolgreich angelegt.
+    update:
+      success: Record wurde erfolgreich geändert.
   domainmetadata:
     columns:
       kind:     Art
@@ -105,4 +145,6 @@ de:
   dashboard:
     index:
       recently_changed_records: Zuletzt geänderte Records
+      pdns_running: PDNS läuft
+      pdns_not_running: PDNS läuft nicht
 

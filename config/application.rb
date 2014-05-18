@@ -28,5 +28,6 @@ module Dnsapi
     config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :de
     config.i18n.available_locales = [ :en, :de ]
+    config.action_view.field_error_proc = Proc.new {|html_tag| html_tag.html_safe}
   end
 end
