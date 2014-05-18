@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   before_action :set_locale
-  before_filter :basic_http_authentication
+#  before_filter :basic_http_authentication
 
   def set_locale
       I18n.locale = params[:locale] || I18n.default_locale

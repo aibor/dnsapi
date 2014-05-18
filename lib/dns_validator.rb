@@ -200,11 +200,13 @@ class DNSValidator
         @record.errors.add(:content, :wrong_number_of_fields)
       end
 
-      fields.values_at(0,1).each do |f|
-        unless is_domain_name? f
-          @record.errors.add(:content, :invalid_domain_name, domain: f)
-        end
-      end
+			unless is_host_name? fields[0]
+				@record.errors.add(:content, :invalid_host_name)
+			end
+
+			unless is_domain_name? fields[1]
+				@record.errors.add(:content, :invalid_domain_name, domain: fields[1])
+			end
 
       fields.values_at(2..6).each do |f|
         unless f =~ /\A\d+\z/
