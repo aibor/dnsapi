@@ -45,6 +45,23 @@
       </dl>
     </div>
 
+  </div>
+
+  <div class="col-md-8">
+    <h3>
+      <%= t '.metadata' %>
+      <%= button_to t('c.new'), new_domain_domainmetadatum_path(@domain),
+        class: "btn btn-primary", method: :get %>
+    </h3>
+    <%= render partial: "domainmetadata/domainmetadata",
+      locals: {domainmetadata: @domain.domainmetadata} %>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+
     <h3>
       <%= t '.cryptokeys' %>
       <%#= "(#{@domain.cryptokeys.count})" unless @domain.cryptokeys.empty? -%>
@@ -60,23 +77,26 @@
         locals: {cryptokeys: @domain.cryptokeys} %>
     <% end -%>
   </div>
-
-  <div class="col-md-8">
-    <h3>
-      <%= t '.metadata' %>
-      <%= button_to t('c.new'), new_domain_domainmetadatum_path(@domain),
-        class: "btn btn-primary", method: :get %>
-    </h3>
-    <%= render partial: "domainmetadata/domainmetadata",
-      locals: {domainmetadata: @domain.domainmetadata} %>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>DS Keys</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @domain.dskeys.each do |d| %>
+          <tr>
+            <td><%= d %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
   </div>
 
-</div>
-
 <% if false %>
-<div class="row">
-  <div class="col-md-4">
-
     <h3>
       <%= t '.cryptokeys' %>
       <%= "(#{@domain.cryptokeys.count})" unless @domain.cryptokeys.empty? -%>
@@ -100,9 +120,8 @@
     <%= render partial: "comments/comments",
       locals: {comments: @domain.comments} %>
 
-  </div>
-</div>
 <% end %>
+</div>
 
 <hr>
 

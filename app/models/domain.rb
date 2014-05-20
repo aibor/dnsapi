@@ -33,6 +33,19 @@ class Domain < ActiveRecord::Base
     end
   end
 
+  def dskeys
+    arr = []
+    IO.popen("pdnssec show-zone #{self.name}") do |res|
+      res.each do |line|
+        puts line
+        puts "--------------"
+        arr << $1 if line =~ /\ADS = (.+)/
+      end
+    end
+    arr
+  end
+
+
   private
 
   def rectify_zone

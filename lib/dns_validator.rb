@@ -12,6 +12,7 @@ class DNSValidator
   # https://tools.ietf.org/html/rfc6698
 
   class Base
+    RE_char_string  = '[[:graph:]]{,255}'
     RE_label = '[[:alpha:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
     RE_domain = /(?=\A.{,255}\z)(?:#{RE_label}\.)*#{RE_label}/
 
@@ -36,32 +37,33 @@ class DNSValidator
       !!(string =~ /\A#{RE_domain}\.?\z/)
     end
 
-    def is_hostname?(string = nil)
-      !!(string =~ /\A#{RE_domain}?\z/)
-    end
-
     def is_ttl?(number)
       (1...2**31).include? number
     end
   end
 
   class Domain < Base
+    def initialize(record)
+      super
+      @name   = @record.name
+      @masters = @record.master ? @record.master.split(',') : []
+      @type   = @record.type
+    end
+
     def validate
       validate_name
-      validate_master if @record.master
+      validate_master
     end
 
     def validate_name
-      unless is_hostname?(@record.name)
-        @record.errors.add(:name, :invalid_host_name)
+      unless is_domain_name?(@name)
+        @record.errors.add(:name, :invalid_domain_name)
       end
     end
 
     def validate_master
-      masters = @record.master.split(',')
-
-      masters.each do |master|
-        unless is_hostname?(master) or is_ip_address?(master)
+      @masters.each do |master|
+        unless is_domain_name?(master) or is_ip_address?(master)
           @record.errors.add(:master, :invalid_master, master: master)
         end
       end
@@ -69,174 +71,206 @@ class DNSValidator
   end
 
   class ResourceRecord < Base
+    def initialize(record)
+      super
+      @name         = @record.name
+      @type         = @record.type
+      @ttl          = @record.ttl
+      @rdlength     = @record.content ? @record.content.length : 0
+      @rdata_fields = rdata_fields
+      @rdata        = parse_rdata
+    end
+
     def validate
       validate_name
-      validate_ttl if @record.ttl
-      validate_prio if @record.prio
-      validate_content_length
-      validate_content
+      validate_ttl if @ttl
+      validate_rdlength
+      validate_rdata_fields
+      validate_rdata
     end
 
     private
 
+    def rdata_fields
+      # dummy method
+    end
+
+    def parse_rdata
+      return @record.content unless @rdata_fields.is_a? Array
+      return @record.content if @rdata_fields.empty?
+      return @record.content if @rdata_fields.bsearch {|e| !e.is_a? Symbol}
+
+      rdata_struct = Struct.new(*@rdata_fields)
+
+      rdata = @record.content ? @record.content.split : []
+
+      rdata_struct.new(*rdata)
+    end
+
     def validate_name
-      unless is_hostname?(@record.name)
-        @record.errors.add(:name, :invalid_host_name)
+      unless is_domain_name?(@name)
+        @record.errors.add(:name, :invalid_domain_name)
       end
     end
 
     def validate_ttl
-      unless is_ttl?(@record.ttl)
+      unless is_ttl?(@ttl)
         @record.errors.add(:ttl, :invalid_ttl)
       end
     end
 
-    def validate_prio
-      unless (0...2**16).include? @record.prio 
-        @record.errors.add(:prio, :invalid_prio)
+    def validate_rdlength
+      unless @rdlength <= 2**16
+        @record.errors.add(:content, :too_long)
       end
     end
 
-    def validate_content_length
-      if @record.content
-        unless @record.content.length <= 2**16
-          @record.errors.add(:content, :too_long)
-        end
-      else
-        @record.errors.add(:content, :blank)
+    def validate_rdata_fields
+      return unless @rdata_fields
+
+      if @rdata.class.name == "Struct" && !@rdata.all?
+        @record.errors.add(:content, :wrong_number_of_fields)
       end
     end
 
-    def validate_content
+    def validate_rdata
+      false
     end
   end
 
   class A < ResourceRecord
-    def validate_content
-      super
-      unless is_ipv4_address? @record.content
+    def validate_rdata
+      unless is_ipv4_address? @rdata
         @record.errors.add(:content, :invalid_ipv4_address)
       end
     end
   end
 
   class AAAA < ResourceRecord
-    def validate_content
-      super
-      unless is_ipv6_address? @record.content
+    def validate_rdata
+      unless is_ipv6_address? @rdata
         @record.errors.add(:content, :invalid_ipv6_address)
       end
     end
   end
 
   class CNAME < ResourceRecord
-    def validate_content
-      super
-      unless is_domain_name? @record.content
+    def validate_rdata
+      unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
       end
     end
   end
 
   class HINFO < ResourceRecord
-    def validate_content
-      super
-      fields = @record.content.split
+    def rdata_fields
+      [:cpu, :os]
+    end
 
-      unless fields.count == 2
-        @record.errors.add(:content, :wrong_number_of_fields)
+    def validate_rdata
+      @rdata.each do |name,value|
+        unless value =~ /\A#{RE_char_string}\z/
+          @record.errors.add(:content, "invalid_#{name}".to_sym)
+        end
       end
     end
   end
 
   class MINFO < ResourceRecord
-    def validate_content
-      super
-      fields = @record.content.split
+    def rdata_fields
+      [:rmailbx, :emailbx]
+    end
 
-      unless fields.count == 2
-        @record.errors.add(:content, :wrong_number_of_fields)
-      end
-
-      fields.each do |f|
+    def validate_rdata
+      @rdata.each do |name,value|
         unless is_domain_name? f
-          @record.errors.add(:content, :invalid_domain_name, domain: f)
+          @record.errors.add(:content, "invalid_#{name}".to_sym)
         end
       end
     end
   end
 
   class MX < ResourceRecord
-    def validate_content
+    def rdata_fields
+      [:exchange, :preference]
+    end
+
+    def initialize(record)
       super
-      unless is_domain_name? @record.content
-        @record.errors.add(:content, :invalid_domain_name)
+      @rdata.preference = @record.prio
+    end
+
+    def validate_rdata
+      unless is_domain_name? @rdata.exchange
+        @record.errors.add(:content, :invalid_exchange)
       end
     end
   end
 
   class NS < ResourceRecord
-    def validate_content
-      super
-      unless is_domain_name? @record.content
+    def validate_rdata
+      unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
       end
     end
   end
 
   class PTR < ResourceRecord
-    def validate_content
-      super
-      unless is_domain_name? @record.content
+    def validate_rdata
+      unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
+      end
+
+      re_octet = "(?:25[0-5]|(?:2[0-4]|(?:1?\d))?\d)"
+      unless @rdata =~ /\A(?:#{re_octet}\.){1,4}IN-ADDR\.ARPA\.\z/
+        @record.errors.add(:content, :invalid_ptr_name)
       end
     end
   end
 
   class SOA < ResourceRecord
-    def validate_content
-      fields = @record.content.split
-      unless fields.count == 7
-        @record.errors.add(:content, :wrong_number_of_fields)
-      end
+    def rdata_fields
+      [:mname, :rname, :serial, :refresh, :retry, :expire, :minimum]
+    end
 
-			unless is_host_name? fields[0]
-				@record.errors.add(:content, :invalid_host_name)
+    def validate_rdata
+			unless is_domain_name? @rdata.mname
+				@record.errors.add(:content, :invalid_mname)
 			end
 
-			unless is_domain_name? fields[1]
-				@record.errors.add(:content, :invalid_domain_name, domain: fields[1])
+			unless is_domain_name? @rdata.rname
+				@record.errors.add(:content, :invalid_rname)
 			end
 
-      fields.values_at(2..6).each do |f|
+      [:serial, :refresh, :retry, :expire, :minimum].each do |key|
+        f = @rdata[key]
         unless f =~ /\A\d+\z/
-          @record.errors.add(:content, :not_a_number, string: f)
+          @record.errors.add(:content, :not_a_number, string: key)
         end
 
         n = f.to_i
         if n == 0
-          @record.errors.add(:content, :TTL_may_not_be_zero, ttl: f)
+          @record.errors.add(:content, :may_not_be_zero, key: key)
         end
 
         unless is_ttl? n
-          @record.errors.add(:content, :invalid_TTL, ttl: f)
+          @record.errors.add(:content, :to_high, key: key)
         end
       end
     end
   end
 
   class SSHFP < ResourceRecord
-    def validate_content
-      fields = @record.content.split
-      unless fields.count == 3
-        @record.errors.add(:content, :wrong_number_of_fields)
-      end
+    def rdata_fields
+      [:algorithm, :fp_type, :fingerprint]
+    end
 
-      unless fields[0] =~ /\A[123]\z/
+    def validate_rdata
+      unless @rdata.algorithm =~ /\A[123]\z/
         @record.errors.add(:content, :invalid_algorithm_number)
       end
 
-      must_length = case fields[1]
+      must_length = case @rdata.fp_type
                     when '1' then 40
                     when '2' then 64
                     else nil
@@ -245,13 +279,13 @@ class DNSValidator
       unless must_length
         @record.errors.add(:content, :invalid_fingerprint_type)
       else
-        is_length = fields[2].length
+        is_length = @rdata.fingerprint.length
         unless  is_length == must_length
           @record.errors.add(:content, :invalid_fingerprint_length,
                              is_length: is_length, must_length: must_length)
         end
 
-        unless fields[2] =~ /\A\h{#{must_length}}\z/
+        unless @rdata.fingerprint =~ /\A\h{#{must_length}}\z/
           @record.errors.add(:content, :invalid_fingerprint)
         end
       end
@@ -260,8 +294,7 @@ class DNSValidator
   end
 
   class TXT < ResourceRecord
-    def validate_content
-      super
+    def validate_rdata
       # count occurence of non-escaped double quotes
       # will fail in cases like 'string \\"more" string'
       unless rdata.match(/((?<!\\)")/).size.even?

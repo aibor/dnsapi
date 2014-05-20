@@ -20,21 +20,52 @@
   <tbody>
     <% @domains.each do |domain| %>
       <tr>
-        <td><%= link_to domain.name, domain, title: t('.show', domain: domain.name) %></td>
-        <td class="text-center"><%= domain.records.count %></td>
-        <td><%= domain.master %></td>
-        <td><%= domain.last_check %></td>
-        <td><%= domain.type %></td>
-        <td><%= domain.notified_serial %></td>
-        <td><%= domain.account %></td>
-        <td><%= link_to edit_domain_path(domain),
-          title: t('.edit', domain: domain.name) do %>
-          <span class="glyphicon glyphicon-edit"></span>
-        <% end %></td>
-        <td><%= link_to delete_domain_path(domain),
-          title: t('.delete', domain: domain.name) do %>
-          <span class="glyphicon glyphicon-remove"></span>
-        <% end%></td>
+        <td>
+          <%= link_to domain.name, domain, title: t('.show', domain: domain.name) %>
+          <% if domain.cryptokeys.any? -%>
+            <span class="label label-success pull-right" title="<%= t('.dnssec') %>">
+              <span class="glyphicon glyphicon-flag"></span>
+            </span>
+          <% end -%>
+        </td>
+
+        <td class="text-center">
+          <%= domain.records.count %>
+        </td>
+
+        <td>
+          <%= domain.master %>
+        </td>
+        
+        <td>
+          <%= domain.last_check %>
+        </td>
+
+        <td>
+          <%= domain.type %>
+        </td>
+
+        <td>
+          <%= domain.notified_serial %>
+        </td>
+
+        <td>
+          <%= domain.account %>
+        </td>
+
+        <td>
+          <%= link_to edit_domain_path(domain),
+            title: t('.edit', domain: domain.name) do %>
+              <span class="glyphicon glyphicon-edit"></span>
+          <% end %>
+        </td>
+
+        <td>
+          <%= link_to delete_domain_path(domain),
+            title: t('.delete', domain: domain.name) do %>
+              <span class="glyphicon glyphicon-remove"></span>
+          <% end%>
+        </td>
       </tr>
     <% end %>
   </tbody>
