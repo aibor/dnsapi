@@ -11,6 +11,10 @@ class Domain < ActiveRecord::Base
     self.type = 'MASTER' if self.type.blank?
   end
 
+  after_save do
+    rectify_zone
+  end
+
   validates :name, presence: true
   validates :type, presence: true
   validates_inclusion_of :type, in: %w(NATIVE MASTER SLAVE)
@@ -46,13 +50,13 @@ class Domain < ActiveRecord::Base
   end
 
 
-  private
-
   def rectify_zone
     pdnssec 'rectify-zone', self.name
   end
 
-  def pdnssec(cmd, args = nil)
+  private
+
+  def pdnssec(cmd, *args)
     unless system("pdnssec #{cmd} #{args}")
       self.errors[:base] << "pdnssec error while executing: #{cmd} #{args}"
     end

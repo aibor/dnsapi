@@ -16,6 +16,11 @@ class Record < ActiveRecord::Base
     self.name = self.name.sub(/\.\z/,'') if self.name
   end
 
+  before_save do
+    self.hash_zone_record if self.domain.cryptokeys.any?
+    self.ttl ||= 86400
+  end
+
   validates :name, presence: true
   validates :domain_id, presence: true
   validates :domain, associated: true
@@ -28,8 +33,16 @@ class Record < ActiveRecord::Base
     end
   end
 
-  def self.type_sort(array = self.all)
-    array.sort do |x,y|
+  def hash_zone_record
+    IO.popen("pdnssec hash-zone-record #{self.domain.name} #{self.name}") do |res|
+      res.each do |line|
+        self.ordername = line
+      end
+    end
+  end
+
+  def self.type_sort
+    all.sort do |x,y|
       catch :sorted do
         if x.type == y.type
           %w(name ordername content).each do |attr|
