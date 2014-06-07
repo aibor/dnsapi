@@ -1,5 +1,11 @@
 <%= form_for @record, html: {role: :form} do |f| %>
 
+  <% if @record.errors[:base].any? %>
+    <div class="alert alert-danger">
+      <%= @record.errors[:base].first %>
+    </div>
+  <% end -%>
+
   <%# Domain can only be choosen if none is defined yet %>
   <% unless @record.domain -%>
   <div class="form-group">

@@ -13,8 +13,12 @@ class DNSValidator
 
   class Base
     RE_char_string  = '[[:graph:]]{,255}'
-    RE_label = '[[:alpha:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
-    RE_domain = /(?=\A.{,255}\z)(?:#{RE_label}\.)*#{RE_label}/
+    # RFC1035 wants a label to start with a letter. The real world also allows digits
+    RE_label = '(?!.*--.*)[[:alnum:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
+    # In order to work around the rfc ignoring domain_names, which causes IPv4 address
+    # to be valid domain names, check the last label to be rfc conform.
+    RE_label_rfc = '(?!.*--.*)[[:alpha:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
+    RE_domain = /(?=\A.{,255}\z)(?:#{RE_label}\.)*#{RE_label_rfc}/
 
 
     def initialize(record)
@@ -40,6 +44,15 @@ class DNSValidator
     def is_ttl?(number)
       (1...2**31).include? number
     end
+
+    def attr_uniqueness
+       [:name, :type]
+    end
+
+    def record_exists?(search_data)
+      @record.class.where(search_data).where.not(id: @record.id).any? 
+    end
+
   end
 
   class Domain < Base
@@ -68,6 +81,7 @@ class DNSValidator
         end
       end
     end
+
   end
 
   class ResourceRecord < Base
@@ -82,6 +96,8 @@ class DNSValidator
     end
 
     def validate
+      validate_type
+      validate_uniqueness_of_record
       validate_name
       validate_ttl if @ttl
       validate_rdlength
@@ -90,6 +106,10 @@ class DNSValidator
     end
 
     private
+
+    def conflicting_types
+      []
+    end
 
     def rdata_fields
       # dummy method
@@ -105,6 +125,25 @@ class DNSValidator
       rdata = @record.content ? @record.content.split : []
 
       rdata_struct.new(*rdata)
+    end
+
+    def validate_type
+      conflicting_types.each do |ctype| 
+        if record_exists?({name: @record.name, type: ctype})
+          @record.errors.add(:base, :conflicting_record, type: ctype)
+        end
+      end
+    end
+
+
+    def validate_uniqueness_of_record
+      search_data = @record.attributes.keep_if do |k,v|
+        attr_uniqueness.include? k.to_sym
+      end
+
+      if record_exists?(search_data)
+        @record.errors.add(:base, :record_with_name_and_type_exists)
+      end
     end
 
     def validate_name
@@ -139,6 +178,10 @@ class DNSValidator
   end
 
   class A < ResourceRecord
+    def conflicting_types
+      %w(CNAME)
+    end
+
     def validate_rdata
       unless is_ipv4_address? @rdata
         @record.errors.add(:content, :invalid_ipv4_address)
@@ -147,6 +190,10 @@ class DNSValidator
   end
 
   class AAAA < ResourceRecord
+    def conflicting_types
+      %w(CNAME)
+    end
+
     def validate_rdata
       unless is_ipv6_address? @rdata
         @record.errors.add(:content, :invalid_ipv6_address)
@@ -155,6 +202,10 @@ class DNSValidator
   end
 
   class CNAME < ResourceRecord
+    def conflicting_types
+      %w(A AAAA)
+    end
+
     def validate_rdata
       unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
@@ -170,7 +221,7 @@ class DNSValidator
     def validate_rdata
       @rdata.each do |name,value|
         unless value =~ /\A#{RE_char_string}\z/
-          @record.errors.add(:content, "invalid_#{name}".to_sym)
+          @record.errors.add(:content, :invalid_char_string, char_string: value)
         end
       end
     end
@@ -184,13 +235,17 @@ class DNSValidator
     def validate_rdata
       @rdata.each do |name,value|
         unless is_domain_name? f
-          @record.errors.add(:content, "invalid_#{name}".to_sym)
+          @record.errors.add(:content, :invalid_domain_name_, domain: value)
         end
       end
     end
   end
 
   class MX < ResourceRecord
+    def attr_uniqueness
+      super << :prio
+    end
+
     def rdata_fields
       [:exchange, :preference]
     end
@@ -202,12 +257,16 @@ class DNSValidator
 
     def validate_rdata
       unless is_domain_name? @rdata.exchange
-        @record.errors.add(:content, :invalid_exchange)
+        @record.errors.add(:content, :invalid_domain_name)
       end
     end
   end
 
   class NS < ResourceRecord
+    def attr_uniqueness
+      super << :content
+    end
+
     def validate_rdata
       unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
@@ -222,7 +281,7 @@ class DNSValidator
       end
 
       re_octet = "(?:25[0-5]|(?:2[0-4]|(?:1?\d))?\d)"
-      unless @rdata =~ /\A(?:#{re_octet}\.){1,4}IN-ADDR\.ARPA\.\z/
+      unless @rdata =~ /\A(?:#{re_octet}\.){1,4}IN-ADDR\.ARPA\.\z/i
         @record.errors.add(:content, :invalid_ptr_name)
       end
     end
@@ -235,11 +294,11 @@ class DNSValidator
 
     def validate_rdata
 			unless is_domain_name? @rdata.mname
-				@record.errors.add(:content, :invalid_mname)
+				@record.errors.add(:content, :invalid_domain_name_, domain: @rdata.mname)
 			end
 
 			unless is_domain_name? @rdata.rname
-				@record.errors.add(:content, :invalid_rname)
+				@record.errors.add(:content, :invalid_domain_name_, domain: @rdata.rname)
 			end
 
       [:serial, :refresh, :retry, :expire, :minimum].each do |key|
@@ -254,7 +313,7 @@ class DNSValidator
         end
 
         unless is_ttl? n
-          @record.errors.add(:content, :to_high, key: key)
+          @record.errors.add(:content, :too_high, key: key)
         end
       end
     end

@@ -6,7 +6,13 @@
   <div class="alert alert-success">
     <%= notice %>
   </div>
-<% elsif @record.errors.any? %>
+<% end %>
+<% if alert %>
+  <div class="alert alert-warning">
+    <%= alert %>
+  </div>
+<% end %>
+<% if @record.errors.any? %>
   <div class="alert alert-danger">
     <%= @record.errors.messages %>
   </div>
@@ -81,6 +87,12 @@
 
 <%= button_to t('c.back'), @record.domain ? @record.domain : domains_path,
   class: "btn btn-default", method: :get
+%>
+<%= button_to t('c.delete'), delete_record_path(@record), class: 'btn btn-primary',
+  method: :get
+%>
+<%= button_to t('c.clone'), clone_record_path(@record), class: 'btn btn-primary',
+  method: :get
 %>
 <%= button_to t('c.edit'), edit_record_path(@record), class: 'btn btn-primary',
   method: :get

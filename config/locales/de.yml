@@ -24,6 +24,8 @@ de:
     back: Zurück
     new:  Neu
     edit: Ändern
+    clone: Klonen
+    delete: Löschen
     refresh: Aktualisieren
     type: Typ
     for: für
@@ -31,18 +33,32 @@ de:
   activerecord:
     errors:
       models:
+        domain:
+          attributes:
+            name:
+              invalid_domain_name: 'ist kein gültiger Domainname'
+            master:
+              invalid_master: 'ist kein gültiger Master Nameserver: %{master}'
         record:
           attributes:
+            base:
+              record_exists: Es existiert bereits ein identischer Record
+              record_with_name_and_type_exists: Es existiert bereits ein Record mit diesem Namen und Typ
+              conflicting_record: 'In Konflikt stehender Record vom Typ %{type} gefunden'
             content:
               invalid_ip_address: ist keine gültige IP-Adresse
               invalid_ipv4_address: ist keine gültige IPv4-Adresse
               invalid_ipv6_address: ist keine gültige IPv6-Adresse
-              invalid_domain_name: 'ist kein gültiger Domainname: %{domain}'
-              invalid_TTL: 'ist keine gültige TTL: %{ttl}'
+              invalid_domain_name: 'ist kein gültiger Domainname'
+              invalid_domain_name_: 'ist kein gültiger Domainname: %{domain}'
+              invalid_ptr_name: 'ist kein gültiger PTR-Domainname'
+              invalid_char_string: 'ist keine gültige Zeichenkette %{char_string}'
+              invalid_ttl: 'ist keine gültige TTL: %{ttl}'
               too_long: ist zu lang
               wrong_number_of_fields: hat ungültige Anzahl von Feldern
               not_a_number: 'ist keine Zahl: %{string}'
-              TTL_may_not_be_zero: 'TTL darf nicht 0 sein: %{ttl}'
+              may_not_be_zero: 'Feld darf nicht 0 sein: %{key}'
+              too_high: 'Zahl zu groß: %{key}'
               odd_number_of_double_quotes: hat ungerade Abzahl von Anführungszeichen
               invalid_algorithm_number: ist kein gültiger Algorithmus
               invalid_fingerprint_type: ist kein gültiger Fingerprint-Typ
@@ -50,9 +66,9 @@ de:
                 %{is_length} statt %{must_length}'
               invalid_fingerprint: ungültiger Fingerprint
             name:
-              invalid_host_name: 'ist kein gültiger Hostname'
+              invalid_domain_name: 'ist kein gültiger Domainname'
             ttl:
-              invalid_TTL: 'zu hoch'
+              invalid_ttl: 'zu hoch'
             prio:
               invalid_prio: 'zu hoch'
   domainmetadata:  Domainmetadaten
@@ -95,6 +111,7 @@ de:
     records:
       show:     'Details zu Eintrag anzeigen'
       edit:     'Eintrag bearbeiten'
+      clone:    'Eintrag klonen'
       delete:   'Eintrag löschen'
     edit:
       title:  Eintrag bearbeiten
@@ -105,8 +122,10 @@ de:
       title: Neuer Eintrag
     create:
       success: Record wurde erfolgreich angelegt.
+      no_validator: Vorsicht! Kein Validator für diesen Typ verfügbar
     update:
       success: Record wurde erfolgreich geändert.
+      no_validator: Vorsicht! Kein Validator für diesen Typ verfügbar
   domainmetadata:
     columns:
       kind:     Art

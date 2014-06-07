@@ -27,18 +27,32 @@ en:
   activerecord:
     errors:
       models:
+        domain:
+          attributes:
+            name:
+              invalid_domain_name: 'is not a valid domain name'
+            master:
+              invalid_master: 'is not a valid master nameserver: %{master}'
         record:
           attributes:
+            base:
+              record_exists: An identical record already exists
+              record_with_name_and_type_exists: A record with this name and type already exists
+              conflicting_record: 'Conflicting record with type %{type} found'
             content:
               invalid_ip_address: is not a valid IP address
               invalid_ipv4_address: is not a valid IPv4 address
               invalid_ipv6_address: is not a valid IPv6 address
-              invalid_domain_name: 'is not a valid domain name: %{domain}'
-              invalid_TTL: 'is not a valid TTL: %{ttl}'
+              invalid_domain_name: 'is not a valid domain name'
+              invalid_domain_name_: 'is not a valid domain name %{domain}'
+              invalid_ptr_name: 'is not a valid PTR domain name'
+              invalid_char_string: 'is not a valid character string: %{char_string}'
+              invalid_ttl: 'is not a valid TTL: %{ttl}'
               too_long: is too long
               wrong_number_of_fields: has invalid number of fields
               not_a_number: 'is not a number: %{string}'
-              TTL_may_not_be_zero: TTL may not be zero
+              may_not_be_zero: 'may not be zero: %{key}'
+              too_high: 'number too high: %{key}'
               odd_number_of_double_quotes: has odd number of double quotes
               invalid_algorithm_number: is not a valid algorithm
               invalid_fingerprint_type: is not a valid fingerprint type
@@ -46,7 +60,7 @@ en:
                 %{is_length} instead of %{must_length}'
               invalid_fingerprint: invalid fingerprint
             name:
-              invalid_host_name: 'is not a valid host name'
+              invalid_domain_name: 'is not a valid domain name'
             ttl:
               invalid_ttl: too high
             prio:
@@ -80,6 +94,7 @@ en:
     records:
       show:     'Show details for this record'
       edit:     'Edit record'
+      clone:    'Clone record'
       delete:   'Delete record'
     edit:
       title:    Edit Record
@@ -90,8 +105,10 @@ en:
       title:  New Record
     create:
       success: Record was successfully created.
+      no_validator: Attention! No validtor available for this type
     update:
       success: Record was successfully updated.
+      no_validator: Attention! No validtor available for this type
   domainmetadata:
     domainmetadata:
       show:     'Show details for domainmetadatum'

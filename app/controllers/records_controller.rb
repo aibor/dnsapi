@@ -1,5 +1,5 @@
 class RecordsController < ApplicationController
-  before_action :set_record, only: [:show, :edit, :update, :delete, :destroy]
+  before_action :set_record, only: [:show, :edit, :clone, :update, :delete, :destroy]
 
   # GET /records
   # GET /records.json
@@ -27,6 +27,12 @@ class RecordsController < ApplicationController
   def edit
   end
 
+  # GET /records/1/clone
+  def clone
+    @record = Record.new(@record.attributes.reject {|k,v| k =~ /\A(?:id|change_date)\z/})
+    render :new
+  end
+
   # POST /records
   # POST /records.json
   def create
@@ -34,7 +40,8 @@ class RecordsController < ApplicationController
 
     respond_to do |format|
       if @record.save
-        format.html { redirect_to @record, notice: t('.success') }
+        no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
+        format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
         format.json { render :show, status: :created, location: @record }
       else
         format.html { render :new }
@@ -48,7 +55,8 @@ class RecordsController < ApplicationController
   def update
     respond_to do |format|
       if @record.update(record_params)
-        format.html { redirect_to @record, notice: t('.success') }
+        no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
+        format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
         format.json { render :show, status: :ok, location: @record }
       else
         format.html { render :edit }

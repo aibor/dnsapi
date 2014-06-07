@@ -15,7 +15,7 @@ class Domain < ActiveRecord::Base
     rectify_zone
   end
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :type, presence: true
   validates_inclusion_of :type, in: %w(NATIVE MASTER SLAVE)
   validate do |record|

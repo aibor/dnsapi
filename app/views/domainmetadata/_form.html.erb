@@ -1,4 +1,4 @@
-<%= form_for(@domainmetadatum) do |f| %>
+<%= form_for @domainmetadatum, html: {role: :form} do |f| %>
   <% if @domainmetadatum.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@domainmetadatum.errors.count, "error") %> prohibited this domainmetadatum from being saved:</h2>
@@ -13,16 +13,18 @@
 
   <% unless @domainmetadatum.domain -%>
   <div class="form-group">
-    <%= f.label :domain_id, t('domainmetadata.columns.domain') %><br>
+    <%= f.label :domain_id, t('domainmetadata.columns.domain'), class: 'control-label' %>
     <%= f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'} %>
   </div>
+  <% else %>
+    <%= f.hidden_field :domain_id %>
   <% end -%>
   <div class="form-group">
-    <%= f.label :kind, t('domainmetadata.columns.kind') %><br>
+    <%= f.label :kind, t('domainmetadata.columns.kind'), class: 'control-label' %>
     <%= f.select :kind, Domainmetadatum::Kinds, {}, {class: 'form-control'} %>
   </div>
   <div class="form-group">
-    <%= f.label :content, t('domainmetadata.columns.content') %><br>
+    <%= f.label :content, t('domainmetadata.columns.content'), class: 'control-label' %>
     <% if @domainmetadatum.kind == 'SOA-EDIT' -%>
       <%= f.select :content, Domainmetadatum::SOAEdits, {}, {class: 'form-control'} %>
     <% else -%>

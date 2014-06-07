@@ -54,7 +54,7 @@
         class: "btn btn-primary", method: :get %>
     </h3>
     <%= render partial: "domainmetadata/domainmetadata",
-      locals: {domainmetadata: @domain.domainmetadata} %>
+      locals: {domainmetadata: @domain.domainmetadata.order(:kind)} %>
   </div>
 
 </div>
