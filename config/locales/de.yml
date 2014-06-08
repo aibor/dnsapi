@@ -93,6 +93,9 @@ de:
       comments: Kommentare
       zone_disabled: Zone deaktiviert
       enable_hint: Zum Aktivieren der Zone SOA-Record aktivieren
+      secure_zone: DNSSEC Schlüssel erstellen
+    secure:
+      success: DNSSEC Schlüssel erfolgreich erstellt
     edit:
       title: Bearbeite Domain
     new:
@@ -123,9 +126,14 @@ de:
     create:
       success: Record wurde erfolgreich angelegt.
       no_validator: Vorsicht! Kein Validator für diesen Typ verfügbar
+      no_type_validation: Vorsicht! Keine Typenvalidierung durchgeführt
     update:
       success: Record wurde erfolgreich geändert.
       no_validator: Vorsicht! Kein Validator für diesen Typ verfügbar
+      no_type_validation: Vorsicht! Keine Typenvalidierung durchgeführt
+    delete:
+      title:    Lösche Record
+      warning:  Diesen Record wirklich löschen?
   domainmetadata:
     columns:
       kind:     Art
@@ -138,6 +146,13 @@ de:
       title: Bearbeite Metadatensatz
     new:
       title: Neuer Domainmetadatensatz
+    create:
+      success: Domainmetadatensatz wurde erfolgreich angelegt.
+    update:
+      success: Domainmetadatensatz wurde erfolgreich geändert.
+    delete:
+      title:    Lösche Domainmetadatensatz
+      warning:  Diesen Domainmetadatensatz wirklich löschen?
   comments:
     columns:
       comment:  Kommentar
@@ -163,6 +178,9 @@ de:
       title: Bearbeite Cryptokey
     new:
       title: Neuer Cryptokey
+    delete:
+      title:    Lösche Cryptokey
+      warning:  Diesen Cryptokey wirklich löschen?
   dashboard:
     index:
       recently_changed_records: Zuletzt geänderte Records

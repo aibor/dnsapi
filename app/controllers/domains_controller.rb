@@ -1,6 +1,7 @@
 class DomainsController < ApplicationController
-  before_action :set_domain, only: [:show, :edit, :update, :delete,
-    :destroy, :secure]
+  before_action :set_domain, only: [
+    :show, :edit, :update, :delete, :destroy, :secure
+  ]
 
   # GET /domains
   # GET /domains.json
@@ -20,7 +21,6 @@ class DomainsController < ApplicationController
   end
 
   def secure
-    
     respond_to do |format|
       if @domain.secure_zone
         format.html { redirect_to :back, notice: t('.success') }
@@ -67,6 +67,7 @@ class DomainsController < ApplicationController
   end
 
   def delete
+    @records_page = params[:records_page].to_i
   end
 
   # DELETE /domains/1

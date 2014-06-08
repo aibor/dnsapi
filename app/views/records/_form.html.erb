@@ -110,6 +110,14 @@
   </div>
 
   <div class="actions pull-right">
+      <div class="form-group">
+        <%= f.label ' ' %>
+        <div class="checkbox">
+          <%= f.label :no_type_validation, class: 'control-label' do %>
+            <%= f.check_box :no_type_validation %><%= t('c.skip_validation') %> 
+          <% end %>
+        </div>
+      </div>
     <%= button_tag type: 'reset', class: 'btn btn-default' do %>
       Reset
     <% end %>

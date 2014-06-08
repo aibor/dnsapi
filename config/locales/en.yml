@@ -78,6 +78,9 @@ en:
       edit:   'Edit properties'
       zone_disabled: Zone disabled
       enable_hint: Enable SOA record to enable the zone
+      secure_zone: Create DNSSEC keys
+    secure:
+      success: Successfully created DNSSEC keys
     edit:
       title:  Edit Domain
     new:
@@ -105,10 +108,15 @@ en:
       title:  New Record
     create:
       success: Record was successfully created.
-      no_validator: Attention! No validtor available for this type
+      no_validator: Attention! No validator available for this type
+      no_type_validation: Attention! No type validation performed
     update:
       success: Record was successfully updated.
-      no_validator: Attention! No validtor available for this type
+      no_validator: Attention! No validator available for this type
+      no_type_validation: Attention! No type validation performed
+    delete:
+      title:    Delete Record
+      warning:  Are you sure you want to delete this Record?
   domainmetadata:
     domainmetadata:
       show:     'Show details for domainmetadatum'
@@ -118,6 +126,13 @@ en:
       title:    Edit Domainmetadatum
     new:
       title:  New Domainmetadatum
+    create:
+      success: Domainmetadatum was successfully created.
+    update:
+      success: Domainmetadatum was successfully updated.
+    delete:
+      title:    Delete Domainmetadatum
+      warning:  Are you sure you want to delete this Domainmetadatum?
   comments:
     comments:
       show:     'Show details for this comment'
@@ -138,6 +153,9 @@ en:
       title:    Edit Cryptokey
     new:
       title:  New Cryptokey
+    delete:
+      title:    Delete Cryptokey
+      warning:  Are you sure you want to delete this Cryptokey?
   dashboard:
     pdns_running: PDNS is running
     pdns_not_running: PDNS is not running

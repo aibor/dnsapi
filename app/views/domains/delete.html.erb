@@ -11,7 +11,10 @@
   <%= t('.records') %>
 </h3>
 <%= render partial: "records/records",
-  locals: { records: @domain.records, no_links: true }
+  locals: {
+  records: @domain.records.type_sort,
+  no_links: true,
+  page: (@records_page > 1) ? @records_page : nil } 
 %>
 
 <h3>
@@ -24,6 +27,6 @@
 <hr>
 
 
-<%= button_to t('c.delete_domain'), (@domain),
+<%= button_to t('c.delete'), (@domain),
   class: "btn btn-primary", method: :delete
 %>

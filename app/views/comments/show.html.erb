@@ -30,5 +30,5 @@
   <%= @comment.comment %>
 </p>
 
-<%= link_to 'Edit', edit_comment_path(@comment) %> |
-<%= link_to 'Back', comments_path %>
+<%= link_to t('c.back'), comments_path %>
+<%= link_to t('c.edit'), edit_comment_path(@comment) %> |

@@ -41,6 +41,7 @@ class RecordsController < ApplicationController
     respond_to do |format|
       if @record.save
         no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
+        no_validator ||= t('.no_type_validation') unless @record.no_type_validation.to_i.zero?
         format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
         format.json { render :show, status: :created, location: @record }
       else
@@ -56,6 +57,7 @@ class RecordsController < ApplicationController
     respond_to do |format|
       if @record.update(record_params)
         no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
+        no_validator ||= t('.no_type_validation') unless @record.no_type_validation.to_i.zero?
         format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
         format.json { render :show, status: :ok, location: @record }
       else
@@ -88,6 +90,6 @@ class RecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def record_params
-      params.require(:record).permit(:domain_id, :name, :type, :content, :ttl, :prio, :ordername, :auth, :change_date, :disabled)
+      params.require(:record).permit(:domain_id, :name, :type, :content, :ttl, :prio, :ordername, :auth, :change_date, :disabled, :no_type_validation)
     end
 end

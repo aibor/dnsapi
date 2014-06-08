@@ -11,16 +11,21 @@
     <% domainmetadata.each do |domainmetadatum| %>
       <tr>
         <td><%= domainmetadatum.kind %></td>
+
         <td><%= domainmetadatum.content %></td>
-        <td><%= link_to edit_domainmetadatum_path(domainmetadatum),
-          title: t('.edit') do %>
-          <span class="glyphicon glyphicon-edit"></span>
-        <% end %></td>
-        <td><%= link_to domainmetadatum, method: :delete,
-          data: { confirm: 'Are you sure?' },
-          title: t('.delete') do %>
-          <span class="glyphicon glyphicon-remove"></span>
-        <% end%></td>
+
+        <td>
+          <%= link_to edit_domainmetadatum_path(domainmetadatum),
+            title: t('.edit') do %>
+            <span class="glyphicon glyphicon-edit"></span>
+          <% end %>
+        </td>
+
+        <td>
+          <%= link_to delete_domainmetadatum_path(domainmetadatum), title: t('.delete') do %>
+            <span class="glyphicon glyphicon-remove"></span>
+          <% end%>
+        </td>
       </tr>
     <% end %>
   </tbody>

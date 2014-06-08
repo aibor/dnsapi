@@ -1,7 +1,7 @@
 <h1>
   <%= t('.title') %>
   <%= " #{@domain.name}" if @domain %>
-  <%= button_to 'Back', @domain ? @domain : domains_path,
+  <%= button_to t('c.back'), @domain ? @domain : domains_path,
     class: "btn btn-default", method: :get %>
 </h1>
 <div class="container">

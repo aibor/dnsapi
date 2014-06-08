@@ -7,7 +7,7 @@
 
 <hr>
 
-<%= button_to 'Back', @cryptokey.domain ? @cryptokey.domain : domains_path,
+<%= button_to t('c.back'), @cryptokey.domain ? @cryptokey.domain : domains_path,
   class: "btn btn-default", method: :get
 %>
 <%= button_to t('c.delete_cryptokey'), (@cryptokey),

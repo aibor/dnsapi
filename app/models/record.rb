@@ -3,6 +3,8 @@ require 'dns_validator'
 class Record < ActiveRecord::Base
   self.inheritance_column = :itype
 
+  attr_accessor :no_type_validation
+
   Types = %w(A AAAA AFSDB CERT CNAME DLV DNAME DNSKEY DS EUI48 EUI64
              HINFO KEY LOC MINFO MX NAPTR NS NSEC NSEC3 NSEC3PARAM OPT
              PTR RKEY RP RRSIG SOA SPF SSHFP SRV TLSA TXT).freeze
@@ -28,7 +30,7 @@ class Record < ActiveRecord::Base
   validates_inclusion_of :type, in: Types
   validate :unique_record
   validate do |record|
-    if has_dns_validator?
+    if has_dns_validator? and record.no_type_validation.to_i.zero?
       klass = DNSValidator.class_eval self.type
       klass.new(record).validate
     end
@@ -64,7 +66,6 @@ class Record < ActiveRecord::Base
             when y.type then throw :sorted, 1
             end
           end
-          #throw :sorted, x.type <=> y.type
           if x.name == y.name
             throw :sorted, x.type <=> y.type
           else

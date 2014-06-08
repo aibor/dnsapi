@@ -41,8 +41,6 @@ class Domain < ActiveRecord::Base
     arr = []
     IO.popen("pdnssec show-zone #{self.name}") do |res|
       res.each do |line|
-        puts line
-        puts "--------------"
         arr << $1 if line =~ /\ADS = (.+)/
       end
     end
@@ -57,8 +55,8 @@ class Domain < ActiveRecord::Base
   private
 
   def pdnssec(cmd, *args)
-    unless system("pdnssec #{cmd} #{args}")
-      self.errors[:base] << "pdnssec error while executing: #{cmd} #{args}"
+    unless system("pdnssec #{cmd} #{args.join(' ')} >/dev/null 2>&1")
+      self.errors[:base] << "pdnssec error while executing: #{cmd} #{args.join(' ')}"
     end
   end
 
