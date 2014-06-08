@@ -28,6 +28,7 @@ gem 'spring',    group: :development
 #gem 'sass-rails'
 #gem 'uglifier'
 
+gem 'puma'
 
 # Add mulitilingual support
 gem 'rails-i18n'

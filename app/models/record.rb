@@ -12,10 +12,10 @@ class Record < ActiveRecord::Base
   belongs_to :domain, inverse_of: :records
 
   before_validation do
+    self.name = self.name.blank? ? self.domain.name : self.name.sub(/\.\z/,'')
     unless self.name =~ /#{self.domain.name.gsub('.','\.')}\.?\z/
       self.name += self.name[-1] == '.' ? '' : '.' + self.domain.name
     end
-    self.name = self.name.sub(/\.\z/,'') if self.name
   end
 
   before_save do
