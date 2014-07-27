@@ -26,6 +26,12 @@ class ApplicationController < ActionController::Base
   end
 
 
+  def logout
+    session[:logout] = true
+    redirect_to :root
+  end
+
+
   protected
 
   def json_request?
@@ -67,9 +73,12 @@ class ApplicationController < ActionController::Base
 
   def http_basic_authentication
     authenticate_or_request_with_http_basic do |username, password|
-      @user = User.where(username: username).first
-      if @user and @user.respond_to?("authenticate")
+      if not session[:logout] and
+        @user = User.where(username: username).first
+        @user and @user.respond_to?("authenticate")
         !!@user.authenticate(password)
+      else
+        session[:logout] = nil
       end
     end
   end

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
     get 'dashboard/index'
 
+    get 'logout' => 'application#logout'
+
     resources :domains do
       resources :records, :domainmetadata, :cryptokeys, only: [:index, :new]
     #  resources :comments
