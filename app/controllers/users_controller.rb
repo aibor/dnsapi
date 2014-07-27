@@ -58,12 +58,14 @@ class UsersController < ApplicationController
 
 
   def delete
+    raise User::NotAuthorized unless @user.admin
   end
 
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    raise User::NotAuthorized unless @user.admin
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_path }

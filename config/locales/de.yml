@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
+  profile: Profil
   c:
     back: Zurück
     new:  Neu

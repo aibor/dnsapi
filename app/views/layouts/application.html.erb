@@ -11,6 +11,10 @@
   <div class="container">
     <header class="header">
       <ul class="nav nav-pills pull-right">
+        <li<%= raw ' class="active"' if
+          current_page?(controller: 'users', action: 'show', id: @user.id) -%>>
+          <%= link_to t(:profile), @user %>
+        </li>
       <% @nav_controller.each do |controller| -%>
         <li<%= raw ' class="active"' if
           current_page?(controller: controller) -%>>
