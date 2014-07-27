@@ -102,6 +102,9 @@ de:
     form:
       password: Passwort
       password_confirmation: Passwortbestätigung
+      help:
+        admin: Nutzer mit Adminrechten können alle Domains bearbeiten und alle Benutzer verwalten.
+        defaults: Diese Werte werden für den Standard-SOA-Record genutzt, der beim Anlegen einer neuen Domain erstellt wird.
     delete:
       title:    Lösche Benutzer
       warning:  Diesen Benutzer wirklich löschen?

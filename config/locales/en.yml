@@ -87,6 +87,10 @@ en:
       title: Edit User
     update:
       success: User successfully updated.
+    form:
+      help:
+        admin: User with admin privileges can edit all domains and can manage all users.
+        defaults: These values are used for the default SOA record, which is created for a new domain.
     delete:
       title:    Delete User
       warning:  Are you sure you want to delete this user?

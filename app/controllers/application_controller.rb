@@ -72,7 +72,8 @@ class ApplicationController < ActionController::Base
   end
 
   def http_basic_authentication
-    authenticate_or_request_with_http_basic do |username, password|
+    realm = Rails.application.class.parent_name + '  Realm'
+    authenticate_or_request_with_http_basic realm do |username, password|
       if not session[:logout] and
         @user = User.where(username: username).first
         @user and @user.respond_to?("authenticate")

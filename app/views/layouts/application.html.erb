@@ -22,7 +22,7 @@
         <li<%= raw ' class="active"' if
           current_page?(controller: controller) -%>>
           <%= link_to controller.capitalize,
-            url_for( controller: controller ) %>
+            url_for(controller: controller) %>
         </li>
       <% end -%>
       </ul>
@@ -30,7 +30,9 @@
       <div class="banner">
         <h2 class="text-muted">
           <%= link_to 'DNS API', "/#{I18n.locale}" %>
-          <%= raw '<span class="label label-warning" style="vertical-align:.1em;">Development</span>' if Rails.env == "development" %>
+          <%= raw '<span class="label label-warning" ' +
+            'style="vertical-align:.1em;">Development</span>' if
+            Rails.env == "development" %>
         </h2>
 
         <ul class="nav nav-lang">
