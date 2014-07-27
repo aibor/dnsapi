@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :cryptokeys, through: :domains
 
   validates_uniqueness_of :username
-  validates :password, length: { minimum: 16 }
+  validates :password, length: { minimum: 16 }, if: :password
   validate :defaults_format
 
   class NotAuthorized < StandardError; end

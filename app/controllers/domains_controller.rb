@@ -50,6 +50,7 @@ class DomainsController < ApplicationController
     respond_to do |format|
       if @domain.save
         @domain.users << @user
+        @domain.create_default_soa @user
         format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :created, location: @domain }
       else

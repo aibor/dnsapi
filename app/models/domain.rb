@@ -55,6 +55,21 @@ class Domain < ActiveRecord::Base
     pdnssec 'rectify-zone', self.name
   end
 
+  def create_default_soa(user)
+    primary     = user.default_primary
+    primary     = primary.blank? ? 'ns.inwx.de.' : primary
+    postmaster  = user.default_postmaster
+    postmaster  = postmaster.blank? ? 'hostmaster.inwx.de.' : postmaster
+    serial      = Time.new.strftime('%Y%m%d01')
+
+   Record.create(
+     domain_id: self.id,
+     ttl: 86400,
+     type: 'SOA',
+     content: "#{primary} #{postmaster} #{serial} 86400 3600 3600000 86400"
+   )
+  end
+
   private
 
   def pdnssec(cmd, *args)
