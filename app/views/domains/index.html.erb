@@ -6,14 +6,34 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Records</th>
-      <th>Master</th>
-      <th>Last check</th>
-      <th>Type</th>
-      <th>Notified serial</th>
+      <th>
+        <%= t('domains.columns.name') %>
+      </th>
+
+      <th>
+        <%= t('domains.columns.records') %>
+      </th>
+
+      <th>
+        <%= t('domains.columns.master') %>
+      </th>
+
+      <th>
+        <%= t('domains.columns.last_check') %>
+      </th>
+
+      <th>
+        <%= t('domains.columns.type') %>
+      </th>
+
+      <th>
+        <%= t('domains.columns.notified_serial') %>
+      </th>
+
       <% if @user.admin %>
-        <th>Users</th>
+      <th>
+        <%= t('domains.columns.users') %>
+      </th>
       <% end %>
       <th colspan="3"></th>
     </tr>

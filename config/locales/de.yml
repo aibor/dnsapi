@@ -88,13 +88,22 @@ de:
       default_postmaster: Standardmailbox
       created: Erstellt
       updated: Zuletzt geändert
+    index:
+      users: Benutzer
     new:
       title: Neuer Benutzer
+    create:
+      success: Benutzer wurde erfolgreich angelegt.
     edit:
       title: Bearbeite Benutzer
+    update:
+      success: Benutzer wurde erfolgreich geändert.
     form:
       password: Passwort
       password_confirmation: Passwortbestätigung
+    delete:
+      title:    Lösche Benutzer
+      warning:  Diesen Benutzer wirklich löschen?
   domains:
     columns:
       account:  Konto

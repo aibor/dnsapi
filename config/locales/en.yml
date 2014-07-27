@@ -81,17 +81,24 @@ en:
       updated: Last Update
     new:
       title: Create User
+    create:
+      success: User successfully created.
     edit:
       title: Edit User
+    update:
+      success: User successfully updated.
+    delete:
+      title:    Delete User
+      warning:  Are you sure you want to delete this user?
   domains:
     index:
       show:   "Show %{domain}"
       edit:   "Edit %{domain}"
       delete: "Delete %{domain}"
     create:
-      success: Domain was successfully created.
+      success: Domain successfully created.
     update:
-      success: Domain was successfully updated.
+      success: Domain successfully updated.
     show:
       edit:   'Edit properties'
       zone_disabled: Zone disabled
@@ -125,11 +132,11 @@ en:
     new:
       title:  New Record
     create:
-      success: Record was successfully created.
+      success: Record successfully created.
       no_validator: Attention! No validator available for this type
       no_type_validation: Attention! No type validation performed
     update:
-      success: Record was successfully updated.
+      success: Record successfully updated.
       no_validator: Attention! No validator available for this type
       no_type_validation: Attention! No type validation performed
     delete:
@@ -145,9 +152,9 @@ en:
     new:
       title:  New Domainmetadatum
     create:
-      success: Domainmetadatum was successfully created.
+      success: Domainmetadatum successfully created.
     update:
-      success: Domainmetadatum was successfully updated.
+      success: Domainmetadatum successfully updated.
     delete:
       title:    Delete Domainmetadatum
       warning:  Are you sure you want to delete this Domainmetadatum?
