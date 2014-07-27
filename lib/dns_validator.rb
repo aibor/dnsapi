@@ -41,6 +41,10 @@ class DNSValidator
       !!(string =~ /\A#{RE_domain}\.?\z/)
     end
 
+    def is_rname?(string = nil)
+      is_domain_name?(string) and string.split('.').count > 2
+    end
+
     def is_ttl?(number)
       (1...2**31).include? number
     end
@@ -297,8 +301,8 @@ class DNSValidator
 				@record.errors.add(:content, :invalid_domain_name_, domain: @rdata.mname)
 			end
 
-			unless is_domain_name? @rdata.rname
-				@record.errors.add(:content, :invalid_domain_name_, domain: @rdata.rname)
+			unless is_rname? @rdata.rname
+				@record.errors.add(:content, :invalid_rname, rname: @rdata.rname)
 			end
 
       [:serial, :refresh, :retry, :expire, :minimum].each do |key|

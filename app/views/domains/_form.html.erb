@@ -32,15 +32,16 @@
         <%= f.select :type, %w( MASTER NATIVE SLAVE ), {}, {class: 'form-control'} %>
       </div>
 
-      <% if false %>
-      <div class="form-group <%= 'has-error' unless @domain.errors[:account].blank? %>">
-        <%= f.label :account, t('domains.columns.account'), class: 'control-label' %>
-        <% unless @domain.errors[:account].blank? %>
+      <% if @user.admin %>
+      <div class="form-group <%= 'has-error' unless @domain.errors[:users].blank? %>">
+        <%= f.label :users, t('domains.columns.users'), class: 'control-label' %>
+        <% unless @domain.errors[:users].blank? %>
           <span class="label label-danger">
-            <%= @domain.errors[:account].first %>
+            <%= @domain.errors[:users].first %>
           </span>
         <% end %>
-        <%= f.text_field :account, maxlength: 255, class: 'form-control' %>
+        <%= f.collection_select :user_ids, User.all, :id, :username,
+          {}, {multiple: true, class: 'form-control'} %>
       </div>
       <% end %>
 

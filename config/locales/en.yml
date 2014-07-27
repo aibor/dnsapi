@@ -27,6 +27,12 @@ en:
   activerecord:
     errors:
       models:
+        user:
+          attributes:
+            default_primary:
+              invalid_domain_name: 'is not a valid domain name'
+            default_postmaster:
+              invalid_rname: 'is bot a valid mailbox name'
         domain:
           attributes:
             name:
@@ -45,6 +51,7 @@ en:
               invalid_ipv6_address: is not a valid IPv6 address
               invalid_domain_name: 'is not a valid domain name'
               invalid_domain_name_: 'is not a valid domain name %{domain}'
+              invalid_rname: 'is bot a valid mailbox name: %{rname}'
               invalid_ptr_name: 'is not a valid PTR domain name'
               invalid_char_string: 'is not a valid character string: %{char_string}'
               invalid_ttl: 'is not a valid TTL: %{ttl}'
@@ -65,6 +72,17 @@ en:
               invalid_ttl: too high
             prio:
               invalid_prio: too high
+  users:
+    columns:
+      admin: Admin?
+      default_primary: Default Primary Nameserver
+      default_postmaster: Default Postmaster
+      created: Created At
+      updated: Last Update
+    new:
+      title: Create User
+    edit:
+      title: Edit User
   domains:
     index:
       show:   "Show %{domain}"

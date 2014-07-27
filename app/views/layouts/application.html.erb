@@ -11,7 +11,7 @@
   <div class="container">
     <header class="header">
       <ul class="nav nav-pills pull-right">
-      <% %w( domains ).each do |controller| -%>
+      <% @nav_controller.each do |controller| -%>
         <li<%= raw ' class="active"' if
           current_page?(controller: controller) -%>>
           <%= link_to controller.capitalize,
@@ -23,7 +23,7 @@
       <div class="banner">
         <h2 class="text-muted">
           <%= link_to 'DNS API', "/#{I18n.locale}" %>
-					<%= raw '<span class="label label-warning" style="vertical-align:.1em;">Development</span>' if Rails.env == "development" %>
+          <%= raw '<span class="label label-warning" style="vertical-align:.1em;">Development</span>' if Rails.env == "development" %>
         </h2>
 
         <ul class="nav nav-lang">
@@ -41,6 +41,12 @@
   </div> <!-- /container -->
 
   <div class="container">
+    <% if flash[:error] %>
+      <div class="alert alert-danger">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+
     <%= yield %>
   </div> <!-- /container -->
 

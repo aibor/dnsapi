@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
-  belongs_to :domain, inverse_of: :comments
+  belongs_to :domain
+  has_many :users, through: :domain
 
   validates :domain_id, presence: true
   validates :domain, associated: true

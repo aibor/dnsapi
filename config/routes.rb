@@ -6,9 +6,7 @@ Rails.application.routes.draw do
     get 'dashboard/index'
 
     resources :domains do
-      resources :records
-      resources :domainmetadata
-      resources :cryptokeys
+      resources :records, :domainmetadata, :cryptokeys, only: [:index, :new]
     #  resources :comments
       member do
         get 'delete'
@@ -16,20 +14,26 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :domainmetadata do
+    resources :domainmetadata, except: :index do 
       member do
         get 'delete'
       end
     end
 
-    resources :records do
+    resources :records, except: :index do
       member do
         get 'delete'
         get 'clone'
       end
     end
 
-    resources :cryptokeys do
+    resources :cryptokeys, except: :index do
+      member do
+        get 'delete'
+      end
+    end
+
+    resources :users do
       member do
         get 'delete'
       end

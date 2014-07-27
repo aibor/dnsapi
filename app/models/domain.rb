@@ -1,10 +1,13 @@
+require 'dns_validator'
+
 class Domain < ActiveRecord::Base
   self.inheritance_column = :itype
 
-  has_many :records, inverse_of: :domain
-  has_many :domainmetadata, inverse_of: :domain
-  has_many :comments, inverse_of: :domain
-  has_many :cryptokeys, inverse_of: :domain
+  has_many :records
+  has_many :domainmetadata
+  has_many :comments
+  has_many :cryptokeys
+  has_and_belongs_to_many :users
 
   before_validation do
     self.name = self.name.sub(/\.\z/,'') if self.name

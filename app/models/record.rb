@@ -9,7 +9,9 @@ class Record < ActiveRecord::Base
              HINFO KEY LOC MINFO MX NAPTR NS NSEC NSEC3 NSEC3PARAM OPT
              PTR RKEY RP RRSIG SOA SPF SSHFP SRV TLSA TXT).freeze
 
-  belongs_to :domain, inverse_of: :records
+  belongs_to :domain
+  has_many :users, through: :domain
+
 
   before_validation do
     self.name = self.name.blank? ? self.domain.name : self.name.sub(/\.\z/,'')

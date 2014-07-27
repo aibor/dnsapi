@@ -33,6 +33,12 @@ de:
   activerecord:
     errors:
       models:
+        user:
+          attributes:
+            default_primary:
+              invalid_domain_name: 'ist kein gültiger Domainname'
+            default_postmaster:
+              invalid_rname: 'ist kein gültiger Mailboxname'
         domain:
           attributes:
             name:
@@ -51,6 +57,7 @@ de:
               invalid_ipv6_address: ist keine gültige IPv6-Adresse
               invalid_domain_name: 'ist kein gültiger Domainname'
               invalid_domain_name_: 'ist kein gültiger Domainname: %{domain}'
+              invalid_rname: 'ist kein gültiger Mailboxname: %{rname}'
               invalid_ptr_name: 'ist kein gültiger PTR-Domainname'
               invalid_char_string: 'ist keine gültige Zeichenkette %{char_string}'
               invalid_ttl: 'ist keine gültige TTL: %{ttl}'
@@ -72,12 +79,29 @@ de:
             prio:
               invalid_prio: 'zu hoch'
   domainmetadata:  Domainmetadaten
+  users:  Benutzer
+  users:
+    columns:
+      username: Benutzername
+      admin: Admin?
+      default_primary: Standardnameserver
+      default_postmaster: Standardmailbox
+      created: Erstellt
+      updated: Zuletzt geändert
+    new:
+      title: Neuer Benutzer
+    edit:
+      title: Bearbeite Benutzer
+    form:
+      password: Passwort
+      password_confirmation: Passwortbestätigung
   domains:
     columns:
       account:  Konto
       last_check: Letzer Check
       type:     Typ
       notified_serial:  Seriennummer
+      users: Benutzer
     index:
       show:   'Details für "%{domain}" anzeigen'
       edit:   'Domain "%{domain}" bearbeiten'

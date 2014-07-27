@@ -1,13 +1,15 @@
 class DomainsController < ApplicationController
-  before_action :set_domain, only: [
-    :show, :edit, :update, :delete, :destroy, :secure
-  ]
 
   # GET /domains
   # GET /domains.json
   def index
-    @domains = Domain.order(:name)
+    @domains = if @user.admin 
+                 Domain.order(:name)
+               else
+                 @user.domains.order(:name)
+               end
   end
+
 
   # GET /domains/1
   # GET /domains/1.json
@@ -15,10 +17,12 @@ class DomainsController < ApplicationController
     @records_page = params[:records_page].to_i
   end
 
+
   # GET /domains/new
   def new
     @domain = Domain.new
   end
+
 
   def secure
     respond_to do |format|
@@ -32,9 +36,11 @@ class DomainsController < ApplicationController
     end
   end
 
+
   # GET /domains/1/edit
   def edit
   end
+
 
   # POST /domains
   # POST /domains.json
@@ -43,6 +49,7 @@ class DomainsController < ApplicationController
 
     respond_to do |format|
       if @domain.save
+        @domain.users << @user
         format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :created, location: @domain }
       else
@@ -51,6 +58,7 @@ class DomainsController < ApplicationController
       end
     end
   end
+
 
   # PATCH/PUT /domains/1
   # PATCH/PUT /domains/1.json
@@ -66,9 +74,11 @@ class DomainsController < ApplicationController
     end
   end
 
+
   def delete
     @records_page = params[:records_page].to_i
   end
+
 
   # DELETE /domains/1
   # DELETE /domains/1.json
@@ -80,14 +90,13 @@ class DomainsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_domain
-      @domain = Domain.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def domain_params
-      params.require(:domain).permit(:name, :master, :last_check, :type, :notified_serial, :account)
-    end
+  private
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def domain_params
+    params.require(:domain).permit(
+      :name, :master, :last_check, :type, :notified_serial, :account, user_ids: []
+    )
+  end
 end

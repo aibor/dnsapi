@@ -6,7 +6,8 @@ class Cryptokey < ActiveRecord::Base
     KSK: 257
   }
 
-  belongs_to :domain, inverse_of: :cryptokeys
+  belongs_to :domain
+  has_many :users, through: :domain
 
   validates :domain_id, presence: true
   validates :domain, associated: true

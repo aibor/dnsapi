@@ -39,9 +39,10 @@
 
         <dt><%= t('domains.columns.notified_serial') %></dt>
         <dd><%= @domain.notified_serial.blank? ? "-" : @domain.notified_serial %></dd>
-
-        <dt><%= t 'domains.columns.account' %></dt>
-        <dd><%= @domain.account.blank? ? "-" : @domain.account %></dd>
+        <% if @user.admin %>
+        <dt><%= t 'domains.columns.users' %></dt>
+        <dd><%= raw @domain.users.empty? ? "-" : @domain.users.map(&:username).join('<br>') %></dd>
+        <% end %>
       </dl>
     </div>
 

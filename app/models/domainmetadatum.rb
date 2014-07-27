@@ -7,7 +7,8 @@ class Domainmetadatum < ActiveRecord::Base
   SOAEdits = %w( INCREMENT-WEEKS INCEPTION-EPOCH INCEPTION-INCREMENT INCEPTION
                  INCEPTION-WEEK EPOCH ).freeze
 
-  belongs_to :domain, inverse_of: :domainmetadata
+  belongs_to :domain
+  has_many :users, through: :domain
 
   validates :domain_id, presence: true
   validates :domain, associated: true

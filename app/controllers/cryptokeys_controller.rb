@@ -1,31 +1,34 @@
 class CryptokeysController < ApplicationController
-  before_action :set_cryptokey, only: [:show, :edit, :update, :destroy, :delete]
-
+  #
   # GET /cryptokeys
   # GET /cryptokeys.json
   def index
-    @cryptokeys = if params[:domain_id]
-                    domain = Domain.find(params[:domain_id]) rescue nil
-                    domain.cryptokeys if domain
-                  else
+    @cryptokeys = if @domain
+                    @domain.cryptokeys
+                  elsif @user.admin
                     Cryptokey.all
+                  else
+                    @user.cryptokeys
                   end
   end
+
 
   # GET /cryptokeys/1
   # GET /cryptokeys/1.json
   def show
   end
 
+
   # GET /cryptokeys/new
   def new
-    @domain = Domain.find(params[:domain_id]) rescue nil
     @cryptokey = Cryptokey.new(domain: @domain)
   end
+
 
   # GET /cryptokeys/1/edit
   def edit
   end
+
 
   # POST /cryptokeys
   # POST /cryptokeys.json
@@ -43,6 +46,7 @@ class CryptokeysController < ApplicationController
     end
   end
 
+
   # PATCH/PUT /cryptokeys/1
   # PATCH/PUT /cryptokeys/1.json
   def update
@@ -57,8 +61,10 @@ class CryptokeysController < ApplicationController
     end
   end
 
+
   def delete
   end
+
 
   # DELETE /cryptokeys/1
   # DELETE /cryptokeys/1.json
@@ -71,14 +77,11 @@ class CryptokeysController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_cryptokey
-      @cryptokey = Cryptokey.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def cryptokey_params
-      params.require(:cryptokey).permit(:domain_id, :flags, :active, :content)
-    end
+  private
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def cryptokey_params
+    params.require(:cryptokey).permit(:domain_id, :flags, :active, :content)
+  end
 end

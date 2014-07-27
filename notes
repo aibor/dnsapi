@@ -1,0 +1,1 @@
+curl --user tobi:m000 http://localhost:3000/records/310.json -d '{"record": {"content": "7.5.6.7"}}' -X PUT -H "Content-Type: application/json"
