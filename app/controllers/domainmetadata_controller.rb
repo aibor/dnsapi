@@ -41,7 +41,7 @@ class DomainmetadataController < ApplicationController
         format.json { render :show, status: :created, location: @domainmetadatum }
       else
         format.html { render :new }
-        format.json { render json: @domainmetadatum.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @domainmetadatum.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -56,7 +56,7 @@ class DomainmetadataController < ApplicationController
         format.json { render :show, status: :ok, location: @domainmetadatum }
       else
         format.html { render :edit }
-        format.json { render json: @domainmetadatum.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @domainmetadatum.errors}}, status: :unprocessable_entity }
       end
     end
   end

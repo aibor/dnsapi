@@ -78,6 +78,13 @@
   </dd>
 
   <dt>
+  <%= t('records.columns.token') %>
+  </dt>
+  <dd>
+  <%= @record.token.blank? ? '-' : @record.token %>
+  </dd>
+
+  <dt>
   <%= t('records.columns.modified') %>
   </dt>
   <dd>
@@ -93,6 +100,9 @@
 %>
 <%= button_to t('c.clone'), clone_record_path(@record), class: 'btn btn-primary',
   method: :get
+%>
+<%= button_to t('c.generate_token'), generate_token_record_path(@record), class: 'btn btn-primary',
+  method: :put
 %>
 <%= button_to t('c.edit'), edit_record_path(@record), class: 'btn btn-primary',
   method: :get

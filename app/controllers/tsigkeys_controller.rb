@@ -32,7 +32,7 @@ class TsigkeysController < ApplicationController
         format.json { render :show, status: :created, location: @tsigkey }
       else
         format.html { render :new }
-        format.json { render json: @tsigkey.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @tsigkey.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -46,7 +46,7 @@ class TsigkeysController < ApplicationController
         format.json { render :show, status: :ok, location: @tsigkey }
       else
         format.html { render :edit }
-        format.json { render json: @tsigkey.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @tsigkey.errors}}, status: :unprocessable_entity }
       end
     end
   end

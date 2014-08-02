@@ -41,7 +41,7 @@ class CryptokeysController < ApplicationController
         format.json { render :show, status: :created, location: @cryptokey }
       else
         format.html { render :new }
-        format.json { render json: @cryptokey.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @cryptokey.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -56,7 +56,7 @@ class CryptokeysController < ApplicationController
         format.json { render :show, status: :ok, location: @cryptokey }
       else
         format.html { render :edit }
-        format.json { render json: @cryptokey.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @cryptokey.errors}}, status: :unprocessable_entity }
       end
     end
   end

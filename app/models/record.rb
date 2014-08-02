@@ -9,6 +9,7 @@ class Record < ActiveRecord::Base
              HINFO KEY LOC MINFO MX NAPTR NS NSEC NSEC3 NSEC3PARAM OPT
              PTR RKEY RP RRSIG SOA SPF SSHFP SRV TLSA TXT).freeze
 
+
   belongs_to :domain
   has_many :users, through: :domain
 
@@ -25,10 +26,12 @@ class Record < ActiveRecord::Base
     self.ttl ||= 86400
   end
 
+
   validates :name, presence: true
   validates :domain_id, presence: true
   validates :domain, associated: true
   validates :type, presence: true
+  validates :token, length: {minimum: 64, maximum: 255}, allow_blank: true
   validates_inclusion_of :type, in: Types
   validate :unique_record
   validate do |record|
@@ -38,6 +41,7 @@ class Record < ActiveRecord::Base
     end
   end
 
+
   def hash_zone_record
     IO.popen("pdnssec hash-zone-record #{self.domain.name} #{self.name}") do |res|
       res.each do |line|
@@ -45,6 +49,7 @@ class Record < ActiveRecord::Base
       end
     end
   end
+
 
   def self.type_sort
     all.sort do |x,y|
@@ -78,9 +83,17 @@ class Record < ActiveRecord::Base
     end
   end
 
+
   def has_dns_validator?
     !!(self.type and DNSValidator.constants.include? self.type.to_sym)
   end
+
+
+  def generate_token
+    input_string = (Time.now.tv_sec + Random.rand(2**32)).to_s
+    self.token = Digest::SHA384.base64digest(input_string).gsub(/[+\/]/,"-")
+  end
+
 
   private
 

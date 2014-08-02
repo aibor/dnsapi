@@ -31,7 +31,7 @@ class DomainsController < ApplicationController
         format.json { render :show, status: :created, location: @domain }
       else
         format.html { redirect_to :back }
-        format.json { render json: @domain.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @domain.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -55,7 +55,7 @@ class DomainsController < ApplicationController
         format.json { render :show, status: :created, location: @domain }
       else
         format.html { render :new }
-        format.json { render json: @domain.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @domain.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -70,7 +70,7 @@ class DomainsController < ApplicationController
         format.json { render :show, status: :ok, location: @domain }
       else
         format.html { render :edit }
-        format.json { render json: @domain.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @domain.errors}}, status: :unprocessable_entity }
       end
     end
   end

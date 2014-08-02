@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
         format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @comment.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -56,7 +56,7 @@ class CommentsController < ApplicationController
         format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @comment.errors}}, status: :unprocessable_entity }
       end
     end
   end

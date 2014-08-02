@@ -1,4 +1,7 @@
 class RecordsController < ApplicationController
+  skip_before_filter :http_basic_authentication,
+    :set_object_if_permitted,
+    only: [:tokenized_update]
 
   # GET /records
   # GET /records.json
@@ -50,7 +53,7 @@ class RecordsController < ApplicationController
         format.json { render :show, status: :created, location: @record }
       else
         format.html { render :new }
-        format.json { render json: @record.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
       end
     end
   end
@@ -67,8 +70,36 @@ class RecordsController < ApplicationController
         format.json { render :show, status: :ok, location: @record }
       else
         format.html { render :edit }
-        format.json { render json: @record.errors, status: :unprocessable_entity }
+        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
       end
+    end
+  end
+
+
+  def generate_token
+    @record.generate_token
+
+    respond_to do |format|
+      if @record.save
+        format.html { redirect_to @record, notice: t('.success') }
+        format.json { render :show, status: :ok, location: @record }
+      else
+        format.html { redirect_to @record, error: t('.error') }
+        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
+  def tokenized_update
+    @record = Record.find(params[:id])
+    content = params[:content]
+    content ||= request.remote_ip if %w(A AAAA).include? @record.type
+
+    if token_valid? and @record.update_attributes(content: content)
+      render :show, status: :ok, location: @record
+    else
+      render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity
     end
   end
 
@@ -95,7 +126,20 @@ class RecordsController < ApplicationController
   def record_params
     params.require(:record).permit(
       :domain_id, :name, :type, :content, :ttl, :prio, :ordername, :auth,
-      :change_date, :disabled, :no_type_validation
+      :change_date, :disabled, :token, :no_type_validation
     )
+  end
+
+
+  def token_valid?
+    bool = (params[:token] and
+            not @record.token.blank? and
+            params[:token] == @record.token)
+
+    unless bool 
+      @record.errors.add(:records, 'Go away!')
+    end
+
+    bool
   end
 end

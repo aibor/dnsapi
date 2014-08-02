@@ -15,14 +15,15 @@ class ApplicationController < ActionController::Base
   before_action :set_nav_controller
 
 
+
   def set_locale
-      I18n.locale = params[:locale] || I18n.default_locale
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 
 
   def default_url_options(options={})
-      logger.debug "default_url_options is passed options: #{options.inspect}\n"
-      { locale: I18n.locale }
+    logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    { locale: I18n.locale }
   end
 
 
@@ -43,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def set_nav_controller
     @nav_controller = %w(domains)
-    @nav_controller.insert(0, 'users') if @user.admin
+    @nav_controller.insert(0, 'users') if @user and @user.admin
   end
 
 
@@ -104,6 +105,22 @@ class ApplicationController < ActionController::Base
         raise User::NotAuthorized unless @user.admin
       end
       instance_variable_set('@' + resource_name, object)
+    end
+  end
+
+
+  ActionController::Renderers.add :json do |json, options|
+    unless json.kind_of?(String)
+      json = json.as_json(options) if json.respond_to?(:as_json)
+      json = JSON.pretty_generate(json, options)
+    end
+
+    if options[:callback].present?
+      self.content_type ||= Mime::JS
+      "#{options[:callback]}(#{json})"
+    else
+      self.content_type ||= Mime::JSON
+      json
     end
   end
 end

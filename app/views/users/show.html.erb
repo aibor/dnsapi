@@ -2,6 +2,8 @@
   <%= @user.username %>
 </h1>
 
+<div class="row">
+  <div class="col-md-6">
 <% if notice %>
   <div class="alert alert-success">
     <%= notice %>
@@ -17,6 +19,8 @@
     <%= @user.errors.messages %>
   </div>
 <% end %>
+  </div>
+  </div>
 
 <div class="container">
 <dl class="dl-horizontal">
@@ -24,21 +28,23 @@
   <%= t('user.columns.admin') %>
   </dt>
   <dd>
-  <%= @user.admin or '-' %>
+    <span class="glyphicon glyphicon-<%=
+      @user.admin ? 'ok text-danger' : 'remove text-success' %>">
+    </span>
   </dd>
 
   <dt>
   <%= t('users.columns.default_primary') %>
   </dt>
   <dd>
-  <%= @user.default_primary %>
+  <%= @user.default_primary.blank? ? '-' : @user.default_primary %>
   </dd>
 
   <dt>
   <%= t('users.columns.default_postmaster') %>
   </dt>
   <dd>
-  <%= @user.default_postmaster %>
+  <%= @user.default_postmaster.blank? ? '-' : @user.default_postmaster %>
   </dd>
 
   <dt>

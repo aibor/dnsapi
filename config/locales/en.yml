@@ -66,12 +66,14 @@ en:
               invalid_fingerprint_length: 'fingerprint has invalid length:
                 %{is_length} instead of %{must_length}'
               invalid_fingerprint: invalid fingerprint
+              exchange_missing: exchange is missing
             name:
               invalid_domain_name: 'is not a valid domain name'
             ttl:
               invalid_ttl: too high
             prio:
               invalid_prio: too high
+              preference_missing: preference is missing
   users:
     columns:
       admin: Admin?
@@ -143,6 +145,9 @@ en:
       success: Record successfully updated.
       no_validator: Attention! No validator available for this type
       no_type_validation: Attention! No type validation performed
+    generate_token:
+      success: Token generated and saved
+      fail: Failed to generate token
     delete:
       title:    Delete Record
       warning:  Are you sure you want to delete this Record?

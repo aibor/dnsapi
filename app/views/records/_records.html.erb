@@ -32,6 +32,11 @@
         </span>
       </th>
 
+      <th title="<%= t('records.columns.token') %>">
+        <span class="glyphicon glyphicon-upload">
+        </span>
+      </th>
+
       <% if false %> 
         <th>
           <%= t('records.columns.modified') %>
@@ -73,6 +78,11 @@
 
         <td>
           <span class="<%= record.disabled ? 'text-danger glyphicon glyphicon-ok' : '' %>">
+          </span>
+        </td>
+
+        <td>
+          <span class="<%= record.token.blank? ? '' : 'text-warning glyphicon glyphicon-ok' %>">
           </span>
         </td>
 

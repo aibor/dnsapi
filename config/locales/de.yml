@@ -73,12 +73,14 @@ de:
               invalid_fingerprint_length: 'Fingerprint hat falsche Länge:
                 %{is_length} statt %{must_length}'
               invalid_fingerprint: ungültiger Fingerprint
+              exchange_missing: kein Domainname angegeben
             name:
               invalid_domain_name: 'ist kein gültiger Domainname'
             ttl:
               invalid_ttl: 'zu hoch'
             prio:
               invalid_prio: 'zu hoch'
+              preference_missing: Priorität fehlt
   domainmetadata:  Domainmetadaten
   users:  Benutzer
   users:
@@ -168,6 +170,9 @@ de:
       success: Record wurde erfolgreich geändert.
       no_validator: Vorsicht! Kein Validator für diesen Typ verfügbar
       no_type_validation: Vorsicht! Keine Typenvalidierung durchgeführt
+    generate_token:
+      success: Token generiert und gespeichert
+      fail: Token konnte nicht generiert werden
     delete:
       title:    Lösche Record
       warning:  Diesen Record wirklich löschen?
