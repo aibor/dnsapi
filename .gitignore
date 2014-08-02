@@ -21,3 +21,6 @@ Gemfile.lock
 
 # Ignore gems bin path
 /bin
+
+# Ignore compiled assets
+/public/assets
