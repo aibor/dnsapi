@@ -104,9 +104,9 @@ class DNSValidator
       validate_uniqueness_of_record
       validate_name
       validate_ttl if @ttl
-      validate_rdlength
-      validate_rdata_fields
-      validate_rdata
+      validate_rdlength and
+        validate_rdata_fields and
+        validate_rdata
     end
 
     private
@@ -163,16 +163,22 @@ class DNSValidator
     end
 
     def validate_rdlength
-      unless @rdlength <= 2**16
+      if @rdlength <= 2**16
+        true
+      else
         @record.errors.add(:content, :too_long)
+        false
       end
     end
 
     def validate_rdata_fields
-      return unless @rdata_fields
+      return true unless @rdata_fields
 
-      if @rdata.class.name == "Struct" && !@rdata.all?
+      if @rdata.class.superclass.name == "Struct" && !@rdata.all?
         @record.errors.add(:content, :wrong_number_of_fields)
+        false
+      else
+        true
       end
     end
 
@@ -259,6 +265,20 @@ class DNSValidator
       @rdata.preference = @record.prio
     end
 
+    def validate_rdata_fields
+      bool = true
+      unless @rdata.preference
+        @record.errors.add(:prio, :preference_missing)
+        bool = false
+      end
+
+      unless @rdata.exchange
+        @record.errors.add(:content, :exchange_missing)
+        bool = false
+      end
+      bool
+    end
+
     def validate_rdata
       unless is_domain_name? @rdata.exchange
         @record.errors.add(:content, :invalid_domain_name)
@@ -307,6 +327,7 @@ class DNSValidator
 
       [:serial, :refresh, :retry, :expire, :minimum].each do |key|
         f = @rdata[key]
+
         unless f =~ /\A\d+\z/
           @record.errors.add(:content, :not_a_number, string: key)
         end
