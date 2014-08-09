@@ -39,7 +39,7 @@
 
         <dt><%= t('domains.columns.notified_serial') %></dt>
         <dd><%= @domain.notified_serial.blank? ? "-" : @domain.notified_serial %></dd>
-        <% if @user.admin %>
+        <% if @current_user.admin %>
         <dt><%= t 'domains.columns.users' %></dt>
         <dd><%= raw @domain.users.empty? ? "-" : @domain.users.map(&:username).join('<br>') %></dd>
         <% end %>
@@ -126,6 +126,9 @@
   <%= "(#{@domain.records.count})" unless @domain.records.empty? -%>
   <%= button_to t('c.new'), new_domain_record_path(@domain),
     class: "btn btn-primary", method: :get %>
+  <%= button_to t('c.import'), import_domain_path(@domain),
+    class: "btn btn-primary", method: :get if @domain.records.empty? %>
+</h3>
 </h3>
 
 <%= render partial: "records/records",

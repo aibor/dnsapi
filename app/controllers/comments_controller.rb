@@ -5,10 +5,10 @@ class CommentsController < ApplicationController
   def index
     @comments = if @domain
                   @domain.comments
-                elsif @user.admin
+                elsif @current_user.admin
                   Comment.all
                 else
-                  @user.comments
+                  @current_user.comments
                 end
   end
 

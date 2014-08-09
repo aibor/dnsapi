@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def set_nav_controller
     @nav_controller = %w(domains)
-    @nav_controller.insert(0, 'users') if @user and @user.admin
+    @nav_controller.insert(0, 'users') if @current_user and @current_user.admin
   end
 
 
@@ -76,9 +76,9 @@ class ApplicationController < ActionController::Base
     realm = Rails.application.class.parent_name + '  Realm'
     authenticate_or_request_with_http_basic realm do |username, password|
       if not session[:logout] and
-        @user = User.where(username: username).first
-        @user and @user.respond_to?("authenticate")
-        !!@user.authenticate(password)
+        @current_user = User.where(username: username).first
+        @current_user and @current_user.respond_to?("authenticate")
+        !!@current_user.authenticate(password)
       else
         session[:logout] = nil
       end
@@ -99,10 +99,10 @@ class ApplicationController < ActionController::Base
                   Domain.find(params[resource_symbol][:domain_id])
                 end
 
-      if (object.respond_to?(:users) and object.users.exclude? @user) or
-        (object.is_a? User and object != @user) or
-        (@domain and @domain.users.exclude? @user)
-        raise User::NotAuthorized unless @user.admin
+      if (object.respond_to?(:users) and object.users.exclude? @current_user) or
+        (object.is_a? User and object != @current_user) or
+        (@domain and @domain.users.exclude? @current_user)
+        raise User::NotAuthorized unless @current_user.admin
       end
       instance_variable_set('@' + resource_name, object)
     end

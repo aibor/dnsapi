@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
+  licensed_under: lizensiert unter
   profile: Profil
   c:
     back: Zurück
@@ -117,6 +118,7 @@ de:
       type:     Typ
       notified_serial:  Seriennummer
       users: Benutzer
+      create_soa: Erstelle SOA Record mit Standardwerten
     index:
       show:   'Details für "%{domain}" anzeigen'
       edit:   'Domain "%{domain}" bearbeiten'
@@ -139,6 +141,10 @@ de:
       title: Bearbeite Domain
     new:
       title: Neue Domain
+    import_zone:
+      title: BIND Zondendatei importieren
+      placeholder: BIND-kompatible Zone hier einfügen.
+      submit: Importiere Zone
     delete:
       title:    Lösche Domain
       warning:  Dies wird ebenso folgende Resourcen löschen

@@ -5,10 +5,10 @@ class CryptokeysController < ApplicationController
   def index
     @cryptokeys = if @domain
                     @domain.cryptokeys
-                  elsif @user.admin
+                  elsif @current_user.admin
                     Cryptokey.all
                   else
-                    @user.cryptokeys
+                    @current_user.cryptokeys
                   end
   end
 

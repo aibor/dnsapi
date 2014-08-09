@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    raise User::NotAuthorized unless @user.admin
+    raise User::NotAuthorized unless @current_user.admin
     @users = User.order(:username)
   end
 
@@ -58,14 +58,14 @@ class UsersController < ApplicationController
 
 
   def delete
-    raise User::NotAuthorized unless @user.admin
+    raise User::NotAuthorized unless @current_user.admin
   end
 
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    raise User::NotAuthorized unless @user.admin
+    raise User::NotAuthorized unless @current_user.admin
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_path }

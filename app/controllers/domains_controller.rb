@@ -3,10 +3,10 @@ class DomainsController < ApplicationController
   # GET /domains
   # GET /domains.json
   def index
-    @domains = if @user.admin 
+    @domains = if @current_user.admin
                  Domain.order(:name)
                else
-                 @user.domains.order(:name)
+                 @current_user.domains.order(:name)
                end
   end
 
@@ -49,12 +49,29 @@ class DomainsController < ApplicationController
 
     respond_to do |format|
       if @domain.save
-        @domain.users << @user
-        @domain.create_default_soa @user
+        @domain.users << @current_user
+        @domain.create_default_soa @current_user if @domain.create_soa and not @domain.soa
         format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :created, location: @domain }
       else
         format.html { render :new }
+        format.json { render json: {error: {status: 422, message: @domain.errors}}, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
+  def import_zone
+  end
+
+
+  def parse_zone
+    respond_to do |format|
+      if @domain.import_zone_file(params[:zone_file])
+        format.html { redirect_to @domain, notice: t('.success') }
+        format.json { render :show, status: :created, location: @domain }
+      else
+        format.html { render :import_zone, locals: {params: params} }
         format.json { render json: {error: {status: 422, message: @domain.errors}}, status: :unprocessable_entity }
       end
     end
@@ -66,6 +83,7 @@ class DomainsController < ApplicationController
   def update
     respond_to do |format|
       if @domain.update(domain_params)
+        @domain.create_default_soa @current_user if @domain.create_soa and not @domain.soa
         format.html { redirect_to @domain, notice: t('.success') }
         format.json { render :show, status: :ok, location: @domain }
       else
@@ -97,7 +115,7 @@ class DomainsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def domain_params
     params.require(:domain).permit(
-      :name, :master, :last_check, :type, :notified_serial, :account, user_ids: []
+      :name, :master, :last_check, :type, :notified_serial, :account, :create_soa, user_ids: []
     )
   end
 end

@@ -15,8 +15,8 @@
           <%= link_to 'Logout', logout_path %>
         </li>
         <li<%= raw ' class="active"' if
-          current_page?(controller: 'users', action: 'show', id: @user.id) -%>>
-          <%= link_to t(:profile), @user %>
+          current_page?(controller: 'users', action: 'show', id: @current_user.id) -%>>
+          <%= link_to t(:profile), @current_user %>
         </li>
       <% @nav_controller.each do |controller| -%>
         <li<%= raw ' class="active"' if
@@ -63,8 +63,24 @@
     <hr>
     <footer class="footer">
       <p class="text-center text-muted">&copy; aibo 2014</p>
-    </footer>
-  </div> <!-- /container -->
+      <p class="text-center text-muted">
+        <a href="http://bootstrap.com">
+          Bootstrap CSS
+        </a>
+        <%= t('licensed_under') %>
+        <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">
+          MIT Lizenz
+        </a><br>
 
-</body>
-</html>
+        <a href="http://glyphicons.com"> Glyphicons Free </a>
+        <%= t('licensed_under') %>
+        <a href="http://creativecommons.org/licenses/by/3.0/">
+          CC BY 3.0
+        </a>
+        </p>
+
+      </footer>
+    </div> <!-- /container -->
+
+    </body>
+    </html>

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     resources :domains do
       resources :records, :domainmetadata, :cryptokeys, only: [:index, :new]
       member do
+        get :import, to: 'domains#import_zone'
+        post :parse, to: 'domains#parse_zone'
         get :delete
         put :secure
       end

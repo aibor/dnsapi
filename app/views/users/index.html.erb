@@ -13,9 +13,9 @@
     <%= alert %>
   </div>
 <% end %>
-<% if @user.errors.any? %>
+<% if @current_user.errors.any? %>
   <div class="alert alert-danger">
-    <%= @user.errors.messages %>
+    <%= @current_user.errors.messages %>
   </div>
 <% end %>
 

@@ -8,10 +8,10 @@ class RecordsController < ApplicationController
   def index
     @records = if @domain
                  @domain.records
-               elsif @user.admin
+               elsif @current_user.admin
                  Record.all
                else
-                 @user.records
+                 @current_user.records
                end
   end
 

@@ -1,7 +1,10 @@
 require 'dns_validator'
+require 'open3'
 
 class Domain < ActiveRecord::Base
   self.inheritance_column = :itype
+
+  attr_accessor :create_soa
 
   has_many :records
   has_many :domainmetadata
@@ -68,6 +71,34 @@ class Domain < ActiveRecord::Base
      type: 'SOA',
      content: "#{primary} #{postmaster} #{serial} 86400 3600 3600000 86400"
    )
+  end
+
+
+  def import_zone_file(import)
+    cmd = "zone2json --zone-name=#{self.name} --zone=/dev/stdin"
+
+    stdout, stderr, status = Open3.capture3(cmd, stdin_data: import)
+
+    zone_file = stdout
+
+    unless status.to_i.zero?
+      self.errors.add(:base, stderr)
+      return false
+    end
+
+
+    begin
+      zone_file = JSON.parse zone_file
+    rescue JSON::ParserError => e
+      self.errors.add(:base, e.message)
+      return false
+    end
+
+    zone_file['records'].each do |record|
+      new_record = Record.new(record)
+      new_record.domain = self
+      new_record.save
+    end
   end
 
   private

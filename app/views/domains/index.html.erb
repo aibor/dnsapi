@@ -30,7 +30,7 @@
         <%= t('domains.columns.notified_serial') %>
       </th>
 
-      <% if @user.admin %>
+      <% if @current_user.admin %>
       <th>
         <%= t('domains.columns.users') %>
       </th>
@@ -71,7 +71,7 @@
           <%= domain.notified_serial %>
         </td>
 
-      <% if @user.admin %>
+      <% if @current_user.admin %>
         <td>
           <%= raw domain.users.map(&:username).join("<br>") %>
         </td>

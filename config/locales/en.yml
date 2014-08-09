@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  licensed_under: licensed under
   c:
     back: Back
     new:  New
@@ -97,6 +98,8 @@ en:
       title:    Delete User
       warning:  Are you sure you want to delete this user?
   domains:
+    columns:
+      create_soa: Create SOA Record with default values
     index:
       show:   "Show %{domain}"
       edit:   "Edit %{domain}"
@@ -116,6 +119,10 @@ en:
       title:  Edit Domain
     new:
       title:  New Domain
+    import_zone:
+      title:  Import BIND zone file
+      placeholder: Paste BIND-stlye zone here.
+      submit: Import Zone
     delete:
       title:    Delete Domain
       warning:  This will also delete the following resources

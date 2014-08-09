@@ -32,7 +32,7 @@
         <%= f.select :type, %w( MASTER NATIVE SLAVE ), {}, {class: 'form-control'} %>
       </div>
 
-      <% if @user.admin %>
+      <% if @current_user.admin %>
       <div class="form-group <%= 'has-error' unless @domain.errors[:users].blank? %>">
         <%= f.label :users, t('domains.columns.users'), class: 'control-label' %>
         <% unless @domain.errors[:users].blank? %>
@@ -44,6 +44,16 @@
           {}, {multiple: true, class: 'form-control'} %>
       </div>
       <% end %>
+
+      <% unless @domain.soa %>
+      <div class="form-group">
+        <div class="checkbox">
+          <%= f.label :create_soa, class: 'control-label' do %>
+            <%= f.check_box :create_soa %><%= t('domains.columns.create_soa') %> 
+          <% end %>
+        </div>
+      </div>
+      <%end%>
 
       <div class="actions pull-right">
         <%= button_tag type: 'reset', class: 'btn btn-default' do %>

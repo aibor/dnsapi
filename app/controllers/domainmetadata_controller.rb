@@ -5,10 +5,10 @@ class DomainmetadataController < ApplicationController
   def index
     @domainmetadatas = if @domain
                          @domain.domainmetadata
-                       elsif @user.admin
+                       elsif @current_user.admin
                          Domainmetadatum.all
                        else
-                         @user.domainmetadata
+                         @current_user.domainmetadata
                        end
   end
 
