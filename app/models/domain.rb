@@ -58,6 +58,7 @@ class Domain < ActiveRecord::Base
     pdnssec 'rectify-zone', self.name
   end
 
+
   def create_default_soa(user)
     primary     = user.default_primary
     primary     = primary.blank? ? 'ns.inwx.de.' : primary
@@ -100,6 +101,7 @@ class Domain < ActiveRecord::Base
       new_record.save
     end
   end
+
 
   private
 

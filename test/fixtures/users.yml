@@ -1,0 +1,14 @@
+admin:
+  username: oper
+  password_digest: '$2a$10$s1mTtSnHY7fukR3WEkFR9.BLyMQXW630MKYKJ9yDGR2eYT98Ccs6i'
+  admin: true
+  domains:
+    - two
+user:
+  username: bob
+  password_digest: '$2a$10$FsPv6jtoalJY1jZMvGEfDeGjzOvradV2AP3Wtv4WzGCxJgeue8sTW'
+  admin: false
+  default_primary: 'ns.bobs-place.org'
+  default_postmaster: 'bob.bobs-place.org'
+  domains:
+    - one

@@ -1,0 +1,6 @@
+one:
+  name: example.com
+  type: MASTER
+two:
+  name: test.de
+  type: MASTER

@@ -21,11 +21,11 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
   username: aibo
+  password: <%= ENV['DNSAPI_DATABASE_PASSWORD'] %>
 
 development:
   <<: *default
   database: testdb
-  password: <%= ENV['DNSAPI_DATABASE_PASSWORD'] %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -82,7 +82,4 @@ test:
 #
 production:
   <<: *default
-  #database: dnsapi_production
   database: testdb
-  #username: dnsapi
-  password: <%= ENV['DNSAPI_DATABASE_PASSWORD'] %>

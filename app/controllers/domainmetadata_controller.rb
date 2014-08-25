@@ -37,11 +37,14 @@ class DomainmetadataController < ApplicationController
 
     respond_to do |format|
       if @domainmetadatum.save
-        format.html { redirect_to @domainmetadatum, notice: 'Domainmetadatum was successfully created.' }
-        format.json { render :show, status: :created, location: @domainmetadatum }
+        format.html { redirect_to @domainmetadatum,
+                      notice: 'Domainmetadatum was successfully created.' }
+        format.json { render :show,
+                      status: :created,
+                      location: @domainmetadatum }
       else
         format.html { render :new }
-        format.json { render json: {error: {status: 422, message: @domainmetadatum.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@domainmetadatum) }
       end
     end
   end
@@ -52,11 +55,12 @@ class DomainmetadataController < ApplicationController
   def update
     respond_to do |format|
       if @domainmetadatum.update(domainmetadatum_params)
-        format.html { redirect_to @domainmetadatum, notice: 'Domainmetadatum was successfully updated.' }
+        format.html { redirect_to @domainmetadatum,
+                      notice: 'Domainmetadatum was successfully updated.' }
         format.json { render :show, status: :ok, location: @domainmetadatum }
       else
         format.html { render :edit }
-        format.json { render json: {error: {status: 422, message: @domainmetadatum.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@domainmetadatum) }
       end
     end
   end

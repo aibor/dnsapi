@@ -28,11 +28,12 @@ class TsigkeysController < ApplicationController
 
     respond_to do |format|
       if @tsigkey.save
-        format.html { redirect_to @tsigkey, notice: 'Tsigkey was successfully created.' }
+        format.html { redirect_to @tsigkey,
+                      notice: 'Tsigkey was successfully created.' }
         format.json { render :show, status: :created, location: @tsigkey }
       else
         format.html { render :new }
-        format.json { render json: {error: {status: 422, message: @tsigkey.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@tsigkey) }
       end
     end
   end
@@ -42,11 +43,12 @@ class TsigkeysController < ApplicationController
   def update
     respond_to do |format|
       if @tsigkey.update(tsigkey_params)
-        format.html { redirect_to @tsigkey, notice: 'Tsigkey was successfully updated.' }
+        format.html { redirect_to @tsigkey,
+                      notice: 'Tsigkey was successfully updated.' }
         format.json { render :show, status: :ok, location: @tsigkey }
       else
         format.html { render :edit }
-        format.json { render json: {error: {status: 422, message: @tsigkey.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@tsigkey) }
       end
     end
   end

@@ -35,7 +35,11 @@ class RecordsController < ApplicationController
 
   # GET /records/1/clone
   def clone
-    @record = Record.new(@record.attributes.reject {|k,v| k =~ /\A(?:id|change_date)\z/})
+    record_data = @record.attributes.reject do |key,value|
+      key =~ /\A(?:id|change_date)\z/
+    end
+
+    @record = Record.new(record_data)
     render :new
   end
 
@@ -47,13 +51,13 @@ class RecordsController < ApplicationController
 
     respond_to do |format|
       if @record.save
-        no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
-        no_validator ||= t('.no_type_validation') unless @record.no_type_validation.to_i.zero?
-        format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
+        format.html { redirect_to @record,
+                      notice: t('.success'),
+                      alert: validation_alert }
         format.json { render :show, status: :created, location: @record }
       else
         format.html { render :new }
-        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@record) }
       end
     end
   end
@@ -64,13 +68,13 @@ class RecordsController < ApplicationController
   def update
     respond_to do |format|
       if @record.update(record_params)
-        no_validator = @record.has_dns_validator? ? nil : t('.no_validator')
-        no_validator ||= t('.no_type_validation') unless @record.no_type_validation.to_i.zero?
-        format.html { redirect_to @record, notice: t('.success'), alert: no_validator }
+        format.html { redirect_to @record,
+                      notice: t('.success'),
+                      alert: validation_alert }
         format.json { render :show, status: :ok, location: @record }
       else
         format.html { render :edit }
-        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@record) }
       end
     end
   end
@@ -85,7 +89,7 @@ class RecordsController < ApplicationController
         format.json { render :show, status: :ok, location: @record }
       else
         format.html { redirect_to @record, error: t('.error') }
-        format.json { render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@record) }
       end
     end
   end
@@ -99,7 +103,7 @@ class RecordsController < ApplicationController
     if token_valid? and @record.update_attributes(content: content)
       render :show, status: :ok, location: @record
     else
-      render json: {error: {status: 422, message: @record.errors}}, status: :unprocessable_entity
+      render unprocessable_entity_json_hash(@record)
     end
   end
 
@@ -141,5 +145,14 @@ class RecordsController < ApplicationController
     end
 
     bool
+  end
+
+
+  def validation_alert
+    if @record.no_type_validation.to_i.zero?
+      @record.has_dns_validator? ? nil : t('.no_validator')
+    else
+      t('.no_type_validation')
+    end
   end
 end

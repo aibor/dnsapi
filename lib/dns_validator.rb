@@ -1,18 +1,22 @@
+# coding: utf-8
 require 'ipaddr'
 
-class DNSValidator
-  # validate types according to RFC 1035
-  # https://tools.ietf.org/html/rfc1035
-  # DNSSEC related types according to RFC 4034
-  # http://www.rfc-archive.org/getrfc.php?rfc=4034
-  # SSHFP according to RFC 4255 nd RFC 6594
-  # https://tools.ietf.org/html/rfc4255
-  # http://www.rfc-archive.org/getrfc.php?rfc=6594
-  # TLSA according to RFC 6698
-  # https://tools.ietf.org/html/rfc6698
+##
+# validate types according to RFC 1035
+# https://tools.ietf.org/html/rfc1035
+# DNSSEC related types according to RFC 4034
+# http://www.rfc-archive.org/getrfc.php?rfc=4034
+# SSHFP according to RFC 4255 nd RFC 6594
+# https://tools.ietf.org/html/rfc4255
+# http://www.rfc-archive.org/getrfc.php?rfc=6594
+# TLSA according to RFC 6698
+# https://tools.ietf.org/html/rfc6698
 
-  class Base
-    RE_char_string  = '[[:graph:]]{,255}'
+class DNSValidator
+
+  module StringValidations
+
+    RE_char_string  = '[[:print:]]{,255}'
     # RFC1035 wants a label to start with a letter. The real world also allows digits
     RE_label = '(?!.*--.*)[[:alnum:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
     # In order to work around the rfc ignoring domain_names, which causes IPv4 address
@@ -21,37 +25,52 @@ class DNSValidator
     RE_domain = /(?=\A.{,255}\z)(?:#{RE_label}\.)*#{RE_label_rfc}/
 
 
-    def initialize(record)
-      @record = record
-    end
-
     def is_ip_address?(ip_addr, family = nil)
       !!(IPAddr.new(ip_addr, family) rescue false)
     end
+
 
     def is_ipv4_address?(ip_addr)
       is_ip_address?(ip_addr, Socket::AF_INET)
     end
 
+
     def is_ipv6_address?(ip_addr)
       is_ip_address?(ip_addr, Socket::AF_INET6)
     end
+
 
     def is_domain_name?(string = nil)
       !!(string =~ /\A#{RE_domain}\.?\z/)
     end
 
+
     def is_rname?(string = nil)
       is_domain_name?(string) and string.split('.').count > 2
     end
+
 
     def is_ttl?(number)
       (1...2**31).include? number
     end
 
+  end
+
+
+  class Base
+
+    include StringValidations
+
+
+    def initialize(record)
+      @record = record
+    end
+
+
     def attr_uniqueness
        [:name, :type]
     end
+
 
     def record_exists?(search_data)
       @record.class.where(search_data).where.not(id: @record.id).any? 
@@ -59,7 +78,9 @@ class DNSValidator
 
   end
 
+
   class Domain < Base
+
     def initialize(record)
       super
       @name   = @record.name
@@ -67,16 +88,19 @@ class DNSValidator
       @type   = @record.type
     end
 
+
     def validate
       validate_name
       validate_master
     end
+
 
     def validate_name
       unless is_domain_name?(@name)
         @record.errors.add(:name, :invalid_domain_name)
       end
     end
+
 
     def validate_master
       @masters.each do |master|
@@ -88,7 +112,9 @@ class DNSValidator
 
   end
 
+
   class ResourceRecord < Base
+
     def initialize(record)
       super
       @name         = @record.name
@@ -98,6 +124,7 @@ class DNSValidator
       @rdata_fields = rdata_fields
       @rdata        = parse_rdata
     end
+
 
     def validate
       validate_type
@@ -109,15 +136,23 @@ class DNSValidator
         validate_rdata
     end
 
+
     private
 
     def conflicting_types
       []
     end
 
+
     def rdata_fields
       # dummy method
     end
+
+
+    def rdata_field_count
+      @rdata_fields.count
+    end
+
 
     def parse_rdata
       return @record.content unless @rdata_fields.is_a? Array
@@ -126,10 +161,15 @@ class DNSValidator
 
       rdata_struct = Struct.new(*@rdata_fields)
 
-      rdata = @record.content ? @record.content.split : []
+      rdata = @record.content ? Shellwords.shellwords(@record.content) : []
 
-      rdata_struct.new(*rdata)
+      if rdata.count != rdata_field_count
+        @record.errors.add(:content, :wrong_number_of_fields)
+      end
+
+      rdata_struct.new(*rdata.take(@rdata_fields.count))
     end
+
 
     def validate_type
       conflicting_types.each do |ctype| 
@@ -146,9 +186,11 @@ class DNSValidator
       end
 
       if record_exists?(search_data)
-        @record.errors.add(:base, :record_with_name_and_type_exists)
+        @record.errors.add(:base, :record_with_attrs_exists,
+                           attrs: attr_uniqueness.join(', '))
       end
     end
+
 
     def validate_name
       unless is_domain_name?(@name)
@@ -156,11 +198,13 @@ class DNSValidator
       end
     end
 
+
     def validate_ttl
       unless is_ttl?(@ttl)
         @record.errors.add(:ttl, :invalid_ttl)
       end
     end
+
 
     def validate_rdlength
       if @rdlength <= 2**16
@@ -170,6 +214,7 @@ class DNSValidator
         false
       end
     end
+
 
     def validate_rdata_fields
       return true unless @rdata_fields
@@ -182,88 +227,130 @@ class DNSValidator
       end
     end
 
+
     def validate_rdata
       false
     end
+
   end
 
+
   class A < ResourceRecord
+
+    def attr_uniqueness
+      super << :content
+    end
+
+
     def conflicting_types
       %w(CNAME)
     end
+
 
     def validate_rdata
       unless is_ipv4_address? @rdata
         @record.errors.add(:content, :invalid_ipv4_address)
       end
     end
+
   end
 
+
   class AAAA < ResourceRecord
+
+    def attr_uniqueness
+      super << :content
+    end
+
+
     def conflicting_types
       %w(CNAME)
     end
+
 
     def validate_rdata
       unless is_ipv6_address? @rdata
         @record.errors.add(:content, :invalid_ipv6_address)
       end
     end
+
   end
 
+
   class CNAME < ResourceRecord
+
     def conflicting_types
       %w(A AAAA)
     end
+
 
     def validate_rdata
       unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
       end
     end
+
   end
 
+
   class HINFO < ResourceRecord
+
     def rdata_fields
       [:cpu, :os]
     end
 
+
     def validate_rdata
-      @rdata.each do |name,value|
+      @rdata.each_pair do |name,value|
         unless value =~ /\A#{RE_char_string}\z/
           @record.errors.add(:content, :invalid_char_string, char_string: value)
         end
       end
     end
+
   end
 
+
   class MINFO < ResourceRecord
+
     def rdata_fields
       [:rmailbx, :emailbx]
     end
 
+
     def validate_rdata
-      @rdata.each do |name,value|
-        unless is_domain_name? f
+      @rdata.each_pair do |name,value|
+        unless is_domain_name? value
           @record.errors.add(:content, :invalid_domain_name_, domain: value)
         end
       end
     end
+
   end
 
-  class MX < ResourceRecord
-    def attr_uniqueness
-      super << :prio
-    end
 
-    def rdata_fields
-      [:exchange, :preference]
-    end
+  class MX < ResourceRecord
 
     def initialize(record)
       super
       @rdata.preference = @record.prio
     end
+
+
+    def attr_uniqueness
+      super << :prio
+    end
+
+
+    def rdata_fields
+      [:exchange, :preference]
+    end
+
+
+    def rdata_field_count
+      1
+    end
+
 
     def validate_rdata_fields
       bool = true
@@ -279,50 +366,64 @@ class DNSValidator
       bool
     end
 
+
     def validate_rdata
       unless is_domain_name? @rdata.exchange
         @record.errors.add(:content, :invalid_domain_name)
       end
     end
+
   end
 
+
   class NS < ResourceRecord
+
     def attr_uniqueness
       super << :content
     end
 
+
     def validate_rdata
       unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
       end
     end
+
   end
 
+
   class PTR < ResourceRecord
+
     def validate_rdata
       unless is_domain_name? @rdata
         @record.errors.add(:content, :invalid_domain_name)
       end
 
-      re_octet = "(?:25[0-5]|(?:2[0-4]|(?:1?\d))?\d)"
+      re_octet = /(?:25[0-5]|(?:2[0-4]|(?:1?\d))?\d)/
       unless @rdata =~ /\A(?:#{re_octet}\.){1,4}IN-ADDR\.ARPA\.\z/i
         @record.errors.add(:content, :invalid_ptr_name)
       end
     end
+
   end
 
+
   class SOA < ResourceRecord
+
     def rdata_fields
       [:mname, :rname, :serial, :refresh, :retry, :expire, :minimum]
     end
 
+
     def validate_rdata
 			unless is_domain_name? @rdata.mname
 				@record.errors.add(:content, :invalid_domain_name_, domain: @rdata.mname)
+        return
 			end
 
 			unless is_rname? @rdata.rname
 				@record.errors.add(:content, :invalid_rname, rname: @rdata.rname)
+        return
 			end
 
       [:serial, :refresh, :retry, :expire, :minimum].each do |key|
@@ -330,24 +431,31 @@ class DNSValidator
 
         unless f =~ /\A\d+\z/
           @record.errors.add(:content, :not_a_number, string: key)
+          break
         end
 
         n = f.to_i
         if n == 0
           @record.errors.add(:content, :may_not_be_zero, key: key)
+          break
         end
 
         unless is_ttl? n
           @record.errors.add(:content, :too_high, key: key)
+          break
         end
       end
     end
+
   end
 
+
   class SSHFP < ResourceRecord
+
     def rdata_fields
       [:algorithm, :fp_type, :fingerprint]
     end
+
 
     def validate_rdata
       unless @rdata.algorithm =~ /\A[123]\z/
@@ -373,17 +481,17 @@ class DNSValidator
           @record.errors.add(:content, :invalid_fingerprint)
         end
       end
-
     end
+
   end
+
 
   class TXT < ResourceRecord
+
     def validate_rdata
-      # count occurence of non-escaped double quotes
-      # will fail in cases like 'string \\"more" string'
-      unless rdata.match(/((?<!\\)")/).size.even?
-        @record.errors.add(:content, :odd_number_of_double_quotes)
-      end
+
     end
+
   end
+
 end

@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   before_action :set_nav_controller
 
 
-
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
@@ -48,6 +47,17 @@ class ApplicationController < ActionController::Base
   end
 
 
+  def set_domain(resource_symbol)
+    domain_id = if params[resource_symbol]
+                  params[resource_name.to_sym][:domain_id]
+                else
+                  params[:domain_id]
+                end
+
+    @domain = Domain.find(domain_id) if domain_id
+  end
+
+
   def record_not_found
     respond_to do |format|
       format.html { raise ActionController::RoutingError.new('Not Found') }
@@ -65,6 +75,7 @@ class ApplicationController < ActionController::Base
         flash[:error] = "No permission to this resource."
         redirect_to request.env['HTTP_REFERER'] ? :back : "/#{I18n.locale}"
       end
+
       format.json do
         render json: {error: {status: 401, message: "Not authorized"}}, 
           status: :unauthorized
@@ -72,12 +83,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+
   def http_basic_authentication
     realm = Rails.application.class.parent_name + '  Realm'
+
     authenticate_or_request_with_http_basic realm do |username, password|
-      if not session[:logout] and
-        @current_user = User.where(username: username).first
-        @current_user and @current_user.respond_to?("authenticate")
+      if not session[:logout] and @current_user = User.find_by(username: username)
         !!@current_user.authenticate(password)
       else
         session[:logout] = nil
@@ -90,22 +101,34 @@ class ApplicationController < ActionController::Base
     if params[:id] or params[:domain_id]
       model_name = self.class.name.sub(/Controller$/,'').singularize
       resource_name = model_name.downcase
-      resource_symbol = resource_name.to_sym
 
       object = class_eval(model_name).find(params[:id]) if params[:id]
-      @domain = if params[:domain_id]
-                  Domain.find(params[:domain_id])
-                elsif params[resource_symbol] and params[resource_symbol][:domain_id]
-                  Domain.find(params[resource_symbol][:domain_id])
-                end
+
+      set_domain(resource_name.to_sym)
 
       if (object.respond_to?(:users) and object.users.exclude? @current_user) or
         (object.is_a? User and object != @current_user) or
         (@domain and @domain.users.exclude? @current_user)
         raise User::NotAuthorized unless @current_user.admin
       end
+
       instance_variable_set('@' + resource_name, object)
     end
+  end
+
+
+  def unprocessable_entity_json_hash(object)
+    message = object.respond_to?('errors') ? object.errors : ''
+
+    {
+      json: {
+        error: {
+          status: 422,
+          message: message
+        }
+      },
+      status: :unprocessable_entity
+    }
   end
 
 

@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
 
+  before_filter :admin_only, except: [:show, :edit, :update]
+
   # GET /users
   # GET /users.json
   def index
-    raise User::NotAuthorized unless @current_user.admin
     @users = User.order(:username)
   end
 
@@ -36,7 +37,7 @@ class UsersController < ApplicationController
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
-        format.json { render json: {error: {status: 422, message: @user.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@user) }
       end
     end
   end
@@ -51,21 +52,19 @@ class UsersController < ApplicationController
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
-        format.json { render json: {error: {status: 422, message: @user.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@user) }
       end
     end
   end
 
 
   def delete
-    raise User::NotAuthorized unless @current_user.admin
   end
 
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    raise User::NotAuthorized unless @current_user.admin
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_path }
@@ -83,4 +82,10 @@ class UsersController < ApplicationController
       :default_primary, :default_postmaster
     )
   end
+
+
+  def admin_only
+    raise User::NotAuthorized unless @current_user.admin
+  end
+
 end

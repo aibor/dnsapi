@@ -44,7 +44,7 @@ en:
           attributes:
             base:
               record_exists: An identical record already exists
-              record_with_name_and_type_exists: A record with this name and type already exists
+              record_with_attrs_exists: 'A record with attributes %{attrs} already exists'
               conflicting_record: 'Conflicting record with type %{type} found'
             content:
               invalid_ip_address: is not a valid IP address

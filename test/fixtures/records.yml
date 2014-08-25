@@ -1,0 +1,81 @@
+one:
+  domain: one
+  name: example.com
+  type: SOA
+  content: 'ns.inwx.de. postmaster.example.com 2014082001 86400 3600 3600000 300'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+two:
+  domain: one
+  name: example.com
+  type: A
+  content: '3.4.5.6'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+three:
+  domain: one
+  name: mail.example.com
+  type: A
+  content: '3.4.5.6'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+four:
+  domain: one
+  name: example.com
+  type: MX
+  content: 'mail.example.com'
+  ttl: 86400
+  prio: 10
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+five:
+  domain: two
+  name: test.de
+  type: SOA
+  content: 'ns.inwx.de. postmaster.test.de 2014082001 86400 3600 3600000 300'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+six:
+  domain: two
+  name: test.de
+  type: A
+  content: '3.4.5.6'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+seven:
+  domain: two
+  name: mail.test.de
+  type: A
+  content: '3.4.5.6'
+  ttl: 86400
+  prio: 0
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false
+  token: 'C6qnrLjxDIjFCNfhlB09plxLm6IjBPXa2FqZq21i6i1pNh1NZsb5Z1zYihPwMDOv'
+eight:
+  domain: two
+  name: test.de
+  type: MX
+  content: 'mail.test.de'
+  ttl: 86400
+  prio: 10
+  auth: true
+  change_date: '2014-08-19 23:23:42'
+  disabled: false

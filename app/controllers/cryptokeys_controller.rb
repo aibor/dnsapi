@@ -37,11 +37,12 @@ class CryptokeysController < ApplicationController
 
     respond_to do |format|
       if @cryptokey.save
-        format.html { redirect_to @cryptokey, notice: 'Cryptokey was successfully created.' }
+        format.html { redirect_to @cryptokey,
+                      notice: 'Cryptokey was successfully created.' }
         format.json { render :show, status: :created, location: @cryptokey }
       else
         format.html { render :new }
-        format.json { render json: {error: {status: 422, message: @cryptokey.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@cryptokey) }
       end
     end
   end
@@ -52,11 +53,12 @@ class CryptokeysController < ApplicationController
   def update
     respond_to do |format|
       if @cryptokey.update(cryptokey_params)
-        format.html { redirect_to @cryptokey, notice: 'Cryptokey was successfully updated.' }
+        format.html { redirect_to @cryptokey,
+                      notice: 'Cryptokey was successfully updated.' }
         format.json { render :show, status: :ok, location: @cryptokey }
       else
         format.html { render :edit }
-        format.json { render json: {error: {status: 422, message: @cryptokey.errors}}, status: :unprocessable_entity }
+        format.json { render unprocessable_entity_json_hash(@cryptokey) }
       end
     end
   end
