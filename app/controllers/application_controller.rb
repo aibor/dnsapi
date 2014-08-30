@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 
   def set_domain(resource_symbol)
     domain_id = if params[resource_symbol]
-                  params[resource_name.to_sym][:domain_id]
+                  params[resource_symbol][:domain_id]
                 else
                   params[:domain_id]
                 end

@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :username
   validates_presence_of :username
-  validates :password, length: { minimum: 16 }
+  validates :password, length: { minimum: 16 }, if: :password
   validate :defaults_format
 
   class NotAuthorized < StandardError; end

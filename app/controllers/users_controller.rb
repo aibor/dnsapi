@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params.reject {|k,v| v.nil? or v == ''})
         format.html { redirect_to @user, notice: t('.success') }
         format.json { render :show, status: :ok, location: @user }
       else
