@@ -55,7 +55,7 @@ Rails.application.routes.draw do
 #      end
 #    end
 
-    put 'tokenized_update/:id/:token' => 'records#tokenized_update',
+    put 'tokenized_update/:token' => 'records#tokenized_update',
       format: :true,
       constraints: {format: :json},
       defaults: {format: :json}

@@ -96,11 +96,16 @@ class RecordsController < ApplicationController
 
 
   def tokenized_update
-    @record = Record.find(params[:id])
+		if params[:token].blank?
+      render unprocessable_entity_json_hash('no token provided')
+			return
+		end
+
+    @record = Record.find_by_token! params[:token]
     content = params[:content]
     content ||= request.remote_ip if %w(A AAAA).include? @record.type
 
-    if token_valid? and @record.update_attributes(content: content)
+    if @record.update_attributes(content: content)
       render :show, status: :ok, location: @record
     else
       render unprocessable_entity_json_hash(@record)
@@ -135,19 +140,6 @@ class RecordsController < ApplicationController
   end
 
 
-  def token_valid?
-    bool = (params[:token] and
-            not @record.token.blank? and
-            params[:token] == @record.token)
-
-    unless bool 
-      @record.errors.add(:records, 'Go away!')
-    end
-
-    bool
-  end
-
-
   def validation_alert
     if @record.no_type_validation.to_i.zero?
       @record.has_dns_validator? ? nil : t('.no_validator')
@@ -155,4 +147,5 @@ class RecordsController < ApplicationController
       t('.no_type_validation')
     end
   end
+
 end

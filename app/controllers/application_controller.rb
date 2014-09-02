@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
 
 
   def unprocessable_entity_json_hash(object)
-    message = object.respond_to?('errors') ? object.errors : ''
+    message = object.respond_to?('errors') ? object.errors : object.to_s
 
     {
       json: {
