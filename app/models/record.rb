@@ -35,8 +35,7 @@ class Record < ActiveRecord::Base
   validates :domain_id, presence: true
   validates :domain, associated: true
   validates :type, presence: true
-	validates :token, uniqueness: true
-  validates :token, length: {minimum: 64, maximum: 255}, allow_blank: true
+  validates :token, uniqueness: true, length: {minimum: 64, maximum: 255}, allow_blank: true
   validates_inclusion_of :type, in: Types
   validate :unique_record
   validate do |record|
