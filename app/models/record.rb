@@ -58,8 +58,6 @@ class Record < ActiveRecord::Base
         self.ordername = line
       end
     end
-
-    self.save
   end
 
 
