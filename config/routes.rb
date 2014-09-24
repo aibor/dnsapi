@@ -55,13 +55,17 @@ Rails.application.routes.draw do
 #      end
 #    end
 
-    put 'tokenized_update/:token' => 'records#tokenized_update',
-      format: :true,
-      constraints: {format: :json},
-      defaults: {format: :json}
+    match 'tokenized_update/:token',
+      to:           'records#tokenized_update',
+      via:          [:get, :put],
+      format:       :true,
+      constraints:  {format: :json},
+      defaults:     {format: :json}
 
   end
 
-  get '/:locale' => 'dashboard#index', format: false
+  get '/:locale',
+    to:     'dashboard#index',
+    format: false
 
 end

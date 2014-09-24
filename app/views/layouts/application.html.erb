@@ -14,10 +14,12 @@
         <li>
           <%= link_to 'Logout', logout_path %>
         </li>
+
         <li<%= raw ' class="active"' if
           current_page?(controller: 'users', action: 'show', id: @current_user.id) -%>>
           <%= link_to t(:profile), @current_user %>
         </li>
+
       <% @nav_controller.each do |controller| -%>
         <li<%= raw ' class="active"' if
           current_page?(controller: controller) -%>>
@@ -82,5 +84,5 @@
       </footer>
     </div> <!-- /container -->
 
-    </body>
-    </html>
+  </body>
+</html>

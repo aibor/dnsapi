@@ -80,6 +80,8 @@ class RecordsController < ApplicationController
   end
 
 
+  # PATCH/PUT /records/1/generate_token
+  # PATCH/PUT /records/1/generate_token.json
   def generate_token
     @record.generate_token
 
@@ -94,7 +96,7 @@ class RecordsController < ApplicationController
     end
   end
 
-
+  # PUT/GET /tokenized_update/abcdef123456
   def tokenized_update
 		if params[:token].blank?
       render unprocessable_entity_json_hash('no token provided')
@@ -113,6 +115,8 @@ class RecordsController < ApplicationController
   end
 
 
+  # GET /records/1/delete
+  # GET /records/1/delete.json
   def delete
   end
 
