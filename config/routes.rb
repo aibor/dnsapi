@@ -43,18 +43,6 @@ Rails.application.routes.draw do
       end
     end
 
-#    resources :comments do
-#      member do
-#        get :delete
-#      end
-#    end
-#
-#    resources :tsigkeys do
-#      member do
-#        get :delete
-#      end
-#    end
-
     match 'tokenized_update/:token',
       to:           'records#tokenized_update',
       via:          [:get, :put],

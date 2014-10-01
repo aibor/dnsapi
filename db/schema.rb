@@ -39,13 +39,6 @@ ActiveRecord::Schema.define(version: 20140802092139) do
 
   add_index "cryptokeys", ["domain_id"], name: "domainidindex", using: :btree
 
-  create_table "ddns_clients", primary_key: "ddns_client_id", force: true do |t|
-    t.integer "record_id",             null: false
-    t.string  "id_string", limit: 128, null: false
-  end
-
-  add_index "ddns_clients", ["id_string"], name: "id_string_index", unique: true, using: :btree
-
   create_table "domainmetadata", force: true do |t|
     t.integer "domain_id"
     t.string  "kind",      limit: 16
@@ -91,8 +84,7 @@ ActiveRecord::Schema.define(version: 20140802092139) do
   add_index "records", ["name", "type"], name: "nametype_index", using: :btree
   add_index "records", ["name"], name: "rec_name_index", using: :btree
 
-  create_table "supermasters", id: false, force: true do |t|
-    t.inet   "ip",                    null: false
+  create_table "supermasters", primary_key: "ip", force: true do |t|
     t.string "nameserver",            null: false
     t.string "account",    limit: 40
   end
