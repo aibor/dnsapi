@@ -35,6 +35,11 @@ the `pdnssec` CLI tool. `pdnd_server` and the app should both use the
 same database user.
 
 
+## JSON API Usage
+
+See `docs/APIRoutes.md`
+
+
 ## Copyright
 
 GPLv2 license can be found in LICENSE
