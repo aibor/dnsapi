@@ -1,5 +1,6 @@
 require 'test_helper'
 
+
 class DNSValidatorTest < ActiveSupport::TestCase
 
   def setup
@@ -218,14 +219,16 @@ class DNSValidatorTest < ActiveSupport::TestCase
   private
 
   def valid_type_check
-    DNSValidator.class_eval(@record.type).new(@record).validate
+    DNSValidator::ResourceRecord.class_eval(@record.type).new(@record).
+      validate
     #puts @record.errors.messages
     assert_equal [], @record.errors.messages.keys 
   end
 
 
   def invalid_type_check(key = :content)
-    DNSValidator.class_eval(@record.type).new(@record).validate
+    DNSValidator::ResourceRecord.class_eval(@record.type).new(@record).
+      validate
     # puts @record.errors.messages
     assert_equal [key], @record.errors.messages.keys 
   end

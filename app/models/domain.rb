@@ -1,5 +1,6 @@
-require 'dns_validator'
+require 'dns_validator/domain'
 require 'open3'
+
 
 class Domain < ActiveRecord::Base
   self.inheritance_column = :itype

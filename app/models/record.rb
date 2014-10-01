@@ -1,5 +1,6 @@
 require 'dns_validator'
 
+
 class Record < ActiveRecord::Base
   self.inheritance_column = :itype
 
@@ -40,7 +41,7 @@ class Record < ActiveRecord::Base
   validate :unique_record
   validate do |record|
     if has_dns_validator? and record.no_type_validation.to_i.zero?
-      klass = DNSValidator.class_eval self.type
+      klass = DNSValidator::ResourceRecord.class_eval self.type
       klass.new(record).validate
     end
   end
@@ -98,7 +99,8 @@ class Record < ActiveRecord::Base
   # of this instance.
 
   def has_dns_validator?
-    !!(self.type and DNSValidator.constants.include? self.type.to_sym)
+    types = DNSValidator::ResourceRecord.constants
+    !!(self.type and types.include? self.type.to_sym)
   end
 
 

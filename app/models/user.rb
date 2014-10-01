@@ -1,4 +1,5 @@
-require 'dns_validator'
+require 'dns_validator/base'
+
 
 class User < ActiveRecord::Base
   has_secure_password
