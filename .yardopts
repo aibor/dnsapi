@@ -1,0 +1,14 @@
+--protected
+--private
+--no-private
+--title DNSAPI Documentation
+--output-dir doc/
+--markup markdown
+--charset utf-8
+--hide-void-return
+--plugin yard-activerecord
+app/
+lib/
+db/schema.rb
+-
+docs/APIRoutes.md
