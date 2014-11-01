@@ -3,19 +3,18 @@ class DomainsController < ApplicationController
   # GET /domains
   # GET /domains.json
   def index
-    domains = if @current_user.admin
-                 Domain
-               else
-                 @current_user.domains
-               end
+    domains = @current_user.admin ? Domain : @current_user.domains
     @domains = domains.includes(:records, :cryptokeys, :users).order(:name)
+    @record_count = Record.group(:domain_id).count
   end
 
 
   # GET /domains/1
   # GET /domains/1.json
   def show
-    @records_page = params[:records_page].to_i
+    per_page = (session[:records_per_page] || 25).to_i
+    @records = records_hash(@domain.records.type_sort,
+                            per_page < 10 ? 10 : per_page)
   end
 
 
@@ -50,9 +49,11 @@ class DomainsController < ApplicationController
 
     respond_to do |format|
       if @domain.save
-        @domain.users << @current_user
+        unless @domain.users.include? @current_user
+          @domain.users << @current_user
+        end
 
-        if @domain.create_soa and not @domain.soa
+        if @domain.create_soa[/1/] && !@domain.soa
           @domain.create_default_soa @current_user
         end
 
@@ -88,7 +89,7 @@ class DomainsController < ApplicationController
   def update
     respond_to do |format|
       if @domain.update(domain_params)
-        if @domain.create_soa and not @domain.soa
+        if @domain.create_soa[/1/] && !@domain.soa
           @domain.create_default_soa @current_user
         end
 
@@ -103,7 +104,7 @@ class DomainsController < ApplicationController
 
 
   def delete
-    @records_page = params[:records_page].to_i
+    @records = records_hash(@domain.records.type_sort)
   end
 
 
@@ -127,4 +128,21 @@ class DomainsController < ApplicationController
       :create_soa, user_ids: []
     )
   end
+
+  # Build hash, which can be used by records/records partial
+  def records_hash(records, per_page = 25)
+    count = @domain.records.count
+    max_page = (count / per_page) + 1
+    page = params[:records_page].to_i
+    page = 1 if !page || page == 0
+    page = max_page if page > max_page
+
+    {
+      page:     page,
+      per_page: per_page,
+      count:    count,
+      records:  records.offset(page.pred * per_page).limit(per_page)
+    }
+  end
+
 end

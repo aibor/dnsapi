@@ -29,9 +29,16 @@ class Domain < ActiveRecord::Base
     DNSValidator::Domain.new(record).validate
   end
 
+
   def soa
     self.records.where(type: 'SOA').first
   end
+
+
+  def disabled?
+    !!(self.soa && self.soa.disabled)
+  end
+
 
   def secure_zone
     if self.cryptokeys.empty?
@@ -43,6 +50,7 @@ class Domain < ActiveRecord::Base
       false
     end
   end
+
 
   def dskeys
     arr = []

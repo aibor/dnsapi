@@ -1,0 +1,34 @@
+= form_for(@cryptokey) do |f|
+
+  - if @cryptokey.errors[:base].any?
+    .alert.alert-danger= @cryptokey.errors[:base].first
+
+  -# Domain can only be choosen if none is defined yet
+  - if @cryptokey.domain
+    = f.hidden_field :domain_id
+  - else
+    = form_field_with_errors f, @cryptokey, :domain_id,
+      t('cryptokeys.columns.domain') do
+      = f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {},
+        {class: 'form-control'}
+
+  .row
+    .col-md-2
+      = form_field_with_errors f, @cryptokey, :flags, t('cryptokeys.columns.flags') do
+        = f.select :flags, Cryptokey.flags.keys, {}, {class: 'form-control'}
+
+    .col-md-2
+      .form-group
+        = f.label ' '
+        .checkbox
+          = f.label :active, class: 'control-label' do
+            = f.check_box :active
+            = t('cryptokeys.columns.active')
+
+  = form_field_with_errors f, @cryptokey, :content, t('cryptokeys.columns.content') do
+    = f.text_area :content, class: 'form-control', maxlength: 65535, rows: 20
+
+  .actions.pull-right
+    = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+    = f.submit class: 'btn btn-primary'
+

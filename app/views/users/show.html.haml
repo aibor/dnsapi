@@ -1,0 +1,24 @@
+%h1= @user.username
+
+= notice_or_errors_tag(@user)
+
+%dl.dl-horizontal
+  %dt= t('user.columns.admin')
+  %dd
+    %span.glyphicon{class: "glyphicon-#{@user.admin ? 'ok text-danger' : 'remove text-success'}"}
+
+  %dt= t('users.columns.default_primary')
+  %dd= @user.default_primary.blank? ? '-' : @user.default_primary
+
+  %dt= t('users.columns.default_postmaster')
+  %dd= @user.default_postmaster.blank? ? '-' : @user.default_postmaster
+
+  %dt= t('users.columns.created')
+  %dd= l @user.created_at, format: :short
+
+  %dt= t('users.columns.updated')
+  %dd= l @user.updated_at, format: :short
+
+= button_to t('c.back'), users_path, class: "btn btn-default", method: :get
+= button_to t('c.edit'), edit_user_path(@user), class: 'btn btn-primary', method: :get
+

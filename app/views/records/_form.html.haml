@@ -1,0 +1,73 @@
+= form_for @record, html: {role: :form} do |f|
+
+  - if @record.errors[:base].any?
+    .alert.alert-danger= @record.errors[:base].first
+
+  -# Domain can only be choosen if none is defined yet
+  - if @record.domain
+    = f.hidden_field :domain_id
+  - else
+    = form_field_with_errors f, @record, :domain_id, t('records.columns.domain') do
+      = f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {}, {class: 'form-control'}
+
+  = form_field_with_errors f, @record, :name, t('records.columns.name') do
+    = f.text_field :name, maxlength: 255, class: 'form-control'
+
+  -# Ordername is only relevant with crypto and NSEC3 modes other then 'Narrow' 
+      see: http://downloads.powerdns.com/documentation/html/dnssec-modes.html
+  - unless @record.domain.cryptokeys.empty?
+    .row
+      .col-md-11
+        .form-group
+          = f.label :ordername, t('records.columns.ordername'), class: 'control-label'
+          = f.text_field :ordername, maxlength: 255, class: 'form-control'
+
+      .col-md-1
+        .form-group
+          = f.label ' '
+          .checkbox
+            = f.label :auth, class: 'control-label' do
+              = f.check_box :auth
+              = t('records.columns.auth')
+
+  .row
+    .col-md-2
+      .form-group
+        = f.label :type, t('records.columns.type'), class: 'control-label'
+        = f.select :type, Record::Types, {}, {class: 'form-control'}
+    
+    .col-md-2
+      = form_field_with_errors f, @record, :ttl, 'TTL' do
+        = f.number_field :ttl, class: 'form-control', min: 0, max: 2**31 - 1
+
+    .col-md-2
+      = form_field_with_errors f, @record, :prio, t('records.columns.prio') do
+        = f.number_field :prio, class: 'form-control', min: 0, max: 2**16 - 1,
+          maxlength: 5, size: 5
+
+    .col-md-6
+      .form-group
+        = f.label ' '
+        .checkbox
+          = f.label :disabled, class: 'control-label' do
+            = f.check_box :disabled
+            = t('records.columns.disabled')
+          .help-block
+
+  = form_field_with_errors f, @record, :content, t('records.content') do
+    = f.text_area :content, maxlength: 65535, class: 'form-control'
+
+  = form_field_with_errors f, @record, :token, t('records.token') do
+    = f.text_field :token, maxlength: 255, class: 'form-control'
+    %p.help-block= t('.help.token')
+
+  .actions.pull-right
+    .form-group
+      = f.label ' '
+      .checkbox
+        = f.label :no_type_validation, class: 'control-label' do
+          = f.check_box :no_type_validation
+          = t('c.skip_validation')
+      = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+      = f.submit class: 'btn btn-primary'
+

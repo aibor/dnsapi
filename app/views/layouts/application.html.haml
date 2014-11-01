@@ -1,0 +1,54 @@
+!!! 5
+%html{lang: I18n.locale}
+
+  %head
+    %title DNS API
+    = stylesheet_link_tag 'application', media: 'all'
+    = csrf_meta_tags
+
+  %body
+    .container
+      %header.header
+        %ul.nav.nav-pills.pull-right
+          %li= link_to 'Logout', logout_path
+          - user_profile = current_page?(controller: 'users', action: 'show', id: @current_user.id)
+          %li{class: user_profile ? 'active' : nil} 
+            = link_to t(:profile), @current_user
+  
+          - @nav_controller.each do |controller|
+            %li{class: current_page?(controller: controller) ? 'active' : nil}
+              = link_to controller.capitalize, url_for(controller: controller)
+  
+        .banner
+          %h2
+            = link_to 'DNS API', "/#{I18n.locale}"
+            - if Rails.env == "development"
+              %span.label.label-warning{style: 'vertical-align:.1em;'} Development
+  
+          %ul.nav.nav-lang
+            - I18n.available_locales.each do |loc|
+              %li= link_to loc, url_for( locale: loc ),
+                class: loc == I18n.locale ? 'text-muted' : nil
+  
+      %hr
+  
+    .container
+      - if flash[:error]
+        .alert.alert-danger= flash[:error]
+  
+      = yield
+  
+    .container
+      %hr
+      %footer.footer
+        %p.text-center.text-muted &copy; aibo 2014
+        %p.text-center.text-muted
+          = link_to 'Bootstrap CSS', 'http://bootstrap.com'
+          = t('licensed_under')
+          = link_to 'MIT Lizenz',
+            'https://github.com/twbs/bootstrap/blob/master/LICENSE'
+          %br/
+          = link_to 'Glyphicons Free', 'http://glyphicons.com'
+          = t('licensed_under')
+          = link_to 'CC BY 3.0', 'http://creativecommons.org/licenses/by/3.0/'
+

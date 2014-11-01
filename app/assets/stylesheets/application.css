@@ -66,3 +66,12 @@
   margin:0px;
   padding: 1px 10px;
 }
+
+.disabled {
+  color: #999;
+}
+
+.disabled a {
+  color: cadetblue;
+}
+

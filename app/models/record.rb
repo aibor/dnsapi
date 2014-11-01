@@ -21,10 +21,21 @@ class Record < ActiveRecord::Base
   belongs_to :domain
   has_many :users, through: :domain
 
+  ##
+  # Sort a Record collection in a sane order. We want SOA records first,
+  # then NS and the rest ordered by its name and type.
+  # This scope is intended to be used for ordering of resource records
+  # for a single domain.
 
-  before_validation do
-    process_name
+  scope :type_sort, -> do
+    order("records.type != 'SOA'", "records.type != 'NS'", :name, :type)
   end
+
+  scope :last_changed, ->(num) do
+    order(:change_date).reverse_order.limit(num)
+  end
+
+  before_validation { process_name }
 
   before_save do
     self.hash_zone_record if self.domain.cryptokeys.any?
@@ -36,7 +47,8 @@ class Record < ActiveRecord::Base
   validates :domain_id, presence: true
   validates :domain, associated: true
   validates :type, presence: true
-  validates :token, uniqueness: true, length: {minimum: 64, maximum: 255}, allow_blank: true
+  validates :token, uniqueness: true, length: {minimum: 64, maximum: 255},
+    allow_blank: true
   validates_inclusion_of :type, in: Types
   validate :unique_record
   validate do |record|
@@ -57,38 +69,6 @@ class Record < ActiveRecord::Base
     IO.popen("pdnssec hash-zone-record #{self.domain.name} #{self.name}") do |res|
       res.each do |line|
         self.ordername = line
-      end
-    end
-  end
-
-
-  ##
-  # Sort a Record collection in a sane order. We want SOA records first,
-  # then NS, then MX and the rest ordered by its name.
-  # This sort methos is inteded to be used for ordering of resource
-  # records for a single domain.
-
-  def self.type_sort
-    all.sort do |x,y|
-      catch :sorted do
-        if (type_comp = x.type.to_s <=> y.type.to_s).zero?
-          %w(name content).each do |attr|
-            attr_comp = x.send(attr).to_s <=> y.send(attr).to_s
-            throw :sorted, attr_comp unless attr_comp == 0
-          end
-
-          throw :sorted, 0
-        else
-          %w(SOA NS MX).each do |rtype|
-            case rtype
-            when x.type then throw :sorted, -1
-            when y.type then throw :sorted, 1
-            end
-          end
-
-          name_comp = x.name.to_s <=> y.name.to_s
-          throw :sorted, name_comp.zero? ? type_comp : name_comp
-        end
       end
     end
   end

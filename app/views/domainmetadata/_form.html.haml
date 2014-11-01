@@ -1,0 +1,26 @@
+= notice_or_errors_tag(@domainmetadatum)
+= form_for @domainmetadatum, html: {role: :form} do |f|
+
+  - if @domainmetadatum.errors[:base].any?
+    .alert.alert-danger= @domainmetadatum.errors[:base].first
+
+  - if @domainmetadatum.domain
+    = f.hidden_field :domain_id
+  - else
+    = form_field_with_errors f, @domainmetadatum, :domain_id,
+      t('domainmetadata.columns.domain') do
+      = f.select :domain_id, Domain.all.map {|d| [d.name, d.id]}, {},
+        {class: 'form-control'}
+
+  = form_field_with_errors f, @domainmetadatum, :kind, t('domainmetadata.columns.kind') do
+    = f.select :kind, Domainmetadatum::Kinds, {}, {class: 'form-control'}
+
+  = form_field_with_errors f, @domainmetadatum, :content, t('domainmetadata.columns.content') do
+    - if @domainmetadatum.kind == 'SOA-EDIT'
+      = f.select :content, Domainmetadatum::SOAEdits, {}, {class: 'form-control'}
+    - else
+      = f.text_area :content, maxlength: 65535, class: 'form-control'
+  .actions.pull-right
+    = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+    = f.submit class: 'btn btn-primary'
+

@@ -1,0 +1,21 @@
+%h1
+  Domainmetadata
+  = "#{t('c.for')} #{@domainmetadatum.domain.name}"
+
+= notice_or_errors_tag(@domainmetadatum)
+
+%dl.dl-horizontal
+  %dt= t('domainmetadata.columns.domain')
+  %dd= link_to @domainmetadatum.domain.name, @domainmetadatum.domain || '-'
+
+  %dt= t('domainmetadata.columns.kind')
+  %dd= @domainmetadatum.kind || '-'
+
+  %dt= t('domainmetadata.columns.content')
+  %dd= @domainmetadatum.content || '-'
+
+= button_to t('c.back'), @domainmetadatum.domain ? @domainmetadatum.domain : domains_path,
+  class: "btn btn-default", method: :get
+= button_to t('c.edit'), edit_domainmetadatum_path(@domainmetadatum), class: 'btn btn-primary',
+  method: :get
+

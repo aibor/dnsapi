@@ -1,0 +1,23 @@
+%table.table.table-condensed
+  %thead
+    %tr
+      %th= t('cryptokeys.columns.flags')
+      %th= t('cryptokeys.columns.active')
+      %th{colspan: 2}
+
+  %tbody
+    - cryptokeys.each do |cryptokey|
+      %tr
+        %td= link_to cryptokey.flags, cryptokey
+
+        %td
+          %span{class: cryptokey.active ? 'text-success glyphicon glyphicon-ok' : nil}/
+
+        %td
+          = link_to edit_cryptokey_path(cryptokey), title: t('.edit') do
+            %span.glyphicon.glyphicon-edit/
+
+        %td
+          = link_to delete_cryptokey_path(cryptokey), title: t('.delete') do
+            %span.glyphicon.glyphicon-remove/
+

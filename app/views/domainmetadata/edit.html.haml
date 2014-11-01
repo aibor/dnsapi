@@ -1,0 +1,8 @@
+%h1
+  = t('.title')
+  = " #{t('c.for')} #{@domainmetadatum.domain.name}" if @domainmetadatum.domain
+  = button_to (t('c.back')), @domainmetadatum.domain ? @domainmetadatum.domain : domains_path,
+    class: "btn btn-default", method: :get
+
+= render 'form'
+

@@ -1,0 +1,17 @@
+%h1
+  = t('.title')
+  = button_to t('c.back'), domains_path,
+    class: "btn btn-default", method: :get
+
+= form_tag(parse_domain_path(@domain), role: :form) do
+  .form-group{class: @domain.errors[:base].blank? || 'has-error'}
+    = label_tag :zone_file, '', class: 'control-label'
+    - unless @domain.errors[:base].blank?
+      %span.label.label-danger= @domain.errors[:base].first
+    = text_area_tag :zone_file, params[:zone_file],
+      class: 'form-control', placeholder: t('.placeholder'), rows: 30
+
+  .actions.pull-right
+    = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+    = submit_tag t('.submit'), {class: 'btn btn-primary'}
+

@@ -1,0 +1,49 @@
+%h1= @record.name
+
+= notice_or_errors_tag(@record)
+
+%dl.dl-horizontal
+  %dt= t('records.columns.domain')
+  %dd= link_to @record.domain.name, @record.domain || '-'
+
+  %dt= t('records.columns.type')
+  %dd= @record.type || '-'
+
+  %dt= t('records.columns.content')
+  %dd{title: @record.type == 'SOA' ? soa_times(@record.content) : @record.content}
+    = @record.content || '-'
+
+  %dt= t('records.columns.ttl')
+  %dd{title: sane_ttl(@record.ttl)}= @record.ttl || '-'
+
+  %dt= t('records.columns.prio')
+  %dd= @record.prio || '-'
+
+  %dt= t('records.columns.ordername')
+  %dd= @record.ordername.blank? ? '-' : @record.ordername
+
+  %dt= t('records.columns.auth')
+  %dd
+    %span.glyphicon{class: "glyphicon-#{@record.auth ? 'ok' : 'remove'}"}
+
+  %dt= t('records.columns.disabled')
+  %dd
+    %span.glyphicon{class: "glyphicon-#{@record.disabled ? 'ok' : 'remove'}"}
+
+  %dt= t('records.columns.token')
+  %dd= @record.token.blank? ? '-' : @record.token
+
+  %dt= t('records.columns.modified')
+  %dd= l @record.change_date.localtime || '-'
+
+= button_to t('c.back'), @record.domain ? @record.domain : domains_path,
+  class: "btn btn-default", method: :get
+= button_to t('c.delete'), delete_record_path(@record), class: 'btn btn-primary',
+  method: :get
+= button_to t('c.clone'), clone_record_path(@record), class: 'btn btn-primary',
+  method: :get
+= button_to t('c.generate_token'), generate_token_record_path(@record),
+  class: 'btn btn-primary', method: :put
+= button_to t('c.edit'), edit_record_path(@record), class: 'btn btn-primary',
+  method: :get
+

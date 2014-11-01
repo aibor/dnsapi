@@ -89,12 +89,12 @@ class RecordTest < ActiveSupport::TestCase
     expected_order = [
       %w(SOA example.com),
       %w(SOA test.de),
-      %w(MX example.com),
-      %w(MX test.de),
       %w(A example.com),
+      %w(MX example.com),
       %w(A mail.example.com),
       %w(A mail.test.de),
-      %w(A test.de)
+      %w(A test.de),
+      %w(MX test.de),
     ]
 
     assert_equal expected_order, records

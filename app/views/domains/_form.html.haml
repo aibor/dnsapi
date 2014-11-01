@@ -1,0 +1,40 @@
+.row
+  .col-md-6
+    = form_for @domain, html: {role: :form} do |f|
+
+      .form-group{class: @domain.errors[:name].blank? || 'has-error'}
+        = f.label :name, t('domains.columns.name'), class: 'control-label'
+        - unless @domain.errors[:name].blank?
+          %span.label.label-danger= @domain.errors[:name].first
+        = f.text_field :name, maxlength: 255, class: 'form-control'
+
+      .form-group{class: @domain.errors[:master].blank? || 'has-error'}
+        = f.label :master, t('domains.columns.master'), class: 'control-label'
+        - unless @domain.errors[:master].blank?
+          %span.label.label-danger= @domain.errors[:master].first
+        = f.text_field :master, maxlength: 255, class: 'form-control'
+
+      .form-group{class: @domain.errors[:type].blank? || 'has-error'}
+        = f.label :type, t('domains.columns.type'), class: 'control-label'
+        - unless @domain.errors[:type].blank?
+          %span.label.label-danger= @domain.errors[:type].first
+        = f.select :type, %w(MASTER NATIVE SLAVE), {}, {class: 'form-control'}
+
+      - if @current_user.admin
+        .form-group{class: @domain.errors[:users].blank? || 'has-error'}
+          = f.label :users, t('domains.columns.users'), class: 'control-label'
+          - unless @domain.errors[:users].blank?
+            %span.label.label-danger= @domain.errors[:users].first
+          = f.collection_select :user_ids, User.all, :id, :username,
+            {}, {multiple: true, class: 'form-control'}
+
+      - unless @domain.soa 
+        .form-group
+          .checkbox
+            = f.label :create_soa, class: 'checkbox control-label' do
+              = f.check_box :create_soa, class: 'checkbox'
+              = t('domains.columns.create_soa')
+
+      .actions.pull-right
+        = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+        = f.submit class: 'btn btn-primary'

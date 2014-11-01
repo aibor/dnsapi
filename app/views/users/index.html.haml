@@ -1,0 +1,31 @@
+%h1
+  = t('.users')
+  = button_to t('c.new'), new_user_path, class: "btn btn-primary", method: :get
+
+= notice_or_errors_tag(@current_user)
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= t('users.columns.username')
+      %th= t('users.columns.admin')
+      %th= t('users.columns.created')
+      %th= t('users.columns.updated')
+      %th{colspan: 3}
+
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= link_to user.username, user, title: t('.show', user: user.username)
+        %td
+          %span{class: user.admin ? 'glyphicon glyphicon-ok' : nil}/
+        %td= l user.created_at, format: :short
+        %td= l user.updated_at, format: :short
+        %td
+          = link_to edit_user_path(user), title: t('.edit', user: user.username) do
+            %span.glyphicon.glyphicon-edit/
+
+        %td
+          = link_to delete_user_path(user), title: t('.delete', user: user.username) do
+            %span.glyphicon.glyphicon-remove/
+

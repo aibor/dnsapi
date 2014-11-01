@@ -30,3 +30,6 @@ gem 'rest-client'
 gem 'rdoc'
 gem 'yard'
 gem 'yard-activerecord'
+
+# use haml templating language
+gem 'haml'

@@ -1,8 +1,0 @@
-<h1>
-  <%= t('.title') %>
-  <%= t('c.for') + " " + @record.domain.name if @record.domain %>
-  <%= button_to (t('c.back')), @record.domain ? @record.domain : domains_path,
-    class: "btn btn-default", method: :get %>
-</h1>
-
-<%= render 'form' %>

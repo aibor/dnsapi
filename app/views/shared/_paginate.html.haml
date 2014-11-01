@@ -1,0 +1,22 @@
+- count    ||= 10
+- per_page ||= 25
+- page     ||= 1
+- var_name ||= 'page'
+- anchor   ||= nil
+
+- pages    ||= (count / (per_page + 1)) + 1
+
+- if pages > 1
+  .text-center
+    %ul.pagination.pagination-sm
+
+      %li{class: page == 1 ? 'disabled' : nil}
+        = link_to raw('&laquo'), var_name => (page > 2) ? (page - 1) : nil, anchor: anchor
+
+      - pages.times do |p|
+        %li{class: (page == p + 1) ? 'active' : nil}
+          = link_to p + 1, var_name => (p > 0) ? (p + 1) : nil, anchor: anchor
+
+      %li{class: page >= pages ? 'disabled' : nil}
+        = link_to raw('&raquo'), var_name => (page + 1), anchor: anchor
+

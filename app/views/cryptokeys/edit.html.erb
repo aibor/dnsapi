@@ -1,8 +1,0 @@
-<h1>
-  <%= t('.title') %>
-  <%= " #{t('c.for')} #{@cryptokey.domain.name}" if @cryptokey.domain %>
-  <%= button_to t('c.back'), @cryptokey.domain ? @cryptokey.domain : domains_path,
-    class: "btn btn-default", method: :get %>
-</h1>
-
-<%= render 'form' %>

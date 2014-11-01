@@ -1,0 +1,24 @@
+%h1
+  = "#{@cryptokey.flags} #{t('c.for')} #{@cryptokey.domain.name}"
+
+= notice_or_errors_tag
+
+%dl.dl-horizontal
+  %dt= t('cryptokeys.columns.domain')
+  %dd= link_to @cryptokey.domain.name, @cryptokey.domain || '-'
+
+  %dt= t('cryptokeys.columns.flags')
+  %dd= @cryptokey.flags
+
+  %dt= t('cryptokeys.columns.active')
+  %dd= @cryptokey.active
+
+  %dt= t('cryptokeys.columns.content')
+  %dd= simple_format @cryptokey.content, wrapper_tag: 'div',
+    class: 'well', style: 'word-wrap: break-word;'
+
+= button_to t('c.edit'), edit_cryptokey_path(@cryptokey),
+  class: 'btn btn-primary', method: :get
+= button_to t('c.back'), @cryptokey.domain ? @cryptokey.domain : domains_path,
+  class: "btn btn-default", method: :get
+

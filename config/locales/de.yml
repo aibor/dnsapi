@@ -119,6 +119,7 @@ de:
       notified_serial:  Seriennummer
       users: Benutzer
       create_soa: Erstelle SOA Record mit Standardwerten
+      disabled: deaktiviert?
     index:
       show:   'Details für "%{domain}" anzeigen'
       edit:   'Domain "%{domain}" bearbeiten'

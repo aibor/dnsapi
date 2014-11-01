@@ -1,0 +1,46 @@
+= form_for @user, html: {role: :form} do |f|
+
+  - if @user.errors[:base].any?
+    .alert.alert-danger= @user.errors[:base].first
+
+  .row
+    .col-md-7
+      = form_field_with_errors f, @user, :username, t('users.columns.username') do
+        = f.text_field :username, maxlength: 255, class: 'form-control'
+
+    - if @current_user.admin
+      .col-md-5
+        .form-group
+          = f.label ' '
+          .checkbox
+            = f.label :admin, class: 'control-label' do
+              = f.check_box :admin
+              = t('users.columns.admin')
+              %p.help-block= t('.help.admin')
+  %hr
+  .row
+    .col-md-6
+      = form_field_with_errors f, @user, :default_primary,
+        t('users.columns.default_primary') do
+        = f.text_field :default_primary, maxlength: 255, class: 'form-control'
+
+    .col-md-6
+      = form_field_with_errors f, @user, :default_postmaster,
+        t('users.columns.default_postmaster') do
+        = f.text_field :default_postmaster, maxlength: 255, class: 'form-control'
+  .row
+    .col-md-10.col-md-offset-1
+      %p.help-block= t('.help.defaults')
+
+  %hr
+
+  = form_field_with_errors f, @user, :password, t('.password') do
+    = f.password_field :password, maxlength: 255, class: 'form-control'
+
+  = form_field_with_errors f, @user, :password_confirmation, t('.password_confirmation') do
+    = f.password_field :password_confirmation, maxlength: 255, class: 'form-control'
+
+  .actions.pull-right
+    = button_tag 'Reset', type: 'reset', class: 'btn btn-default'
+    = f.submit class: 'btn btn-primary'
+

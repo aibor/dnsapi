@@ -1,0 +1,23 @@
+%p#notice= notice
+
+%h1
+  = t('.title')
+  = @domain.name
+
+.alert.alert-warning= t('.warning')
+
+%h3= t('.records')
+
+= render partial: 'records/records',
+  locals: {records: {records: @domain.records.type_sort}, no_links: true} 
+
+%h3= t '.cryptokeys'
+
+= render partial: "cryptokeys/cryptokeys",
+  locals: {cryptokeys: @domain.cryptokeys}
+
+%hr
+
+= button_to t('c.delete'), (@domain),
+  class: "btn btn-primary", method: :delete
+

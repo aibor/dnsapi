@@ -1,0 +1,13 @@
+= notice_or_errors_tag 
+
+%h1
+  = t('.title')
+  = @record.name
+
+.alert.alert-warning= t('.warning')
+
+%hr
+
+= button_to t('c.delete'), @record,
+  class: "btn btn-primary", method: :delete
+
