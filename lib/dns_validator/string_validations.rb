@@ -9,8 +9,9 @@ module DNSValidator
 
     RE_char_string  = '[[:print:]]{,255}'
 
-    # RFC1035 wants a label to start with a letter. The real world also allows digits
-    RE_label = '(?!.*--.*)[[:alnum:]](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
+    # RFC1035 wants a label to start with a letter.
+    # The real world also allows digits and needs underscores for service records.
+    RE_label = '(?!.*--.*)[[:alnum:]_](?:(?:[[:alnum:]-]{0,61})?[[:alnum:]])?'
 
     # In order to work around the rfc ignoring domain_names, which causes IPv4 address
     # to be valid domain names, check the last label to be rfc conform.
@@ -50,3 +51,4 @@ module DNSValidator
   end
 
 end
+

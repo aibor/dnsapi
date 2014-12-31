@@ -216,6 +216,14 @@ class DNSValidatorTest < ActiveSupport::TestCase
   end
 
 
+  # https://www.aibor.de/redmine/issues/23
+  test "should be valid resource name" do
+    @record.type = 'TXT'
+    @record.name = 'john.doe._domainkey.test.org.'
+    valid_type_check
+  end
+
+
   private
 
   def valid_type_check
