@@ -1,4 +1,6 @@
-require 'dns_validator/base'
+# coding: utf-8
+
+require 'dns_validator/validateable'
 
 
 class User < ActiveRecord::Base
@@ -20,7 +22,7 @@ class User < ActiveRecord::Base
   private
 
   def defaults_format
-    dns_validator = DNSValidator::Base.new(self)
+    dns_validator = DNSValidator::StringValidations
 
     unless default_primary.blank? or dns_validator.is_domain_name?(default_primary)
       errors.add(:default_primary, :invalid_domain_name)
@@ -32,3 +34,4 @@ class User < ActiveRecord::Base
 
   end
 end
+

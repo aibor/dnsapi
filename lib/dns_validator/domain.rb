@@ -1,14 +1,17 @@
 # coding: utf-8
 
-require 'dns_validator/base.rb'
+require 'dns_validator/validateable'
 
 
 module DNSValidator
 
-  class Domain < Base
+  class Domain
+
+    include Validatable
+
 
     def initialize(record)
-      super
+      @record = record
       @name   = @record.name
       @masters = @record.master ? @record.master.split(',') : []
       @type   = @record.type
@@ -39,3 +42,4 @@ module DNSValidator
   end
 
 end
+

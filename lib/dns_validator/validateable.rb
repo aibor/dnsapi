@@ -5,7 +5,7 @@ require 'dns_validator/string_validations'
 
 module DNSValidator
 
-  class Base
+  module Validatable
 
     include StringValidations
 
@@ -27,3 +27,4 @@ module DNSValidator
   end
 
 end
+

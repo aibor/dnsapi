@@ -1,14 +1,17 @@
 # coding: utf-8
 
-require 'dns_validator/base.rb'
+require 'dns_validator/validateable'
 
 
 module DNSValidator
 
-  class ResourceRecord < Base
+  class ResourceRecord
+
+    include Validatable
+
 
     def initialize(record)
-      super
+      @record       = record
       @name         = @record.name
       @type         = @record.type
       @ttl          = @record.ttl
@@ -130,3 +133,4 @@ module DNSValidator
   Dir.glob("#{__dir__}/resource_record/*.rb").each { |f| require f }
 
 end
+
