@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 20140802092139) do
   enable_extension "plpgsql"
   enable_extension "plperl"
 
-  create_table "comments", force: true do |t|
+  create_table "comments", force: :cascade do |t|
     t.integer "domain_id",                 null: false
-    t.string  "name",                      null: false
+    t.string  "name",        limit: 255,   null: false
     t.string  "type",        limit: 10,    null: false
     t.integer "modified_at",               null: false
     t.string  "account",     limit: 40
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20140802092139) do
   add_index "comments", ["domain_id"], name: "comments_domain_id_idx", using: :btree
   add_index "comments", ["name", "type"], name: "comments_name_type_idx", using: :btree
 
-  create_table "cryptokeys", force: true do |t|
+  create_table "cryptokeys", force: :cascade do |t|
     t.integer "domain_id"
     t.integer "flags",     null: false
     t.boolean "active"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20140802092139) do
 
   add_index "cryptokeys", ["domain_id"], name: "domainidindex", using: :btree
 
-  create_table "domainmetadata", force: true do |t|
+  create_table "domainmetadata", force: :cascade do |t|
     t.integer "domain_id"
     t.string  "kind",      limit: 16
     t.text    "content"
@@ -47,36 +47,36 @@ ActiveRecord::Schema.define(version: 20140802092139) do
 
   add_index "domainmetadata", ["domain_id"], name: "domainidmetaindex", using: :btree
 
-  create_table "domains", force: true do |t|
-    t.string  "name",                        null: false
+  create_table "domains", force: :cascade do |t|
+    t.string  "name",            limit: 255,                    null: false
     t.string  "master",          limit: 128
     t.integer "last_check"
-    t.string  "type",            limit: 6,   null: false
+    t.string  "type",            limit: 6,   default: "MASTER", null: false
     t.integer "notified_serial"
     t.string  "account",         limit: 40
   end
 
   add_index "domains", ["name"], name: "name_index", unique: true, using: :btree
 
-  create_table "domains_users", id: false, force: true do |t|
+  create_table "domains_users", id: false, force: :cascade do |t|
     t.integer "domain_id"
     t.integer "user_id"
   end
 
   add_index "domains_users", ["domain_id", "user_id"], name: "index_domains_users_on_domain_id_and_user_id", unique: true, using: :btree
 
-  create_table "records", force: true do |t|
+  create_table "records", force: :cascade do |t|
     t.integer  "domain_id"
-    t.string   "name"
+    t.string   "name",        limit: 255
     t.string   "type",        limit: 10
     t.string   "content",     limit: 65535
     t.integer  "ttl"
     t.integer  "prio"
-    t.string   "ordername"
+    t.string   "ordername",   limit: 255
     t.boolean  "auth",                      default: true
     t.datetime "change_date"
     t.boolean  "disabled",                  default: false
-    t.string   "token"
+    t.string   "token",       limit: 255
   end
 
   add_index "records", ["domain_id", "ordername"], name: "recordorder", using: :btree
@@ -84,29 +84,35 @@ ActiveRecord::Schema.define(version: 20140802092139) do
   add_index "records", ["name", "type"], name: "nametype_index", using: :btree
   add_index "records", ["name"], name: "rec_name_index", using: :btree
 
-  create_table "supermasters", primary_key: "ip", force: true do |t|
-    t.string "nameserver",            null: false
+  create_table "supermasters", primary_key: "ip", force: :cascade do |t|
+    t.string "nameserver", limit: 255, null: false
     t.string "account",    limit: 40
   end
 
-  create_table "tsigkeys", force: true do |t|
-    t.string "name"
+  create_table "tsigkeys", force: :cascade do |t|
+    t.string "name",      limit: 255
     t.string "algorithm", limit: 50
-    t.string "secret"
+    t.string "secret",    limit: 255
   end
 
   add_index "tsigkeys", ["name", "algorithm"], name: "namealgoindex", unique: true, using: :btree
 
-  create_table "users", force: true do |t|
-    t.string   "username"
-    t.string   "password_digest"
-    t.boolean  "admin",              default: false
-    t.string   "default_primary"
-    t.string   "default_postmaster"
+  create_table "users", force: :cascade do |t|
+    t.string   "username",           limit: 255
+    t.string   "password_digest",    limit: 255
+    t.boolean  "admin",                          default: false
+    t.string   "default_primary",    limit: 255
+    t.string   "default_postmaster", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "comments", "domains", name: "domain_exists", on_delete: :cascade
+  add_foreign_key "cryptokeys", "domains", name: "cryptokeys_domain_id_fkey", on_delete: :cascade
+  add_foreign_key "domainmetadata", "domains", name: "domainmetadata_domain_id_fkey", on_delete: :cascade
+  add_foreign_key "domains_users", "domains", name: "domain_exists", on_delete: :cascade
+  add_foreign_key "domains_users", "users", name: "user_exists", on_delete: :cascade
+  add_foreign_key "records", "domains", name: "domain_exists", on_delete: :cascade
 end
