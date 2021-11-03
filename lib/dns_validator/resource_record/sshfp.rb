@@ -9,13 +9,18 @@ module DNSValidator
     end
 
 
+    def attr_uniqueness
+      super << :content
+    end
+
+
     def rdata_fields
       [:algorithm, :fp_type, :fingerprint]
     end
 
 
     def validate_rdata
-      unless @rdata.algorithm =~ /\A[123]\z/
+      unless @rdata.algorithm =~ /\A[1234]\z/
         @record.errors.add(:content, :invalid_algorithm_number)
       end
 
