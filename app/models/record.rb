@@ -13,7 +13,7 @@ class Record < ActiveRecord::Base
   ##
   # Array of all available resource record types we can handle currently.
 
-  Types = %w(A AAAA AFSDB CERT CNAME DLV DNAME DNSKEY DS EUI48 EUI64
+  Types = %w(A AAAA AFSDB CAA CERT CNAME DLV DNAME DNSKEY DS EUI48 EUI64
              HINFO KEY LOC MINFO MX NAPTR NS NSEC NSEC3 NSEC3PARAM OPT
              PTR RKEY RP RRSIG SOA SPF SSHFP SRV TLSA TXT).freeze
 
